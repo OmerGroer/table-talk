@@ -1,15 +1,16 @@
-package com.example.android_application_course.adapter
+package com.example.tabletalk.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.tabletalk.OnPostItemClickListener
 import com.example.tabletalk.R
-import com.example.tabletalk.OnItemClickListener
 import com.example.tabletalk.model.Post
 
-class PostsRecyclerAdapter(private val posts: List<Post>?): RecyclerView.Adapter<PostViewHolder>() {
+class PostsRecyclerAdapter(private val posts: List<Post>?) :
+    RecyclerView.Adapter<PostViewHolder>() {
 
-    var listener: OnItemClickListener? = null
+    var listener: OnPostItemClickListener? = null
 
     override fun getItemCount(): Int = posts?.size ?: 0
 
