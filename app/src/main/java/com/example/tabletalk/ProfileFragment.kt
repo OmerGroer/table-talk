@@ -2,6 +2,7 @@ package com.example.tabletalk
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -15,6 +16,11 @@ import com.example.tabletalk.model.Model
 import com.example.tabletalk.model.Post
 
 class ProfileFragment : Fragment() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -26,6 +32,9 @@ class ProfileFragment : Fragment() {
 
         val username: TextView = view.findViewById(R.id.profile_username)
         username.text = loggedUser.username
+
+        val toolbar: androidx.appcompat.widget.Toolbar = view.findViewById(R.id.profile_toolbar)
+        toolbar.inflateMenu(R.menu.profile_menu)
 
         val recyclerView: RecyclerView = view.findViewById(R.id.posts_recycler_view)
         recyclerView.setHasFixedSize(true)
@@ -49,5 +58,19 @@ class ProfileFragment : Fragment() {
         recyclerView.adapter = adapter
 
         return view
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.edit_profile) {
+            return true
+        }
+
+        if (item.itemId == R.id.logout_profile) {
+            Model.shared.logout()
+            TODO("finish activity and go back to login")
+            return true
+        }
+
+        return false
     }
 }

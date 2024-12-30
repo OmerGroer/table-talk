@@ -219,6 +219,6 @@ class Model {
         listener.onComplete(true)
     }
 
-    fun logOut() {
+    fun logout() {
     }
 }

@@ -33,10 +33,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> navController?.popBackStack()
-            else -> navController?.let { NavigationUI.onNavDestinationSelected(item, it) }
+        if (item.itemId == android.R.id.home) {
+            navController?.popBackStack()
+            return true
         }
-        return true
+
+        return NavigationUI.onNavDestinationSelected(item, navController as NavController)
     }
 }
