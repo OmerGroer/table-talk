@@ -2,6 +2,7 @@ package com.example.tabletalk.model
 
 class Post (
     var id: String,
+    var userEmail: String,
     var userName: String,
     var avatarUrl: String,
     var restaurantName: String,
