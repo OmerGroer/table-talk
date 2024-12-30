@@ -4,7 +4,6 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.tabletalk.OnUserItemClickListener
 import com.example.tabletalk.R
 import com.example.tabletalk.model.User
 

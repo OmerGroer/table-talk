@@ -10,19 +10,13 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.tabletalk.adapter.OnRestaurantItemClickListener
+import com.example.tabletalk.adapter.OnUserItemClickListener
 import com.example.tabletalk.adapter.RestaurantsRecyclerAdapter
 import com.example.tabletalk.adapter.UsersRecyclerAdapter
 import com.example.tabletalk.model.Model
 import com.example.tabletalk.model.Restaurant
 import com.example.tabletalk.model.User
-
-interface OnRestaurantItemClickListener {
-    fun onRestaurantClickListener(restaurant: Restaurant)
-}
-
-interface OnUserItemClickListener {
-    fun onUsernameClickListener(user: User)
-}
 
 enum class SearchType {
     RESTAURANTS, PEOPLE;

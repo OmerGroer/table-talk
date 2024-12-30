@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/post_row_main"
+    android:padding="4dp"
     android:background="?attr/selectableItemBackground">
 
     <ImageView
         android:id="@+id/post_row_avatar"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,7 +20,6 @@
         android:id="@+id/post_row_username"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
         android:text="TextView"
         android:textColor="@color/black"
         android:textStyle="bold"
@@ -88,8 +87,6 @@
         android:id="@+id/post_row_review"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
         android:text="TextView"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
@@ -100,7 +97,8 @@
         android:id="@+id/post_row_restaurant_image"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:adjustViewBounds="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -108,9 +106,9 @@
         app:srcCompat="@drawable/restaurant" />
 
     <android.widget.Button
+        android:id="@+id/post_row_comment_button"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
-        android:layout_marginStart="4dp"
         android:layout_marginTop="4dp"
         android:background="@drawable/bordered_button"
         android:text="Comment"
