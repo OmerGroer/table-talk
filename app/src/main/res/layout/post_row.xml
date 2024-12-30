@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground">
+
+    <ImageView
+        android:id="@+id/post_row_avatar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/avatar" />
+
+    <TextView
+        android:id="@+id/post_row_username"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="TextView"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/post_row_avatar"
+        app:layout_constraintStart_toEndOf="@id/post_row_avatar"
+        app:layout_constraintTop_toTopOf="@id/post_row_avatar" />
+
+    <TextView
+        android:id="@+id/post_row_restaurant"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="TextView"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/post_row_avatar"
+        app:layout_constraintTop_toBottomOf="@id/post_row_avatar" />
+
+    <ImageView
+        android:id="@+id/post_row_first_star"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:layout_constraintBottom_toBottomOf="@id/post_row_restaurant"
+        app:layout_constraintStart_toEndOf="@id/post_row_restaurant"
+        app:layout_constraintTop_toTopOf="@id/post_row_restaurant"
+        app:srcCompat="@drawable/star_on" />
+
+    <ImageView
+        android:id="@+id/post_row_second_star"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:layout_constraintBottom_toBottomOf="@id/post_row_restaurant"
+        app:layout_constraintStart_toEndOf="@id/post_row_first_star"
+        app:layout_constraintTop_toTopOf="@id/post_row_restaurant"
+        app:srcCompat="@drawable/star_on" />
+
+    <ImageView
+        android:id="@+id/post_row_third_star"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:layout_constraintBottom_toBottomOf="@id/post_row_restaurant"
+        app:layout_constraintStart_toEndOf="@id/post_row_second_star"
+        app:layout_constraintTop_toTopOf="@id/post_row_restaurant"
+        app:srcCompat="@drawable/star_on" />
+
+    <ImageView
+        android:id="@+id/post_row_fourth_star"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:layout_constraintBottom_toBottomOf="@id/post_row_restaurant"
+        app:layout_constraintStart_toEndOf="@id/post_row_third_star"
+        app:layout_constraintTop_toTopOf="@id/post_row_restaurant"
+        app:srcCompat="@drawable/star_on" />
+
+    <ImageView
+        android:id="@+id/post_row_fifth_star"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:layout_constraintBottom_toBottomOf="@id/post_row_restaurant"
+        app:layout_constraintStart_toEndOf="@id/post_row_fourth_star"
+        app:layout_constraintTop_toTopOf="@id/post_row_restaurant"
+        app:srcCompat="@drawable/star_on" />
+
+    <TextView
+        android:id="@+id/post_row_review"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:text="TextView"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/post_row_restaurant" />
+
+    <ImageView
+        android:id="@+id/post_row_restaurant_image"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:adjustViewBounds="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/post_row_review"
+        app:srcCompat="@drawable/restaurant" />
+
+    <android.widget.Button
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/bordered_button"
+        android:text="Comment"
+        android:textAllCaps="false"
+        android:textColor="@color/bright_blue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/post_row_restaurant_image" />
+</androidx.constraintlayout.widget.ConstraintLayout>

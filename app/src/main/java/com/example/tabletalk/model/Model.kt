@@ -15,6 +15,7 @@ class Model {
             Post(
                 "1",
                 "Gal",
+                "Gal",
                 "",
                 "Mcdonalds",
                 "Great",
@@ -25,11 +26,12 @@ class Model {
             Post(
                 "2",
                 "Gal",
+                "Gal",
                 "",
                 "Mcdonalds",
                 "Great",
                 "",
-                5,
+                3,
                 null
             )
         )
@@ -38,6 +40,7 @@ class Model {
     fun getPostById(id: String): Post {
         return Post(
             "1",
+            "Gal",
             "Gal",
             "",
             "Mcdonalds",
@@ -53,6 +56,7 @@ class Model {
             Comment(
                 "1",
                 "Gal",
+                "Gal",
                 "",
                 "Great",
                 "1",
@@ -60,6 +64,7 @@ class Model {
             ),
             Comment(
                 "2",
+                "Gal",
                 "Gal",
                 "",
                 "Great",
@@ -106,6 +111,7 @@ class Model {
             Post(
                 "1",
                 "Gal",
+                "Gal",
                 "",
                 "Mcdonalds",
                 "Great",
@@ -115,6 +121,7 @@ class Model {
             ),
             Post(
                 "2",
+                "Gal",
                 "Gal",
                 "",
                 "Mcdonalds",
@@ -144,6 +151,7 @@ class Model {
             Post(
                 "1",
                 "Gal",
+                "Gal",
                 "",
                 "Mcdonalds",
                 "Great",
@@ -153,6 +161,7 @@ class Model {
             ),
             Post(
                 "2",
+                "Gal",
                 "Gal",
                 "",
                 "Mcdonalds",
