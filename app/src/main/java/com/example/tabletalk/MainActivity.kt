@@ -9,6 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
     var navController: NavController? = null
@@ -26,6 +27,9 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment: NavHostFragment? =
             supportFragmentManager.findFragmentById(R.id.main_nav_host) as? NavHostFragment
         navController = navHostFragment?.navController
+
+        val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottom_bar)
+        navController?.let { NavigationUI.setupWithNavController(bottomNavigationView, it) }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

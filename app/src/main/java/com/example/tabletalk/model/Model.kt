@@ -173,6 +173,40 @@ class Model {
         )
     }
 
+    fun getAllRestaurants(name: String): MutableList<Restaurant> {
+        return mutableListOf(
+            Restaurant(
+                "Mcdonalds",
+                5.0,
+                "Fast Food",
+                "Tel Aviv"
+            ),
+            Restaurant(
+                "Burgranch",
+                1.0,
+                "Fast Food",
+                "Yavne"
+            )
+        )
+    }
+
+    fun getAllUsers(name: String): MutableList<User> {
+        return mutableListOf(
+            User(
+                "1",
+                "Gal",
+                "",
+                null
+            ),
+            User(
+                "2",
+                "Gal",
+                "",
+                null
+            )
+        )
+    }
+
     fun isUserNameAvailable(userName: String, listener: Listener<Boolean>) {
         listener.onComplete(true)
     }

@@ -1,16 +1,16 @@
-package com.example.android_application_course.adapter
+package com.example.tabletalk.adapter
 
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tabletalk.R
-import com.example.tabletalk.OnItemClickListener
+import com.example.tabletalk.OnPostItemClickListener
 import com.example.tabletalk.model.Post
 
 class PostViewHolder(
     itemView: View,
-    listener: OnItemClickListener?
+    listener: OnPostItemClickListener?
 ): RecyclerView.ViewHolder(itemView) {
     private var username: TextView? = null
     private var restaurant: TextView? = null
