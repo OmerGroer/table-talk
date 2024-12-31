@@ -29,15 +29,17 @@ class PostsListFragment : Fragment() {
 
         val adapter = PostsRecyclerAdapter(posts)
 
-        adapter.listener = object : OnPostItemClickListener {
-            override fun onRestaurantClickListener(post: Post) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onUsernameClickListener(post: Post) {
+        adapter.restaurantListener = object : OnPostItemClickListener {
+            override fun onClickListener(post: Post) {
                 TODO("Not yet implemented")
             }
         }
+        adapter.userListener = object : OnPostItemClickListener {
+            override fun onClickListener(post: Post) {
+                TODO("Not yet implemented")
+            }
+        }
+
         recyclerView.adapter = adapter
 
         return view

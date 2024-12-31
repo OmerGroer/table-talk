@@ -11,14 +11,14 @@ enum class PostType {
 }
 
 interface OnPostItemClickListener {
-    fun onRestaurantClickListener(post: Post)
-    fun onUsernameClickListener(post: Post)
+    fun onClickListener(post: Post)
 }
 
 class PostsRecyclerAdapter(private val posts: List<Post>?) :
     RecyclerView.Adapter<PostViewHolder>() {
 
-    var listener: OnPostItemClickListener? = null
+    var restaurantListener: OnPostItemClickListener? = null
+    var userListener: OnPostItemClickListener? = null
     var postType = PostType.REGULAR
 
     override fun getItemCount(): Int = posts?.size ?: 0
@@ -29,7 +29,7 @@ class PostsRecyclerAdapter(private val posts: List<Post>?) :
             parent,
             false
         )
-        return PostViewHolder(itemView, listener)
+        return PostViewHolder(itemView, restaurantListener, userListener)
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {

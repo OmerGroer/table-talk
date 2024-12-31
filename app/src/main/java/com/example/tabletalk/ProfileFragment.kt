@@ -44,15 +44,12 @@ class ProfileFragment : Fragment() {
 
         val adapter = PostsRecyclerAdapter(posts)
 
-        adapter.listener = object : OnPostItemClickListener {
-            override fun onRestaurantClickListener(post: Post) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onUsernameClickListener(post: Post) {
+        adapter.restaurantListener = object : OnPostItemClickListener {
+            override fun onClickListener(post: Post) {
                 TODO("Not yet implemented")
             }
         }
+
         adapter.postType = PostType.PROFILE
 
         recyclerView.adapter = adapter
@@ -61,16 +58,17 @@ class ProfileFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.edit_profile) {
-            return true
+        when (item.itemId) {
+            R.id.edit_profile -> {
+                TODO("Not yet implemented")
+            }
+            R.id.logout_profile -> {
+                TODO("Not yet implemented")
+                Model.shared.logout()
+            }
+            else -> return false
         }
 
-        if (item.itemId == R.id.logout_profile) {
-            Model.shared.logout()
-            TODO("finish activity and go back to login")
-            return true
-        }
-
-        return false
+        return true
     }
 }
