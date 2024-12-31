@@ -3,9 +3,12 @@ package com.example.tabletalk.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.tabletalk.OnRestaurantItemClickListener
 import com.example.tabletalk.R
 import com.example.tabletalk.model.Restaurant
+
+interface OnRestaurantItemClickListener {
+    fun onRestaurantClickListener(restaurant: Restaurant)
+}
 
 class RestaurantsRecyclerAdapter(private val restaurants: List<Restaurant>?) :
     RecyclerView.Adapter<RestaurantViewHolder>() {

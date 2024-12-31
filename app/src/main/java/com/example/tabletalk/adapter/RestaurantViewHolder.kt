@@ -3,7 +3,6 @@ package com.example.tabletalk.adapter
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.tabletalk.OnRestaurantItemClickListener
 import com.example.tabletalk.R
 import com.example.tabletalk.model.Restaurant
 

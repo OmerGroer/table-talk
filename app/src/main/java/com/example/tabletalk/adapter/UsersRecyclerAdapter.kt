@@ -3,9 +3,12 @@ package com.example.tabletalk.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.tabletalk.OnUserItemClickListener
 import com.example.tabletalk.R
 import com.example.tabletalk.model.User
+
+interface OnUserItemClickListener {
+    fun onUsernameClickListener(user: User)
+}
 
 class UsersRecyclerAdapter(private val users: List<User>?) :
     RecyclerView.Adapter<UserViewHolder>() {

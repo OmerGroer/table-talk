@@ -7,14 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.tabletalk.adapter.OnPostItemClickListener
 import com.example.tabletalk.adapter.PostsRecyclerAdapter
 import com.example.tabletalk.model.Model
 import com.example.tabletalk.model.Post
-
-interface OnPostItemClickListener {
-    fun onRestaurantClickListener(post: Post)
-    fun onUsernameClickListener(post: Post)
-}
 
 class PostsListFragment : Fragment() {
     override fun onCreateView(
@@ -33,15 +29,17 @@ class PostsListFragment : Fragment() {
 
         val adapter = PostsRecyclerAdapter(posts)
 
-        adapter.listener = object : OnPostItemClickListener {
-            override fun onRestaurantClickListener(post: Post) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onUsernameClickListener(post: Post) {
+        adapter.restaurantListener = object : OnPostItemClickListener {
+            override fun onClickListener(post: Post) {
                 TODO("Not yet implemented")
             }
         }
+        adapter.userListener = object : OnPostItemClickListener {
+            override fun onClickListener(post: Post) {
+                TODO("Not yet implemented")
+            }
+        }
+
         recyclerView.adapter = adapter
 
         return view

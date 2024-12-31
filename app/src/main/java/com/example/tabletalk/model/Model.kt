@@ -106,7 +106,7 @@ class Model {
         listener.onComplete(user)
     }
 
-    fun getPostsByUserName(userName: String): List<Post> {
+    fun getPostsByEmail(email: String): List<Post> {
         return listOf(
             Post(
                 "1",
@@ -219,6 +219,6 @@ class Model {
         listener.onComplete(true)
     }
 
-    fun logOut() {
+    fun logout() {
     }
 }
