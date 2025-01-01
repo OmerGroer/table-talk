@@ -19,7 +19,7 @@ class PostsListFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_posts_list, container, false)
 
-        val posts = Model.shared.getAllPosts()
+        val posts = Model.shared.getAllPostsWithoutUser(Model.shared.getLoggedInUser().username)
 
         val recyclerView: RecyclerView = view.findViewById(R.id.posts_recycler_view)
         recyclerView.setHasFixedSize(true)

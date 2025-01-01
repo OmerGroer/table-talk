@@ -94,32 +94,51 @@ class PostViewHolder(
             stars?.get(i)?.visibility = View.GONE
         }
 
+        val isMenuShown = post.userEmail == Model.shared.getLoggedInUser().email
+        if (isMenuShown) {
+            menu?.visibility = View.VISIBLE
+        }
+
         when (postType) {
             PostType.PROFILE -> {
                 username?.visibility = View.GONE
                 avatar?.visibility = View.GONE
-                menu?.visibility = View.VISIBLE
 
-                ConstraintSet().apply {
-                    clone(layout)
+                val constraintSet = ConstraintSet()
+                constraintSet.clone(layout)
+                reorderStars(constraintSet, isMenuShown)
+                constraintSet.connect(R.id.post_row_restaurant, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
+                constraintSet.applyTo(layout)
+            }
+            PostType.RESTAURANT -> {
+                restaurant?.visibility = View.INVISIBLE
 
-                    connect(R.id.post_row_first_star, ConstraintSet.END, R.id.post_row_menu, ConstraintSet.START)
-                    clear(R.id.post_row_first_star, ConstraintSet.START)
-                    connect(R.id.post_row_second_star, ConstraintSet.END, R.id.post_row_first_star, ConstraintSet.START)
-                    clear(R.id.post_row_second_star, ConstraintSet.START)
-                    connect(R.id.post_row_third_star, ConstraintSet.END, R.id.post_row_second_star, ConstraintSet.START)
-                    clear(R.id.post_row_third_star, ConstraintSet.START)
-                    connect(R.id.post_row_fourth_star, ConstraintSet.END, R.id.post_row_third_star, ConstraintSet.START)
-                    clear(R.id.post_row_fourth_star, ConstraintSet.START)
-                    connect(R.id.post_row_fifth_star, ConstraintSet.END, R.id.post_row_fourth_star, ConstraintSet.START)
-                    clear(R.id.post_row_fifth_star, ConstraintSet.START)
-
-                    connect(R.id.post_row_restaurant, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
-
-                    applyTo(layout)
-                }
+                val constraintSet = ConstraintSet()
+                constraintSet.clone(layout)
+                reorderStars(constraintSet, isMenuShown)
+                constraintSet.connect(R.id.post_row_restaurant, ConstraintSet.TOP, R.id.post_row_avatar, ConstraintSet.TOP)
+                constraintSet.connect(R.id.post_row_restaurant, ConstraintSet.BOTTOM, R.id.post_row_avatar, ConstraintSet.BOTTOM)
+                constraintSet.connect(R.id.post_row_review, ConstraintSet.TOP, R.id.post_row_avatar, ConstraintSet.BOTTOM)
+                constraintSet.applyTo(layout)
             }
             else -> { }
         }
+    }
+
+    private fun reorderStars(constraintSet: ConstraintSet, isMenuShown: Boolean) {
+        if (isMenuShown) {
+            constraintSet.connect(R.id.post_row_first_star, ConstraintSet.END, R.id.post_row_menu, ConstraintSet.START)
+        } else {
+            constraintSet.connect(R.id.post_row_first_star, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
+        }
+        constraintSet.clear(R.id.post_row_first_star, ConstraintSet.START)
+        constraintSet.connect(R.id.post_row_second_star, ConstraintSet.END, R.id.post_row_first_star, ConstraintSet.START)
+        constraintSet.clear(R.id.post_row_second_star, ConstraintSet.START)
+        constraintSet.connect(R.id.post_row_third_star, ConstraintSet.END, R.id.post_row_second_star, ConstraintSet.START)
+        constraintSet.clear(R.id.post_row_third_star, ConstraintSet.START)
+        constraintSet.connect(R.id.post_row_fourth_star, ConstraintSet.END, R.id.post_row_third_star, ConstraintSet.START)
+        constraintSet.clear(R.id.post_row_fourth_star, ConstraintSet.START)
+        constraintSet.connect(R.id.post_row_fifth_star, ConstraintSet.END, R.id.post_row_fourth_star, ConstraintSet.START)
+        constraintSet.clear(R.id.post_row_fifth_star, ConstraintSet.START)
     }
 }
