@@ -9,7 +9,7 @@
         android:icon="@android:drawable/ic_menu_search"
         android:title="Search" />
     <item
-        android:id="@+id/createPostFragment"
+        android:id="@+id/addPostFragment"
         android:icon="@android:drawable/ic_menu_add"
         android:title="New" />
     <item
