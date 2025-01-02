@@ -45,6 +45,7 @@ class RestaurantPageFragment : Fragment() {
 
         val adapter = PostsRecyclerAdapter(allPosts)
 
+        adapter.fragmentManager = getChildFragmentManager()
         adapter.userListener = object : OnPostItemClickListener {
             override fun onClickListener(post: Post) {
                 val action =

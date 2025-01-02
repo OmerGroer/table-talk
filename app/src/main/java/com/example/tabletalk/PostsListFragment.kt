@@ -30,6 +30,7 @@ class PostsListFragment : Fragment() {
 
         val adapter = PostsRecyclerAdapter(posts)
 
+        adapter.fragmentManager = getChildFragmentManager()
         adapter.restaurantListener = object : OnPostItemClickListener {
             override fun onClickListener(post: Post) {
                 val action =

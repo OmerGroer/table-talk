@@ -2,13 +2,16 @@ package com.example.tabletalk.adapter
 
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.PopupMenu.OnMenuItemClickListener
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.tabletalk.CommentsFragment
 import com.example.tabletalk.R
 import com.example.tabletalk.model.Model
 import com.example.tabletalk.model.Post
@@ -18,6 +21,7 @@ class PostViewHolder(
     restaurantListener: OnPostItemClickListener?,
     userListener: OnPostItemClickListener?,
     editPostListener: OnPostItemClickListener?,
+    fragmentManager: FragmentManager?,
 ): RecyclerView.ViewHolder(itemView) {
     private var layout: ConstraintLayout? = null
     private var menu: ImageView? = null
@@ -27,6 +31,7 @@ class PostViewHolder(
     private var review: TextView? = null
     private var restaurantImage: ImageView? = null
     private var avatar: ImageView? = null
+    private var comment: Button? = null
 
     private var post: Post? = null
 
@@ -45,6 +50,7 @@ class PostViewHolder(
         )
         review = itemView.findViewById(R.id.post_row_review)
         restaurantImage = itemView.findViewById(R.id.post_row_restaurant_image)
+        comment = itemView.findViewById(R.id.post_row_comment_button)
 
         username?.setOnClickListener {
             userListener?.onClickListener(post as Post)
@@ -54,6 +60,9 @@ class PostViewHolder(
         }
         restaurant?.setOnClickListener {
             restaurantListener?.onClickListener(post as Post)
+        }
+        comment?.setOnClickListener {
+            if (fragmentManager != null) CommentsFragment.display(fragmentManager, post?.id as String)
         }
 
         menu?.setOnClickListener {
