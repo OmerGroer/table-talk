@@ -19,6 +19,7 @@ class PostsRecyclerAdapter(private val posts: List<Post>?) :
 
     var restaurantListener: OnPostItemClickListener? = null
     var userListener: OnPostItemClickListener? = null
+    var editPostListener: OnPostItemClickListener? = null
     var postType = PostType.REGULAR
 
     override fun getItemCount(): Int = posts?.size ?: 0
@@ -29,7 +30,7 @@ class PostsRecyclerAdapter(private val posts: List<Post>?) :
             parent,
             false
         )
-        return PostViewHolder(itemView, restaurantListener, userListener)
+        return PostViewHolder(itemView, restaurantListener, userListener, editPostListener)
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {

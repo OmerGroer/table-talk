@@ -19,13 +19,20 @@
         android:id="@+id/profileFragment"
         android:name="com.example.tabletalk.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_editPostFragment"
+            app:destination="@id/editPostFragment" />
+    </fragment>
     <fragment
         android:id="@+id/restaurantPageFragment"
         android:name="com.example.tabletalk.RestaurantPageFragment"
         android:label="fragment_restaurant_page"
         tools:layout="@layout/fragment_restaurant_page" >
         <argument android:name="restaurantName" />
+        <action
+            android:id="@+id/action_restaurantPageFragment_to_editPostFragment"
+            app:destination="@id/editPostFragment" />
     </fragment>
     <action
         android:id="@+id/action_global_restaurantPageFragment"
@@ -52,4 +59,13 @@
         android:name="com.example.tabletalk.AddPostFragment"
         android:label="fragment_add_post"
         tools:layout="@layout/fragment_add_post" />
+    <fragment
+        android:id="@+id/editPostFragment"
+        android:name="com.example.tabletalk.EditPostFragment"
+        android:label="fragment_edit_post"
+        tools:layout="@layout/fragment_edit_post" >
+        <argument
+            android:name="postId"
+            app:argType="string" />
+    </fragment>
 </navigation>

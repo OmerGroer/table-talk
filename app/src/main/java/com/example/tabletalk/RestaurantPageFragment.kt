@@ -54,6 +54,15 @@ class RestaurantPageFragment : Fragment() {
                 Navigation.findNavController(view).navigate(action)
             }
         }
+        adapter.editPostListener = object : OnPostItemClickListener {
+            override fun onClickListener(post: Post) {
+                val action =
+                    RestaurantPageFragmentDirections.actionRestaurantPageFragmentToEditPostFragment(
+                        post.id
+                    )
+                Navigation.findNavController(view).navigate(action)
+            }
+        }
 
         adapter.postType = PostType.RESTAURANT
 
