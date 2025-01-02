@@ -2,6 +2,7 @@ package com.example.tabletalk.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tabletalk.R
 import com.example.tabletalk.model.Post
@@ -20,6 +21,7 @@ class PostsRecyclerAdapter(private val posts: List<Post>?) :
     var restaurantListener: OnPostItemClickListener? = null
     var userListener: OnPostItemClickListener? = null
     var editPostListener: OnPostItemClickListener? = null
+    var fragmentManager: FragmentManager? = null
     var postType = PostType.REGULAR
 
     override fun getItemCount(): Int = posts?.size ?: 0
@@ -30,7 +32,7 @@ class PostsRecyclerAdapter(private val posts: List<Post>?) :
             parent,
             false
         )
-        return PostViewHolder(itemView, restaurantListener, userListener, editPostListener)
+        return PostViewHolder(itemView, restaurantListener, userListener, editPostListener, fragmentManager)
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {

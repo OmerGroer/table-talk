@@ -59,6 +59,7 @@ class UserFragment : Fragment() {
 
         adapter.restaurantListener = onRestaurantClickListener
         adapter.editPostListener = onEditPostListener
+        adapter.fragmentManager = getChildFragmentManager()
 
         adapter.postType = PostType.PROFILE
 
