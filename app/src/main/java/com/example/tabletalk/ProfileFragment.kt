@@ -5,13 +5,9 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.navigation.Navigation
 import com.example.tabletalk.adapter.OnPostItemClickListener
-import com.example.tabletalk.adapter.PostType
-import com.example.tabletalk.adapter.PostsRecyclerAdapter
 import com.example.tabletalk.model.Model
 import com.example.tabletalk.model.Post
 
@@ -27,32 +23,25 @@ class ProfileFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        val loggedUser = Model.shared.getLoggedInUser()
-        val posts = Model.shared.getPostsByEmail(loggedUser.email)
-
-        val username: TextView = view.findViewById(R.id.profile_username)
-        username.text = loggedUser.username
-
-        val toolbar: androidx.appcompat.widget.Toolbar = view.findViewById(R.id.profile_toolbar)
-        toolbar.inflateMenu(R.menu.profile_menu)
-
-        val recyclerView: RecyclerView = view.findViewById(R.id.posts_recycler_view)
-        recyclerView.setHasFixedSize(true)
-
-        val layoutManager = LinearLayoutManager(context)
-        recyclerView.layoutManager = layoutManager
-
-        val adapter = PostsRecyclerAdapter(posts)
-
-        adapter.restaurantListener = object : OnPostItemClickListener {
-            override fun onClickListener(post: Post) {
-                TODO("Not yet implemented")
+        val user = Model.shared.getLoggedInUser()
+        val fragment = UserFragment.newInstance(user.email, user.username).setOnCreate(object : OnCreateListener {
+            override fun onCreate(view: View) {
+                val toolbar: androidx.appcompat.widget.Toolbar = view.findViewById(R.id.profile_toolbar)
+                toolbar.inflateMenu(R.menu.profile_menu)
             }
-        }
+        }).setOnRestaurantClickListener(object : OnPostItemClickListener {
+            override fun onClickListener(post: Post) {
+                val action =
+                    ProfileFragmentDirections.actionGlobalRestaurantPageFragment(
+                        post.restaurantName
+                    )
+                Navigation.findNavController(view).navigate(action)
+            }
+        })
 
-        adapter.postType = PostType.PROFILE
-
-        recyclerView.adapter = adapter
+        getChildFragmentManager().beginTransaction()
+            .replace(R.id.container, fragment)
+            .commitNow()
 
         return view
     }

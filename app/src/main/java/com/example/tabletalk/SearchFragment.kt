@@ -59,7 +59,7 @@ class SearchFragment : Fragment() {
         restaurantRecyclerAdapter.listener = object : OnRestaurantItemClickListener {
             override fun onRestaurantClickListener(restaurant: Restaurant) {
                 val action =
-                    SearchFragmentDirections.actionSearchFragmentToRestaurantPageFragment(
+                    SearchFragmentDirections.actionGlobalRestaurantPageFragment(
                         restaurant.name
                     )
                 Navigation.findNavController(view).navigate(action)
@@ -69,7 +69,11 @@ class SearchFragment : Fragment() {
         userRecyclerAdapter = UsersRecyclerAdapter(users)
         userRecyclerAdapter.listener = object : OnUserItemClickListener {
             override fun onUsernameClickListener(user: User) {
-                TODO("Not yet implemented")
+                val action =
+                    SearchFragmentDirections.actionGlobalUserPageFragment(
+                        user.username, user.email
+                    )
+                Navigation.findNavController(view).navigate(action)
             }
         }
 

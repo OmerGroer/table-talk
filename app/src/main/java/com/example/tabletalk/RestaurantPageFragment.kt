@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tabletalk.adapter.OnPostItemClickListener
@@ -46,7 +47,11 @@ class RestaurantPageFragment : Fragment() {
 
         adapter.userListener = object : OnPostItemClickListener {
             override fun onClickListener(post: Post) {
-                TODO("Not yet implemented")
+                val action =
+                    RestaurantPageFragmentDirections.actionGlobalUserPageFragment(
+                        post.userName, post.userEmail
+                    )
+                Navigation.findNavController(view).navigate(action)
             }
         }
 

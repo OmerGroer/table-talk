@@ -14,11 +14,7 @@
         android:id="@+id/searchFragment"
         android:name="com.example.tabletalk.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" >
-        <action
-            android:id="@+id/action_searchFragment_to_restaurantPageFragment"
-            app:destination="@id/restaurantPageFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.tabletalk.ProfileFragment"
@@ -31,4 +27,24 @@
         tools:layout="@layout/fragment_restaurant_page" >
         <argument android:name="restaurantName" />
     </fragment>
+    <action
+        android:id="@+id/action_global_restaurantPageFragment"
+        app:destination="@id/restaurantPageFragment"
+        app:popUpToInclusive="true" />
+    <fragment
+        android:id="@+id/userPageFragment"
+        android:name="com.example.tabletalk.UserPageFragment"
+        android:label="fragment_user_page"
+        tools:layout="@layout/fragment_user_page" >
+        <argument
+            android:name="username"
+            app:argType="string" />
+        <argument
+            android:name="userEmail"
+            app:argType="string" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_userPageFragment"
+        app:destination="@id/userPageFragment"
+        app:popUpToInclusive="true" />
 </navigation>
