@@ -25,6 +25,7 @@ interface OnCreateListener {
 class UserFragment : Fragment() {
     private var onCreateListener: OnCreateListener? = null
     private var onRestaurantClickListener: OnPostItemClickListener? = null
+    private var onEditPostListener: OnPostItemClickListener? = null
 
     private var userEmail: String? = null
     private var username: String? = null
@@ -57,6 +58,7 @@ class UserFragment : Fragment() {
         val adapter = PostsRecyclerAdapter(posts)
 
         adapter.restaurantListener = onRestaurantClickListener
+        adapter.editPostListener = onEditPostListener
 
         adapter.postType = PostType.PROFILE
 
@@ -84,6 +86,11 @@ class UserFragment : Fragment() {
 
     fun setOnRestaurantClickListener(listener: OnPostItemClickListener): UserFragment {
         this.onRestaurantClickListener = listener
+        return this
+    }
+
+    fun setOnEditPostListener(listener: OnPostItemClickListener): UserFragment {
+        this.onEditPostListener = listener
         return this
     }
 }

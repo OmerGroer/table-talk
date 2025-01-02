@@ -17,6 +17,7 @@ class PostViewHolder(
     itemView: View,
     restaurantListener: OnPostItemClickListener?,
     userListener: OnPostItemClickListener?,
+    editPostListener: OnPostItemClickListener?,
 ): RecyclerView.ViewHolder(itemView) {
     private var layout: ConstraintLayout? = null
     private var menu: ImageView? = null
@@ -61,7 +62,7 @@ class PostViewHolder(
                     override fun onMenuItemClick(item: MenuItem?): Boolean {
                         when (item?.itemId) {
                             R.id.edit_post -> {
-                                TODO("Not yet implemented")
+                                editPostListener?.onClickListener(post as Post)
                             }
                             R.id.delete_post -> {
                                 Model.shared.deletePost(post as Post, object : Model.Listener<Post> {
@@ -87,7 +88,7 @@ class PostViewHolder(
         restaurant?.text = post?.restaurantName
         review?.text = post?.review
 
-        val rate = post?.rate as Int
+        val rate = post?.rating as Int
         val startsSize = stars?.size as Int - 1
 
         for (i in rate..startsSize) {

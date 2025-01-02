@@ -8,6 +8,6 @@ class Post (
     var restaurantName: String,
     var review: String,
     var restaurantUrl: String,
-    var rate: Int,
+    var rating: Int,
     var lastUpdated: Long?
 )
