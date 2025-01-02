@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tabletalk.adapter.OnPostItemClickListener
@@ -31,12 +32,20 @@ class PostsListFragment : Fragment() {
 
         adapter.restaurantListener = object : OnPostItemClickListener {
             override fun onClickListener(post: Post) {
-                TODO("Not yet implemented")
+                val action =
+                    PostsListFragmentDirections.actionGlobalRestaurantPageFragment(
+                        post.restaurantName
+                    )
+                Navigation.findNavController(view).navigate(action)
             }
         }
         adapter.userListener = object : OnPostItemClickListener {
             override fun onClickListener(post: Post) {
-                TODO("Not yet implemented")
+                val action =
+                    PostsListFragmentDirections.actionGlobalUserPageFragment(
+                        post.userName, post.userEmail
+                    )
+                Navigation.findNavController(view).navigate(action)
             }
         }
 
