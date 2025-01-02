@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tabletalk.adapter.OnRestaurantItemClickListener
@@ -57,7 +58,11 @@ class SearchFragment : Fragment() {
         restaurantRecyclerAdapter = RestaurantsRecyclerAdapter(restaurants)
         restaurantRecyclerAdapter.listener = object : OnRestaurantItemClickListener {
             override fun onRestaurantClickListener(restaurant: Restaurant) {
-                TODO("Not yet implemented")
+                val action =
+                    SearchFragmentDirections.actionSearchFragmentToRestaurantPageFragment(
+                        restaurant.name
+                    )
+                Navigation.findNavController(view).navigate(action)
             }
         }
 

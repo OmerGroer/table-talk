@@ -10,11 +10,11 @@ class Model {
         fun onComplete(data: T)
     }
 
-    fun getAllPosts(): List<Post> {
+    fun getAllPostsWithoutUser(userEmail: String): List<Post> {
         return listOf(
             Post(
                 "1",
-                "Gal",
+                "Gal5",
                 "Gal",
                 "",
                 "Mcdonalds",
@@ -25,7 +25,7 @@ class Model {
             ),
             Post(
                 "2",
-                "Gal",
+                "Gal7",
                 "Gal",
                 "",
                 "Mcdonalds",
@@ -135,7 +135,7 @@ class Model {
 
     fun getLoggedInUser(): User {
         return User(
-            "1",
+            "Gal",
             "Gal",
             "",
             null
@@ -146,8 +146,8 @@ class Model {
         listener.onComplete(user)
     }
 
-    fun getPostsByRestaurantName(restaurantName: String): List<Post> {
-        return listOf(
+    fun getPostsByRestaurantNameAndUserEmail(restaurantName: String, userEmail: String): List<Post> {
+        return mutableListOf(
             Post(
                 "1",
                 "Gal",
@@ -158,10 +158,26 @@ class Model {
                 "",
                 5,
                 null
+            )
+        )
+    }
+
+    fun getPostsByRestaurantName(restaurantName: String): List<Post> {
+        return mutableListOf(
+            Post(
+                "1",
+                "Gal3",
+                "Gal",
+                "",
+                "Mcdonalds",
+                "Great",
+                "",
+                5,
+                null
             ),
             Post(
                 "2",
-                "Gal",
+                "Gal2",
                 "Gal",
                 "",
                 "Mcdonalds",
@@ -170,6 +186,15 @@ class Model {
                 5,
                 null
             )
+        )
+    }
+
+    fun getRestaurantByName(name: String): Restaurant {
+        return Restaurant(
+            "Mcdonalds",
+            4.9,
+            "Fast Food",
+            "Tel Aviv"
         )
     }
 
