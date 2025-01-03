@@ -1,9 +1,6 @@
-package com.example.tabletalk.login
+package com.example.tabletalk.register
 
 import android.util.Log
-import android.view.View
-import androidx.databinding.Bindable
-import androidx.databinding.BindingAdapter
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,48 +9,58 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class LoginViewModel : ViewModel() {
+class RegisterViewModel : ViewModel() {
+    val name = MutableLiveData("")
     val email = MutableLiveData("")
     val password = MutableLiveData("")
+    val confirmPassword = MutableLiveData("")
 
+    val isNameValid = MutableLiveData(true)
     val isEmailValid = MutableLiveData(true)
     val isPasswordValid = MutableLiveData(true)
+    val isConfirmPasswordValid = MutableLiveData(true)
+
+    val isFormValid: Boolean
+        get() = isNameValid.value == true && isEmailValid.value == true
+                && isPasswordValid.value == true && isConfirmPasswordValid.value == true
 
     private val validator = Validator()
 
-    val isFormValid: Boolean
-        get() = isEmailValid.value == true && isPasswordValid.value == true
-//    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-
-    fun login(onSuccess: () -> Unit, onFailure: (error: Exception?) -> Unit) {
+    fun register(onSuccess: () -> Unit, onFailure: (error: Exception?) -> Unit) {
         validateForm()
+
         if (!isFormValid) {
             onFailure(null)
             return
         }
 
-        signInUserConcurrently(onSuccess, onFailure)
+        try {
+            createUserConcurrently(onSuccess, onFailure)
+        } catch (e: Exception) {
+            Log.e("Register", "Error registering user", e)
+            onFailure(e)
+
+        }
     }
 
-    private fun signInUserConcurrently(
+    private fun createUserConcurrently(
         onSuccess: () -> Unit,
         onFailure: (error: Exception?) -> Unit
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
-                withContext(Dispatchers.IO) {
-//                    auth.signInWithEmailAndPassword(email.value!!, password.value!!).await()
-                }
                 withContext(Dispatchers.Main) { onSuccess() }
             } catch (e: Exception) {
-                Log.e("Login", "Error signing in user", e)
+                Log.e("Register", "Error registering user", e)
                 withContext(Dispatchers.Main) { onFailure(e) }
             }
         }
     }
 
     private fun validateForm() {
+        isNameValid.value = name.value?.isNotEmpty() == true
         isEmailValid.value = validator.validateEmail(email.value)
         isPasswordValid.value = validator.validatePassword(password.value)
+        isConfirmPasswordValid.value = validator.validateConfirmPassword(password.value, confirmPassword.value)
     }
 }

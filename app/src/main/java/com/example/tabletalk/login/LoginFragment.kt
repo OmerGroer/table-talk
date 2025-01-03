@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.tabletalk.R
 import com.example.tabletalk.databinding.FragmentLoginBinding
 
@@ -25,13 +26,11 @@ class LoginFragment : Fragment() {
         bindViews(binding)
 
 //        if (FirebaseAuth.getInstance().currentUser != null) {
-//            val action =
-//                LoginFragmentDirections.actionLoginFragmentToPostsListFragment()
-//            Navigation.findNavController(view).navigate(action)
+//            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToPostsListFragment())
 //        }
 
         binding.registerButton.setOnClickListener {
-            TODO("implement")
+            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
         }
 
         binding.loginButton.setOnClickListener {
@@ -48,6 +47,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun onLoginSuccess() {
+        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToPostsListFragment())
     }
 
     private fun onLoginFailure(error: Exception?) {

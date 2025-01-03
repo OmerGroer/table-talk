@@ -12,7 +12,7 @@ class Validator {
         return password != null && _passwordPattern.matches(password)
     }
 
-    fun validateConfirmPassword(password: String, confirmPassword: String): Boolean {
+    fun validateConfirmPassword(password: String?, confirmPassword: String?): Boolean {
         return password == confirmPassword
     }
 }
