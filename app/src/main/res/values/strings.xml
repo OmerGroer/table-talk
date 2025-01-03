@@ -4,5 +4,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="register_link">Don\'t have an account yet?</string>
     <string name="email_error">Email is invalid</string>
+    <string name="name_error">Name is invalid</string>
+    <string name="confirm_password_error">Passwords don\'t match</string>
     <string name="password_error">Password must be 6 characters long, contain numbers, an upper case letter and a lower case letter</string>
 </resources>
