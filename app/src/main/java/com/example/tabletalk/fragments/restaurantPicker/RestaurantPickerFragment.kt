@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -104,7 +103,5 @@ class RestaurantPickerFragment : Fragment() {
                 return false
             }
         })
-        val searchIcon = binding?.searchInput?.findViewById<ImageView>(androidx.appcompat.R.id.search_button)
-        searchIcon?.visibility = View.GONE
     }
 }

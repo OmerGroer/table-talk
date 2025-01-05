@@ -51,7 +51,6 @@ class PostFormFragment : Fragment() {
             rating?.rating = post.rating.toFloat()
             restaurantName?.text = post.restaurantName
         } else {
-            cancelButton?.visibility = View.GONE
             restaurantName?.text = restaurantId.toString()
         }
 

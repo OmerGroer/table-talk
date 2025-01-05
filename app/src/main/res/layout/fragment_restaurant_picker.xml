@@ -43,6 +43,7 @@
                     android:iconifiedByDefault="false"
                     android:imeOptions="actionSearch"
                     android:inputType="text"
+                    android:searchIcon="@null"
                     android:queryHint="@string/search_hint"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/search_button"
