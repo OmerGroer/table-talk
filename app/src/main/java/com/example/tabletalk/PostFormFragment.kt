@@ -1,25 +1,25 @@
 package com.example.tabletalk
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RatingBar
-import android.widget.SearchView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.example.tabletalk.model.Model
 
 private const val POST_ID = "postId"
+private const val RESTAURANT_ID = "restaurantId"
 
 class PostFormFragment : Fragment() {
     private var postId: String? = null
+    private var restaurantId: Int? = null
 
     private var restaurantName: TextView? = null
-    private var restaurant: SearchView? = null
     private var review: EditText? = null
     private var rating: RatingBar? = null
     private var saveButton: Button? = null
@@ -29,6 +29,7 @@ class PostFormFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             postId = it.getString(POST_ID)
+            restaurantId = it.getInt(RESTAURANT_ID)
         }
     }
 
@@ -40,7 +41,6 @@ class PostFormFragment : Fragment() {
 
         review = view.findViewById(R.id.restaurant_review)
         rating = view.findViewById(R.id.ratingBar)
-        restaurant = view.findViewById(R.id.search_restaurant)
         restaurantName = view.findViewById(R.id.toolbar_title)
         saveButton = view.findViewById(R.id.save_changes_button)
         cancelButton = view.findViewById(R.id.cancel_button)
@@ -49,10 +49,10 @@ class PostFormFragment : Fragment() {
             val post = Model.shared.getPostById(postId as String)
             review?.setText(post.review)
             rating?.rating = post.rating.toFloat()
-            restaurant?.visibility = View.GONE
             restaurantName?.text = post.restaurantName
         } else {
             cancelButton?.visibility = View.GONE
+            restaurantName?.text = restaurantId.toString()
         }
 
         cancelButton?.setOnClickListener {
@@ -63,11 +63,16 @@ class PostFormFragment : Fragment() {
     }
 
     companion object {
-        @JvmStatic
         fun newInstance(postId: String) =
             PostFormFragment().apply {
                 arguments = Bundle().apply {
                     putString(POST_ID, postId)
+                }
+            }
+        fun newInstance(restaurantId: Int) =
+            PostFormFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(RESTAURANT_ID, restaurantId)
                 }
             }
         fun newInstance() = PostFormFragment()

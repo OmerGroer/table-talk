@@ -30,10 +30,10 @@ class SearchFragment : Fragment() {
     private var searchInput: SearchView? = null
 
     private var users: MutableList<User>? = null
-    private var restaurants: MutableList<Restaurant>? = null
+    private var restaurants: List<Restaurant> = emptyList()
 
     private var userRecyclerAdapter: UsersRecyclerAdapter = UsersRecyclerAdapter(users)
-    private var restaurantRecyclerAdapter: RestaurantsRecyclerAdapter = RestaurantsRecyclerAdapter(restaurants)
+    private var restaurantRecyclerAdapter: RestaurantsRecyclerAdapter = RestaurantsRecyclerAdapter(emptyList())
 
     private var searchType: SearchType = SearchType.RESTAURANTS
 
@@ -129,7 +129,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun setRestaurants() {
-        restaurants?.clear()
-        restaurants?.addAll(Model.shared.getAllRestaurants(searchInput?.query.toString()))
+//        restaurants?.clear()
+//        restaurants?.addAll(Model.shared.getAllRestaurants(searchInput?.query.toString()))
     }
 }

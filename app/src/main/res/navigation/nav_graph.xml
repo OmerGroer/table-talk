@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/postsListFragment">
 
     <fragment
         android:id="@+id/postsListFragment"
@@ -58,7 +58,11 @@
         android:id="@+id/addPostFragment"
         android:name="com.example.tabletalk.AddPostFragment"
         android:label="fragment_add_post"
-        tools:layout="@layout/fragment_add_post" />
+        tools:layout="@layout/fragment_add_post" >
+        <argument
+            android:name="restaurantId"
+            app:argType="integer" />
+    </fragment>
     <fragment
         android:id="@+id/editPostFragment"
         android:name="com.example.tabletalk.EditPostFragment"
@@ -70,7 +74,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.tabletalk.login.LoginFragment"
+        android:name="com.example.tabletalk.fragments.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -84,7 +88,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.tabletalk.register.RegisterFragment"
+        android:name="com.example.tabletalk.fragments.register.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action
@@ -92,5 +96,14 @@
             app:destination="@id/postsListFragment"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/restaurantPickerFragment"
+        android:name="com.example.tabletalk.fragments.restaurantPicker.RestaurantPickerFragment"
+        android:label="fragment_restaurant_picker"
+        tools:layout="@layout/fragment_restaurant_picker" >
+        <action
+            android:id="@+id/action_restaurantPickerFragment_to_addPostFragment"
+            app:destination="@id/addPostFragment" />
     </fragment>
 </navigation>

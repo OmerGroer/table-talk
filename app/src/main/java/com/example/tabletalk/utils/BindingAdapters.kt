@@ -1,11 +1,13 @@
-package com.example.tabletalk.customEditText
+package com.example.tabletalk.utils
 
+import android.widget.SearchView
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
 import androidx.lifecycle.LiveData
 import com.example.tabletalk.R
+import com.example.tabletalk.customEditText.CustomTextInput
 import com.google.android.material.textfield.TextInputEditText
 
 @BindingAdapter("android:text")

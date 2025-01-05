@@ -1,6 +1,7 @@
 package com.example.tabletalk.adapter
 
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tabletalk.R
@@ -10,17 +11,14 @@ class RestaurantViewHolder(
     itemView: View,
     listener: OnRestaurantItemClickListener?
 ) : RecyclerView.ViewHolder(itemView) {
-    private var name: TextView? = null
-    private var description: TextView? = null
-    private var rate: TextView? = null
+    private var name: TextView = itemView.findViewById(R.id.restaurant_row_name)
+    private var description: TextView = itemView.findViewById(R.id.restaurant_row_description)
+    private var rate: TextView = itemView.findViewById(R.id.restaurant_row_rate)
+    private var rateStar: ImageView = itemView.findViewById(R.id.restaurant_row_star)
 
     private var restaurant: Restaurant? = null
 
     init {
-        name = itemView.findViewById(R.id.restaurant_row_name)
-        description = itemView.findViewById(R.id.restaurant_row_description)
-        rate = itemView.findViewById(R.id.restaurant_row_rate)
-
         itemView.setOnClickListener {
             listener?.onRestaurantClickListener(restaurant as Restaurant)
         }
@@ -30,7 +28,14 @@ class RestaurantViewHolder(
         this.restaurant = restaurant
 
         name?.text = restaurant?.name
-        description?.text = "${restaurant?.category} - ${restaurant?.location}"
-        rate?.text = restaurant?.rate.toString()
+        description?.text = "${restaurant?.category} - ${restaurant?.address}"
+
+        val rating = restaurant?.rating
+        if (rating == null) {
+            rate.visibility = View.GONE
+            rateStar.visibility = View.GONE
+        } else {
+            rate?.text = rating.toString()
+        }
     }
 }

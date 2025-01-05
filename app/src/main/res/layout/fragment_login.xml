@@ -2,13 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".login.LoginFragment">
+    tools:context=".fragments.login.LoginFragment">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.example.tabletalk.login.LoginViewModel" />
+            type="com.example.tabletalk.fragments.login.LoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

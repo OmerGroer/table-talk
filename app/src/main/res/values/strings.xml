@@ -7,4 +7,5 @@
     <string name="name_error">Name is invalid</string>
     <string name="confirm_password_error">Passwords don\'t match</string>
     <string name="password_error">Password must be 6 characters long, contain numbers, an upper case letter and a lower case letter</string>
+    <string name="search_hint"><font size="14">Country/City/ZIP code/Address/Neighborhood</font></string>
 </resources>

@@ -48,8 +48,8 @@
             android:hint="Review..."
             android:inputType="textMultiLine"
             android:padding="8dp"
-            app:layout_constraintEnd_toEndOf="@id/search_restaurant"
-            app:layout_constraintStart_toStartOf="@id/search_restaurant"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ratingBar" />
 
         <RatingBar
@@ -59,24 +59,6 @@
             android:layout_marginTop="16dp"
             android:stepSize="1"
             android:theme="@style/RatingBar"
-            app:layout_constraintEnd_toEndOf="@id/search_restaurant"
-            app:layout_constraintStart_toStartOf="@id/search_restaurant"
-            app:layout_constraintTop_toBottomOf="@id/search_restaurant" />
-
-        <SearchView
-            android:id="@+id/search_restaurant"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="32dp"
-            android:background="@drawable/add_post_background"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:iconifiedByDefault="false"
-            android:imeOptions="actionSearch"
-            android:inputType="text"
-            android:queryHint="Restaurant..."
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/post_toolbar" />

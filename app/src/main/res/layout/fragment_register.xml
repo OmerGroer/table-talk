@@ -2,13 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".register.RegisterFragment">
+    tools:context=".fragments.register.RegisterFragment">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.example.tabletalk.register.RegisterViewModel" />
+            type="com.example.tabletalk.fragments.register.RegisterViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
