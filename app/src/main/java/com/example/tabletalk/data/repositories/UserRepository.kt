@@ -19,7 +19,7 @@ class UserRepository {
 
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-    private val localDb = AppLocalDb.database
+    private val localDb get() = AppLocalDb.database
 
     suspend fun saveUserInDB(user: User) {
         db.collection(USERS_COLLECTION)
@@ -57,5 +57,25 @@ class UserRepository {
     suspend fun createAuthUser(email: String, password: String) {
         val task = auth.createUserWithEmailAndPassword(email, password).await()
         if (task.user?.uid == null) throw Exception("User not created")
+    }
+
+    fun getLoggedUserId(): String? {
+        return auth.currentUser?.uid
+    }
+
+    fun isLogged(): Boolean {
+        return auth.currentUser != null
+    }
+
+    suspend fun signIn(email: String, password: String) {
+        auth.signInWithEmailAndPassword(email, password).await()
+    }
+
+    fun logout() {
+        auth.signOut()
+    }
+
+    fun addAuthStateListener(listener: FirebaseAuth.AuthStateListener) {
+        auth.addAuthStateListener(listener)
     }
 }

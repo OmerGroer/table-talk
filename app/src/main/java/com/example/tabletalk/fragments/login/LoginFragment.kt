@@ -10,7 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.tabletalk.R
+import com.example.tabletalk.data.repositories.UserRepository
 import com.example.tabletalk.databinding.FragmentLoginBinding
+import com.example.tabletalk.utils.BasicAlert
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 
 class LoginFragment : Fragment() {
     private val viewModel: LoginViewModel by viewModels()
@@ -25,9 +29,9 @@ class LoginFragment : Fragment() {
         )
         bindViews(binding)
 
-//        if (FirebaseAuth.getInstance().currentUser != null) {
-//            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToPostsListFragment())
-//        }
+        if (UserRepository.getInstance().isLogged()) {
+            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToPostsListFragment())
+        }
 
         binding?.registerButton?.setOnClickListener {
             findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
@@ -61,13 +65,12 @@ class LoginFragment : Fragment() {
 
     private fun handleLoginError(error: Exception) {
         when (error) {
-//            is FirebaseAuthInvalidUserException, is FirebaseAuthInvalidCredentialsException -> {
-//                BasicAlert("Login Error", "User not found", requireContext()).show()
-//            }
-//
-//            else -> {
-//                BasicAlert("Login Error", "An error occurred", requireContext()).show()
-//            }
+            is FirebaseAuthInvalidUserException, is FirebaseAuthInvalidCredentialsException -> {
+                BasicAlert("Login Error", "User not found", requireContext()).show()
+            }
+            else -> {
+                BasicAlert("Login Error", "An error occurred", requireContext()).show()
+            }
         }
     }
 

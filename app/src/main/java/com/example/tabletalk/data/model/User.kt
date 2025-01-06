@@ -8,6 +8,5 @@ class User (
     @PrimaryKey val id: String,
     val email: String,
     val username: String,
-    val avatarUrl: String,
-    val lastUpdated: Long?
+    val avatarUrl: String? = null
 )

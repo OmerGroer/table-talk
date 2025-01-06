@@ -138,8 +138,7 @@ class Model {
             "1",
             "Gal",
             "Gal",
-            "",
-            null
+            ""
         )
     }
 
@@ -225,15 +224,13 @@ class Model {
                 "1",
                 "1",
                 "Gal",
-                "",
-                null
+                ""
             ),
             User(
                 "2",
                 "2",
                 "Gal",
-                "",
-                null
+                ""
             )
         )
     }
