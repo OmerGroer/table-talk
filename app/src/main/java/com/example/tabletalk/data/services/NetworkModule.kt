@@ -1,4 +1,4 @@
-package com.example.tabletalk.services
+package com.example.tabletalk.data.services
 
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient

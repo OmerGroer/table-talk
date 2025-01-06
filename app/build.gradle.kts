@@ -62,4 +62,10 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.adapter.guava)
     implementation(libs.converter.gson)
+    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.auth)
+    implementation(libs.room.runtime)
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
 }

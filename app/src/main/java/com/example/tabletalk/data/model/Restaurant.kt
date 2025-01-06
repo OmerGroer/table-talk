@@ -1,4 +1,4 @@
-package com.example.tabletalk.model
+package com.example.tabletalk.data.model
 
 class Restaurant (
     val id: Int,
