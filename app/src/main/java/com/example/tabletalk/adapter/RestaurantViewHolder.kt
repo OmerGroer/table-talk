@@ -27,15 +27,15 @@ class RestaurantViewHolder(
     fun bind(restaurant: Restaurant?, position: Int) {
         this.restaurant = restaurant
 
-        name?.text = restaurant?.name
-        description?.text = "${restaurant?.category} - ${restaurant?.address}"
+        name.text = restaurant?.name
+        description.text = "${restaurant?.category?.let {"${restaurant.category} - "} ?: ""}${restaurant?.address}"
 
         val rating = restaurant?.rating
         if (rating == null) {
             rate.visibility = View.GONE
             rateStar.visibility = View.GONE
         } else {
-            rate?.text = rating.toString()
+            rate.text = rating.toString()
         }
     }
 }
