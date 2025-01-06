@@ -10,7 +10,7 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import com.example.tabletalk.model.Model
+import com.example.tabletalk.data.model.Model
 
 private const val POST_ID = "postId"
 private const val RESTAURANT_ID = "restaurantId"

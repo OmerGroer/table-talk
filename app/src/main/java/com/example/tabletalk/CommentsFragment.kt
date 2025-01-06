@@ -10,7 +10,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tabletalk.adapter.CommentsRecyclerAdapter
-import com.example.tabletalk.model.Model
+import com.example.tabletalk.data.model.Model
 
 private const val POST_ID = "postId"
 private const val TAG = "comments"

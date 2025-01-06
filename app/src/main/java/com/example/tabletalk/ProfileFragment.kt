@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.example.tabletalk.adapter.OnPostItemClickListener
-import com.example.tabletalk.model.Model
-import com.example.tabletalk.model.Post
+import com.example.tabletalk.data.model.Model
+import com.example.tabletalk.data.model.Post
 
 class ProfileFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +24,7 @@ class ProfileFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
         val user = Model.shared.getLoggedInUser()
-        val fragment = UserFragment.newInstance(user.email, user.username)
+        val fragment = UserFragment.newInstance(user.id, user.username)
         fragment.setOnCreate(object : OnCreateListener {
             override fun onCreate(view: View) {
                 val toolbar: androidx.appcompat.widget.Toolbar = view.findViewById(R.id.profile_toolbar)

@@ -1,7 +1,7 @@
 package com.example.tabletalk.utils
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.tabletalk.model.Restaurant
+import com.example.tabletalk.data.model.Restaurant
 
 class DiffCallback(
     private val oldList: List<Restaurant>,

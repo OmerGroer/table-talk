@@ -47,7 +47,7 @@
             android:name="username"
             app:argType="string" />
         <argument
-            android:name="userEmail"
+            android:name="userId"
             app:argType="string" />
     </fragment>
     <action

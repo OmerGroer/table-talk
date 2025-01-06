@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tabletalk.R
-import com.example.tabletalk.model.Post
+import com.example.tabletalk.data.model.Post
 
 enum class PostType {
     REGULAR, PROFILE, RESTAURANT

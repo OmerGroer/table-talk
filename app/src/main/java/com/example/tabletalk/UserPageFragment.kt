@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
 import com.example.tabletalk.adapter.OnPostItemClickListener
-import com.example.tabletalk.model.Post
+import com.example.tabletalk.data.model.Post
 
 class UserPageFragment : Fragment() {
 
@@ -18,7 +18,7 @@ class UserPageFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_user_page, container, false)
 
         val user = UserPageFragmentArgs.fromBundle(requireArguments())
-        val fragment = UserFragment.newInstance(user.userEmail, user.username).setOnRestaurantClickListener(object : OnPostItemClickListener {
+        val fragment = UserFragment.newInstance(user.userId, user.username).setOnRestaurantClickListener(object : OnPostItemClickListener {
             override fun onClickListener(post: Post) {
                 val action =
                     UserPageFragmentDirections.actionGlobalRestaurantPageFragment(

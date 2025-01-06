@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
 import com.example.tabletalk.adapter.OnPostItemClickListener
-import com.example.tabletalk.model.Post
+import com.example.tabletalk.data.model.Post
 
 class EditPostFragment : Fragment() {
     override fun onCreateView(

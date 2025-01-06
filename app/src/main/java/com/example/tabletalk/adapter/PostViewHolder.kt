@@ -13,8 +13,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tabletalk.CommentsFragment
 import com.example.tabletalk.R
-import com.example.tabletalk.model.Model
-import com.example.tabletalk.model.Post
+import com.example.tabletalk.data.model.Model
+import com.example.tabletalk.data.model.Post
 
 class PostViewHolder(
     itemView: View,
@@ -104,7 +104,7 @@ class PostViewHolder(
             stars?.get(i)?.visibility = View.GONE
         }
 
-        val isMenuShown = post.userEmail == Model.shared.getLoggedInUser().email
+        val isMenuShown = post.userId == Model.shared.getLoggedInUser().id
         if (isMenuShown) {
             menu?.visibility = View.VISIBLE
         }

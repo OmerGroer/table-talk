@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tabletalk.adapter.OnPostItemClickListener
 import com.example.tabletalk.adapter.PostType
 import com.example.tabletalk.adapter.PostsRecyclerAdapter
-import com.example.tabletalk.model.Model
-import com.example.tabletalk.model.Post
+import com.example.tabletalk.data.model.Model
+import com.example.tabletalk.data.model.Post
 
 class RestaurantPageFragment : Fragment() {
     override fun onCreateView(
@@ -27,7 +27,7 @@ class RestaurantPageFragment : Fragment() {
         val restaurant = Model.shared.getRestaurantByName(restaurantName)
 
         val posts = Model.shared.getPostsByRestaurantName(restaurantName)
-        val loggedUserPosts = Model.shared.getPostsByRestaurantNameAndUserEmail(restaurantName, loggedUser.email)
+        val loggedUserPosts = Model.shared.getPostsByRestaurantNameAndUserId(restaurantName, loggedUser.id)
         val allPosts = loggedUserPosts + posts
 
         val restaurantNameTextView: TextView = view.findViewById(R.id.restaurant_name)
@@ -50,7 +50,7 @@ class RestaurantPageFragment : Fragment() {
             override fun onClickListener(post: Post) {
                 val action =
                     RestaurantPageFragmentDirections.actionGlobalUserPageFragment(
-                        post.userName, post.userEmail
+                        post.userName, post.userId
                     )
                 Navigation.findNavController(view).navigate(action)
             }
