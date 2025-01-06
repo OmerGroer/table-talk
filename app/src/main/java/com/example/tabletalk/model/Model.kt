@@ -191,6 +191,7 @@ class Model {
 
     fun getRestaurantByName(name: String): Restaurant {
         return Restaurant(
+            1,
             "Mcdonalds",
             4.9,
             "Fast Food",
@@ -198,15 +199,17 @@ class Model {
         )
     }
 
-    fun getAllRestaurants(name: String): MutableList<Restaurant> {
-        return mutableListOf(
+    fun getAllRestaurants(name: String): List<Restaurant> {
+        return listOf(
             Restaurant(
+                1,
                 "Mcdonalds",
                 5.0,
                 "Fast Food",
                 "Tel Aviv"
             ),
             Restaurant(
+                2,
                 "Burgranch",
                 1.0,
                 "Fast Food",

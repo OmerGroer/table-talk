@@ -13,8 +13,9 @@ class AddPostFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_add_post, container, false)
 
+        val restaurantId = AddPostFragmentArgs.fromBundle(requireArguments()).restaurantId
         getChildFragmentManager().beginTransaction()
-            .replace(R.id.container, PostFormFragment.newInstance())
+            .replace(R.id.container, PostFormFragment.newInstance(restaurantId))
             .commitNow()
 
         return view

@@ -1,4 +1,4 @@
-package com.example.tabletalk.login
+package com.example.tabletalk.fragments.login
 
 import android.os.Bundle
 import android.util.Log
@@ -14,12 +14,12 @@ import com.example.tabletalk.databinding.FragmentLoginBinding
 
 class LoginFragment : Fragment() {
     private val viewModel: LoginViewModel by viewModels()
-    private lateinit var binding: FragmentLoginBinding
+    private var binding: FragmentLoginBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_login, container, false
         )
@@ -29,21 +29,21 @@ class LoginFragment : Fragment() {
 //            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToPostsListFragment())
 //        }
 
-        binding.registerButton.setOnClickListener {
+        binding?.registerButton?.setOnClickListener {
             findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
         }
 
-        binding.loginButton.setOnClickListener {
+        binding?.loginButton?.setOnClickListener {
             showProgressBar()
             viewModel.login({ onLoginSuccess() }, { error -> onLoginFailure(error) })
         }
 
-        return binding.root
+        return binding?.root
     }
 
-    private fun bindViews(binding: FragmentLoginBinding) {
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
+    private fun bindViews(binding: FragmentLoginBinding?) {
+        binding?.viewModel = viewModel
+        binding?.lifecycleOwner = viewLifecycleOwner
     }
 
     private fun onLoginSuccess() {
@@ -72,12 +72,17 @@ class LoginFragment : Fragment() {
     }
 
     private fun showLoginButton() {
-        binding.loginButton.visibility = View.VISIBLE
-        binding.progressBar.visibility = View.GONE
+        binding?.loginButton?.visibility = View.VISIBLE
+        binding?.progressBar?.visibility = View.GONE
     }
 
     private fun showProgressBar() {
-        binding.loginButton.visibility = View.GONE
-        binding.progressBar.visibility = View.VISIBLE
+        binding?.loginButton?.visibility = View.GONE
+        binding?.progressBar?.visibility = View.VISIBLE
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
     }
 }

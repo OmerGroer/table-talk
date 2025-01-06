@@ -1,5 +1,6 @@
 package com.example.tabletalk
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import com.example.tabletalk.model.Model
 import com.example.tabletalk.model.Post
 
 class RestaurantPageFragment : Fragment() {
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,9 +35,9 @@ class RestaurantPageFragment : Fragment() {
         val restaurantNameTextView: TextView = view.findViewById(R.id.restaurant_name)
         restaurantNameTextView.text = restaurant.name
         val restaurantRateTextView: TextView = view.findViewById(R.id.restaurant_rate)
-        restaurantRateTextView.text = restaurant.rate.toString()
+        restaurantRateTextView.text = restaurant.rating.toString()
         val descriptionTextView: TextView = view.findViewById(R.id.restaurant_description)
-        descriptionTextView.text = "${restaurant?.category} - ${restaurant?.location}"
+        descriptionTextView.text = "${restaurant.category?.let {"${restaurant.category} - "} ?: ""}${restaurant.address}"
 
         val recyclerView: RecyclerView = view.findViewById(R.id.posts_recycler_view)
         recyclerView.setHasFixedSize(true)

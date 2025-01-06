@@ -1,4 +1,4 @@
-package com.example.tabletalk.register
+package com.example.tabletalk.fragments.register
 
 import android.os.Bundle
 import android.util.Log
@@ -14,32 +14,32 @@ import com.example.tabletalk.databinding.FragmentRegisterBinding
 
 class RegisterFragment : Fragment() {
     private val viewModel: RegisterViewModel by viewModels()
-    private lateinit var binding: FragmentRegisterBinding
+    private var binding: FragmentRegisterBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_register, container, false
         )
         bindViews(binding)
 
-        binding.registerButton.setOnClickListener {
+        binding?.registerButton?.setOnClickListener {
             showProgressBar()
             viewModel.register({ onRegisterSuccess() }, { error -> onRegisterFailure(error) })
         }
 
-        binding.cancelButton.setOnClickListener {
+        binding?.cancelButton?.setOnClickListener {
             findNavController().popBackStack()
         }
 
-        return binding.root
+        return binding?.root
     }
 
-    private fun bindViews(binding: FragmentRegisterBinding) {
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
+    private fun bindViews(binding: FragmentRegisterBinding?) {
+        binding?.viewModel = viewModel
+        binding?.lifecycleOwner = viewLifecycleOwner
     }
 
     private fun onRegisterSuccess() {
@@ -72,14 +72,19 @@ class RegisterFragment : Fragment() {
     }
 
     private fun showRegisterButton() {
-        binding.registerButton.visibility = View.VISIBLE
-        binding.cancelButton.visibility = View.VISIBLE
-        binding.progressBar.visibility = View.GONE
+        binding?.registerButton?.visibility = View.VISIBLE
+        binding?.cancelButton?.visibility = View.VISIBLE
+        binding?.progressBar?.visibility = View.GONE
     }
 
     private fun showProgressBar() {
-        binding.registerButton.visibility = View.GONE
-        binding.cancelButton.visibility = View.GONE
-        binding.progressBar.visibility = View.VISIBLE
+        binding?.registerButton?.visibility = View.GONE
+        binding?.cancelButton?.visibility = View.GONE
+        binding?.progressBar?.visibility = View.VISIBLE
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
     }
 }
