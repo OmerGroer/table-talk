@@ -1,6 +1,5 @@
 package com.example.tabletalk
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +16,6 @@ import com.example.tabletalk.model.Model
 import com.example.tabletalk.model.Post
 
 class RestaurantPageFragment : Fragment() {
-    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
