@@ -110,7 +110,7 @@ class Model {
         return listOf(
             Post(
                 "1",
-                "Gal",
+                "dgo3ezbMuDarzoKbDMv1PVhHqFg2",
                 "Gal",
                 "",
                 "Mcdonalds",
@@ -121,7 +121,7 @@ class Model {
             ),
             Post(
                 "2",
-                "Gal",
+                "dgo3ezbMuDarzoKbDMv1PVhHqFg2",
                 "Gal",
                 "",
                 "Mcdonalds",

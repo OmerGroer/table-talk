@@ -4,12 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.example.tabletalk.data.model.Model
 
 private const val POST_ID = "postId"
@@ -22,8 +21,6 @@ class PostFormFragment : Fragment() {
     private var restaurantName: TextView? = null
     private var review: EditText? = null
     private var rating: RatingBar? = null
-    private var saveButton: Button? = null
-    private var cancelButton: Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,8 +39,6 @@ class PostFormFragment : Fragment() {
         review = view.findViewById(R.id.restaurant_review)
         rating = view.findViewById(R.id.ratingBar)
         restaurantName = view.findViewById(R.id.toolbar_title)
-        saveButton = view.findViewById(R.id.save_changes_button)
-        cancelButton = view.findViewById(R.id.cancel_button)
 
         if (postId != null) {
             val post = Model.shared.getPostById(postId as String)
@@ -54,9 +49,12 @@ class PostFormFragment : Fragment() {
             restaurantName?.text = restaurantId.toString()
         }
 
-        cancelButton?.setOnClickListener {
-            Navigation.findNavController(view).popBackStack()
+        val toolbar: androidx.appcompat.widget.Toolbar = view.findViewById(R.id.post_toolbar)
+        toolbar.setNavigationIcon(R.drawable.arrow_back)
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
         }
+        toolbar.inflateMenu(R.menu.post_form)
 
         return view
     }
@@ -74,6 +72,5 @@ class PostFormFragment : Fragment() {
                     putInt(RESTAURANT_ID, restaurantId)
                 }
             }
-        fun newInstance() = PostFormFragment()
     }
 }

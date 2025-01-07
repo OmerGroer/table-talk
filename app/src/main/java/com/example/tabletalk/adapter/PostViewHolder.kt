@@ -15,6 +15,7 @@ import com.example.tabletalk.CommentsFragment
 import com.example.tabletalk.R
 import com.example.tabletalk.data.model.Model
 import com.example.tabletalk.data.model.Post
+import com.example.tabletalk.data.repositories.UserRepository
 
 class PostViewHolder(
     itemView: View,
@@ -104,7 +105,7 @@ class PostViewHolder(
             stars?.get(i)?.visibility = View.GONE
         }
 
-        val isMenuShown = post.userId == Model.shared.getLoggedInUser().id
+        val isMenuShown = post.userId == UserRepository.getInstance().getLoggedUserId()
         if (isMenuShown) {
             menu?.visibility = View.VISIBLE
         }
