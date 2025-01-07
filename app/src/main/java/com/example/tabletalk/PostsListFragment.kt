@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tabletalk.adapter.OnPostItemClickListener
 import com.example.tabletalk.adapter.PostsRecyclerAdapter
-import com.example.tabletalk.model.Model
-import com.example.tabletalk.model.Post
+import com.example.tabletalk.data.model.Model
+import com.example.tabletalk.data.model.Post
 
 class PostsListFragment : Fragment() {
     override fun onCreateView(
@@ -20,7 +20,7 @@ class PostsListFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_posts_list, container, false)
 
-        val posts = Model.shared.getAllPostsWithoutUser(Model.shared.getLoggedInUser().username)
+        val posts = Model.shared.getAllPostsWithoutUser(Model.shared.getLoggedInUser().id)
 
         val recyclerView: RecyclerView = view.findViewById(R.id.posts_recycler_view)
         recyclerView.setHasFixedSize(true)
@@ -44,7 +44,7 @@ class PostsListFragment : Fragment() {
             override fun onClickListener(post: Post) {
                 val action =
                     PostsListFragmentDirections.actionGlobalUserPageFragment(
-                        post.userName, post.userEmail
+                        post.userName, post.userId
                     )
                 Navigation.findNavController(view).navigate(action)
             }

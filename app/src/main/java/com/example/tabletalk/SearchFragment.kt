@@ -15,9 +15,9 @@ import com.example.tabletalk.adapter.OnRestaurantItemClickListener
 import com.example.tabletalk.adapter.OnUserItemClickListener
 import com.example.tabletalk.adapter.RestaurantsRecyclerAdapter
 import com.example.tabletalk.adapter.UsersRecyclerAdapter
-import com.example.tabletalk.model.Model
-import com.example.tabletalk.model.Restaurant
-import com.example.tabletalk.model.User
+import com.example.tabletalk.data.model.Model
+import com.example.tabletalk.data.model.Restaurant
+import com.example.tabletalk.data.model.User
 
 enum class SearchType {
     RESTAURANTS, PEOPLE;
@@ -71,7 +71,7 @@ class SearchFragment : Fragment() {
             override fun onUsernameClickListener(user: User) {
                 val action =
                     SearchFragmentDirections.actionGlobalUserPageFragment(
-                        user.username, user.email
+                        user.username, user.id
                     )
                 Navigation.findNavController(view).navigate(action)
             }

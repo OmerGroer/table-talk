@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tabletalk.data.model.User
+import com.example.tabletalk.data.repositories.UserRepository
 import com.example.tabletalk.utils.Validator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,7 +37,7 @@ class RegisterViewModel : ViewModel() {
         }
 
         try {
-            createUserConcurrently(onSuccess, onFailure)
+            createUser(onSuccess, onFailure)
         } catch (e: Exception) {
             Log.e("Register", "Error registering user", e)
             onFailure(e)
@@ -43,18 +45,28 @@ class RegisterViewModel : ViewModel() {
         }
     }
 
-    private fun createUserConcurrently(
+    private fun createUser(
         onSuccess: () -> Unit,
         onFailure: (error: Exception?) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                UserRepository.getInstance().createAuthUser(email.value!!, password.value!!)
+                UserRepository.getInstance().saveUserInDB(buildUser())
                 withContext(Dispatchers.Main) { onSuccess() }
             } catch (e: Exception) {
                 Log.e("Register", "Error registering user", e)
                 withContext(Dispatchers.Main) { onFailure(e) }
             }
         }
+    }
+
+    private fun buildUser(): User {
+        return User(
+            id = UserRepository.getInstance().getLoggedUserId()!!,
+            username = name.value!!,
+            email = email.value!!
+        )
     }
 
     private fun validateForm() {

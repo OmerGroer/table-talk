@@ -1,8 +1,8 @@
-package com.example.tabletalk.model
+package com.example.tabletalk.data.model
 
 class Post (
     var id: String,
-    var userEmail: String,
+    var userId: String,
     var userName: String,
     var avatarUrl: String,
     var restaurantName: String,

@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.androidx.navigation.safeargs)
     id("kotlin-kapt")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -62,4 +63,11 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.adapter.guava)
     implementation(libs.converter.gson)
+    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.auth)
+    implementation(libs.room.runtime)
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.firebase.bom)
 }

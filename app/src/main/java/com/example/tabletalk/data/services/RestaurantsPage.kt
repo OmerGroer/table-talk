@@ -1,8 +1,9 @@
-package com.example.tabletalk.services
+package com.example.tabletalk.data.services
 
 class RestaurantsPage(
     val data: List<ApiRestaurant>,
-    val pageInfo: PageInfo)
+    val pageInfo: PageInfo
+)
 
 class Address(
     val fullAddress: String,

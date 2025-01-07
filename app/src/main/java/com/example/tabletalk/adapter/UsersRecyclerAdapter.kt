@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tabletalk.R
-import com.example.tabletalk.model.User
+import com.example.tabletalk.data.model.User
 
 interface OnUserItemClickListener {
     fun onUsernameClickListener(user: User)

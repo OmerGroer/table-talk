@@ -5,7 +5,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tabletalk.R
-import com.example.tabletalk.model.User
+import com.example.tabletalk.data.model.User
 
 class UserViewHolder(
     itemView: View,

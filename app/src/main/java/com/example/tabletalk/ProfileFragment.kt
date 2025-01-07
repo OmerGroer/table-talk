@@ -8,15 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.example.tabletalk.adapter.OnPostItemClickListener
-import com.example.tabletalk.model.Model
-import com.example.tabletalk.model.Post
+import com.example.tabletalk.data.model.Model
+import com.example.tabletalk.data.model.Post
+import com.example.tabletalk.data.repositories.UserRepository
 
 class ProfileFragment : Fragment() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -24,11 +20,14 @@ class ProfileFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
         val user = Model.shared.getLoggedInUser()
-        val fragment = UserFragment.newInstance(user.email, user.username)
+        val fragment = UserFragment.newInstance(user.id, user.username)
         fragment.setOnCreate(object : OnCreateListener {
             override fun onCreate(view: View) {
                 val toolbar: androidx.appcompat.widget.Toolbar = view.findViewById(R.id.profile_toolbar)
                 toolbar.inflateMenu(R.menu.profile_menu)
+                toolbar.menu
+                toolbar.menu.getItem(0).setOnMenuItemClickListener { onOptionsItemSelected(it) }
+                toolbar.menu.getItem(1).setOnMenuItemClickListener { onOptionsItemSelected(it) }
             }
         })
         fragment.setOnRestaurantClickListener(object : OnPostItemClickListener {
@@ -63,8 +62,7 @@ class ProfileFragment : Fragment() {
                 TODO("Not yet implemented")
             }
             R.id.logout_profile -> {
-                TODO("Not yet implemented")
-                Model.shared.logout()
+                UserRepository.getInstance().logout()
             }
             else -> return false
         }

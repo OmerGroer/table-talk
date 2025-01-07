@@ -1,12 +1,10 @@
 package com.example.tabletalk.fragments.login
 
 import android.util.Log
-import android.view.View
-import androidx.databinding.Bindable
-import androidx.databinding.BindingAdapter
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tabletalk.data.repositories.UserRepository
 import com.example.tabletalk.utils.Validator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,7 +21,6 @@ class LoginViewModel : ViewModel() {
 
     val isFormValid: Boolean
         get() = isEmailValid.value == true && isPasswordValid.value == true
-//    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     fun login(onSuccess: () -> Unit, onFailure: (error: Exception?) -> Unit) {
         validateForm()
@@ -42,7 +39,7 @@ class LoginViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 withContext(Dispatchers.IO) {
-//                    auth.signInWithEmailAndPassword(email.value!!, password.value!!).await()
+                    UserRepository.getInstance().signIn(email.value!!, password.value!!)
                 }
                 withContext(Dispatchers.Main) { onSuccess() }
             } catch (e: Exception) {

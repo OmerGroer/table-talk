@@ -14,7 +14,7 @@ import com.example.tabletalk.R
 import com.example.tabletalk.adapter.OnRestaurantItemClickListener
 import com.example.tabletalk.adapter.RestaurantsRecyclerAdapter
 import com.example.tabletalk.databinding.FragmentRestaurantPickerBinding
-import com.example.tabletalk.model.Restaurant
+import com.example.tabletalk.data.model.Restaurant
 import com.example.tabletalk.utils.PaginationScrollListener
 
 class RestaurantPickerFragment : Fragment() {

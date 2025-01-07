@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tabletalk.R
-import com.example.tabletalk.model.Restaurant
+import com.example.tabletalk.data.model.Restaurant
 import com.example.tabletalk.utils.DiffCallback
 
 interface OnRestaurantItemClickListener {

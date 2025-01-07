@@ -1,4 +1,4 @@
-package com.example.tabletalk.model
+package com.example.tabletalk.data.model
 
 class Model {
 
@@ -10,7 +10,7 @@ class Model {
         fun onComplete(data: T)
     }
 
-    fun getAllPostsWithoutUser(userEmail: String): List<Post> {
+    fun getAllPostsWithoutUser(userId: String): List<Post> {
         return listOf(
             Post(
                 "1",
@@ -106,7 +106,7 @@ class Model {
         listener.onComplete(user)
     }
 
-    fun getPostsByEmail(email: String): List<Post> {
+    fun getPostsByUserId(userId: String): List<Post> {
         return listOf(
             Post(
                 "1",
@@ -135,10 +135,10 @@ class Model {
 
     fun getLoggedInUser(): User {
         return User(
+            "1",
             "Gal",
             "Gal",
-            "",
-            null
+            ""
         )
     }
 
@@ -146,7 +146,7 @@ class Model {
         listener.onComplete(user)
     }
 
-    fun getPostsByRestaurantNameAndUserEmail(restaurantName: String, userEmail: String): List<Post> {
+    fun getPostsByRestaurantNameAndUserId(restaurantName: String, userId: String): List<Post> {
         return mutableListOf(
             Post(
                 "1",
@@ -222,15 +222,15 @@ class Model {
         return mutableListOf(
             User(
                 "1",
+                "1",
                 "Gal",
-                "",
-                null
+                ""
             ),
             User(
                 "2",
+                "2",
                 "Gal",
-                "",
-                null
+                ""
             )
         )
     }

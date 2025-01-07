@@ -2,6 +2,7 @@ package com.example.tabletalk
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -9,6 +10,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import com.example.tabletalk.data.repositories.UserRepository
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -30,6 +32,20 @@ class MainActivity : AppCompatActivity() {
 
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottom_bar)
         navController?.let { NavigationUI.setupWithNavController(bottomNavigationView, it) }
+
+        if (UserRepository.getInstance().isLogged()) {
+            bottomNavigationView.visibility = View.VISIBLE
+        }
+
+        UserRepository.getInstance().addAuthStateListener {
+            if (UserRepository.getInstance().isLogged()) {
+                bottomNavigationView.visibility = View.VISIBLE
+                navController?.navigate(R.id.postsListFragment)
+            } else {
+                bottomNavigationView.visibility = View.GONE
+                navController?.navigate(R.id.loginFragment)
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

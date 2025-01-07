@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tabletalk.R
-import com.example.tabletalk.model.Comment
+import com.example.tabletalk.data.model.Comment
 
 class CommentsRecyclerAdapter(private val comments: List<Comment>?) :
     RecyclerView.Adapter<CommentViewHolder>() {
