@@ -23,6 +23,9 @@
         <action
             android:id="@+id/action_profileFragment_to_editPostFragment"
             app:destination="@id/editPostFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_editUserFragment"
+            app:destination="@id/editUserFragment" />
     </fragment>
     <fragment
         android:id="@+id/restaurantPageFragment"
@@ -106,4 +109,9 @@
             android:id="@+id/action_restaurantPickerFragment_to_addPostFragment"
             app:destination="@id/addPostFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/editUserFragment"
+        android:name="com.example.tabletalk.fragments.editUser.EditUserFragment"
+        android:label="fragment_edit_user"
+        tools:layout="@layout/fragment_edit_user" />
 </navigation>

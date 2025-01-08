@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.example.tabletalk.adapter.OnPostItemClickListener
 import com.example.tabletalk.data.model.Model
 import com.example.tabletalk.data.model.Post
@@ -59,7 +60,7 @@ class ProfileFragment : Fragment() {
     fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.edit_profile -> {
-                TODO("Not yet implemented")
+                findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToEditUserFragment())
             }
             R.id.logout_profile -> {
                 UserRepository.getInstance().logout()

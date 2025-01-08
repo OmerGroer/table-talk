@@ -1,5 +1,6 @@
 package com.example.tabletalk.data.repositories
 
+import android.accounts.AuthenticatorException
 import androidx.core.net.toUri
 import com.example.tabletalk.data.local.AppLocalDb
 import com.example.tabletalk.data.model.User
@@ -49,6 +50,27 @@ class UserRepository {
         }
     }
 
+    suspend fun updateUser(oldPassword: String, password: String, username: String, avatarUri: String) {
+        if (password.isNotEmpty()) {
+            if (oldPassword.isEmpty()) {
+                throw AuthenticatorException("Old password is required")
+            }
+
+            auth.signInWithEmailAndPassword(getLoggedUserEmail()!!, oldPassword).await()
+            auth.currentUser?.updatePassword(password)?.await()
+        }
+
+        val user = User(
+            id = getLoggedUserId()!!,
+            username = username,
+            email = getLoggedUserEmail()!!,
+            avatarUrl = if (!avatarUri.startsWith("file:///")) "file://${avatarUri}" else avatarUri
+        )
+
+        saveUser(user)
+        saveUserImage(user.avatarUrl!!, user.id)
+    }
+
     private suspend fun saveUser(user: User) {
         db.collection(USERS_COLLECTION)
             .document(user.id)
@@ -90,6 +112,10 @@ class UserRepository {
 
     fun getLoggedUserId(): String? {
         return auth.currentUser?.uid
+    }
+
+    fun getLoggedUserEmail(): String? {
+        return auth.currentUser?.email
     }
 
     fun isLogged(): Boolean {

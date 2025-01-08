@@ -29,12 +29,6 @@ class LoginViewModel : ViewModel() {
             return
         }
 
-        signInUser(onFailure)
-    }
-
-    private fun signInUser(
-        onFailure: (error: Exception?) -> Unit
-    ) {
         viewModelScope.launch {
             try {
                 withContext(Dispatchers.IO) {

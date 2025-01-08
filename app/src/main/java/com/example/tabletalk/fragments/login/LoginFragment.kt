@@ -55,21 +55,17 @@ class LoginFragment : Fragment() {
 
         if (error != null) {
             Log.e("Login", "Error signing in user", error)
-            handleLoginError(error)
+            when (error) {
+                is FirebaseAuthInvalidUserException, is FirebaseAuthInvalidCredentialsException -> {
+                    BasicAlert("Login Error", "User not found", requireContext()).show()
+                }
+                else -> {
+                    BasicAlert("Login Error", "An error occurred", requireContext()).show()
+                }
+            }
         }
 
         showLoginButton()
-    }
-
-    private fun handleLoginError(error: Exception) {
-        when (error) {
-            is FirebaseAuthInvalidUserException, is FirebaseAuthInvalidCredentialsException -> {
-                BasicAlert("Login Error", "User not found", requireContext()).show()
-            }
-            else -> {
-                BasicAlert("Login Error", "An error occurred", requireContext()).show()
-            }
-        }
     }
 
     private fun showLoginButton() {
