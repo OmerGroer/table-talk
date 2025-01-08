@@ -51,6 +51,8 @@ class LoginFragment : Fragment() {
     }
 
     private fun onLoginFailure(error: Exception?) {
+        UserRepository.getInstance().logout()
+
         if (error != null) {
             Log.e("Login", "Error signing in user", error)
             handleLoginError(error)
@@ -72,7 +74,7 @@ class LoginFragment : Fragment() {
 
     private fun showLoginButton() {
         binding?.loginButton?.visibility = View.VISIBLE
-        binding?.progressBar?.visibility = View.GONE
+        binding?.progressBar?.visibility = View.INVISIBLE
     }
 
     private fun showProgressBar() {

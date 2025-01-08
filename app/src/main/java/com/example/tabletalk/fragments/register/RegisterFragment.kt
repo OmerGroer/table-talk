@@ -1,22 +1,32 @@
 package com.example.tabletalk.fragments.register
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.tabletalk.R
+import com.example.tabletalk.data.repositories.UserRepository
 import com.example.tabletalk.databinding.FragmentRegisterBinding
 import com.example.tabletalk.utils.BasicAlert
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.yalantis.ucrop.UCrop
 
 class RegisterFragment : Fragment() {
     private val viewModel: RegisterViewModel by viewModels()
     private var binding: FragmentRegisterBinding? = null
+
+    private val imagePicker: ActivityResultLauncher<String> = getImagePicker()
+    private val uCropLauncher: ActivityResultLauncher<Intent> = getUCropLauncher()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,10 +39,13 @@ class RegisterFragment : Fragment() {
 
         binding?.registerButton?.setOnClickListener {
             showProgressBar()
-            viewModel.register({ onRegisterSuccess() }, { error -> onRegisterFailure(error) })
+            viewModel.register({ error -> onRegisterFailure(error) })
         }
 
         setupToolbar()
+
+        setupUploadButton()
+        binding?.imageView?.requestStoragePermission(requireContext(), requireActivity())
 
         return binding?.root
     }
@@ -40,10 +53,6 @@ class RegisterFragment : Fragment() {
     private fun bindViews(binding: FragmentRegisterBinding?) {
         binding?.viewModel = viewModel
         binding?.lifecycleOwner = viewLifecycleOwner
-    }
-
-    private fun onRegisterSuccess() {
-        findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToPostsListFragment())
     }
 
     private fun onRegisterFailure(error: Exception?) {
@@ -56,6 +65,7 @@ class RegisterFragment : Fragment() {
     }
 
     private fun handleRegisterError(error: Exception) {
+        UserRepository.getInstance().logout()
         when (error) {
             is FirebaseAuthUserCollisionException -> {
                 BasicAlert(
@@ -74,13 +84,30 @@ class RegisterFragment : Fragment() {
     private fun setupToolbar() {
         binding?.loginToolbar?.setNavigationIcon(R.drawable.arrow_back)
         binding?.loginToolbar?.setNavigationOnClickListener {
-            findNavController().popBackStack()
+            if (!viewModel.isLoading) {
+                findNavController().popBackStack()
+            }
+        }
+    }
+
+    private fun setupUploadButton() {
+        binding?.imageView?.setOnClickListener {
+            imagePicker.launch("image/*")
+        }
+        addOnIsImageUriValidChangedCallback()
+    }
+
+    private fun addOnIsImageUriValidChangedCallback() {
+        viewModel.isAvatarUriValid.observe(viewLifecycleOwner) {
+            if (!viewModel.isAvatarUriValid.value!!) {
+                BasicAlert("Invalid Input", "Please upload an image", requireContext()).show()
+            }
         }
     }
 
     private fun showRegisterButton() {
         binding?.registerButton?.visibility = View.VISIBLE
-        binding?.progressBar?.visibility = View.GONE
+        binding?.progressBar?.visibility = View.INVISIBLE
     }
 
     private fun showProgressBar() {
@@ -92,4 +119,18 @@ class RegisterFragment : Fragment() {
         super.onDestroy()
         binding = null
     }
+
+    private fun getImagePicker() =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            binding?.imageView?.getImagePicker(uri, uCropLauncher)
+        }
+
+    private fun getUCropLauncher() =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val uri = UCrop.getOutput(result.data!!)
+                binding?.imageView?.setImageURI(uri)
+                viewModel.avatarUri.value = uri.toString()
+            }
+        }
 }

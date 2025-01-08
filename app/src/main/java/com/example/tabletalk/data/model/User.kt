@@ -8,5 +8,5 @@ class User (
     @PrimaryKey val id: String,
     val email: String,
     val username: String,
-    val avatarUrl: String? = null
+    var avatarUrl: String? = null
 )

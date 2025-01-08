@@ -25,7 +25,12 @@ okhttp = "3.14.9"
 firebaseFirestoreKtx = "25.1.1"
 firebaseFirestore = "25.1.1"
 firebaseAuth = "23.1.0"
+playServicesMaps = "19.0.0"
 roomRuntimeVersion = "2.6.1"
+ucrop = "2.2.6"
+glide = "4.16.0"
+firebaseStorageKtx = "21.0.1"
+googleGmsGoogleServices = "4.4.2"
 
 [libraries]
 adapter-guava = { module = "com.squareup.retrofit2:adapter-guava", version.ref = "adapterGuava" }
@@ -56,10 +61,16 @@ firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-fires
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntimeVersion" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntimeVersion" }
+play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntimeVersion" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+ucrop = { module = "com.github.yalantis:ucrop", version.ref = "ucrop" }
+firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx", version.ref = "firebaseStorageKtx" }
 
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 androidx-navigation-safeargs = { id = "androidx.navigation.safeargs" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
+
