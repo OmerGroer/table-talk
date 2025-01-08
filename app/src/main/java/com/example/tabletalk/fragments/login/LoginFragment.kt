@@ -39,7 +39,7 @@ class LoginFragment : Fragment() {
 
         binding?.loginButton?.setOnClickListener {
             showProgressBar()
-            viewModel.login({ onLoginSuccess() }, { error -> onLoginFailure(error) })
+            viewModel.login({ error -> onLoginFailure(error) })
         }
 
         return binding?.root
@@ -48,10 +48,6 @@ class LoginFragment : Fragment() {
     private fun bindViews(binding: FragmentLoginBinding?) {
         binding?.viewModel = viewModel
         binding?.lifecycleOwner = viewLifecycleOwner
-    }
-
-    private fun onLoginSuccess() {
-        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToPostsListFragment())
     }
 
     private fun onLoginFailure(error: Exception?) {

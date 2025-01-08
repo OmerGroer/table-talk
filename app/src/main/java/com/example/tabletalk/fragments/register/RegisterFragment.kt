@@ -11,6 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.tabletalk.R
 import com.example.tabletalk.databinding.FragmentRegisterBinding
+import com.example.tabletalk.utils.BasicAlert
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 
 class RegisterFragment : Fragment() {
     private val viewModel: RegisterViewModel by viewModels()
@@ -30,9 +32,7 @@ class RegisterFragment : Fragment() {
             viewModel.register({ onRegisterSuccess() }, { error -> onRegisterFailure(error) })
         }
 
-        binding?.cancelButton?.setOnClickListener {
-            findNavController().popBackStack()
-        }
+        setupToolbar()
 
         return binding?.root
     }
@@ -57,29 +57,34 @@ class RegisterFragment : Fragment() {
 
     private fun handleRegisterError(error: Exception) {
         when (error) {
-//            is FirebaseAuthUserCollisionException -> {
-//                BasicAlert(
-//                    "Register Error",
-//                    "User with this email already exists",
-//                    requireContext()
-//                ).show()
-//            }
-//
-//            else -> {
-//                BasicAlert("Register Error", "An error occurred", requireContext()).show()
-//            }
+            is FirebaseAuthUserCollisionException -> {
+                BasicAlert(
+                    "Register Error",
+                    "User with this email already exists",
+                    requireContext()
+                ).show()
+            }
+
+            else -> {
+                BasicAlert("Register Error", "An error occurred", requireContext()).show()
+            }
+        }
+    }
+
+    private fun setupToolbar() {
+        binding?.loginToolbar?.setNavigationIcon(R.drawable.arrow_back)
+        binding?.loginToolbar?.setNavigationOnClickListener {
+            findNavController().popBackStack()
         }
     }
 
     private fun showRegisterButton() {
         binding?.registerButton?.visibility = View.VISIBLE
-        binding?.cancelButton?.visibility = View.VISIBLE
         binding?.progressBar?.visibility = View.GONE
     }
 
     private fun showProgressBar() {
         binding?.registerButton?.visibility = View.GONE
-        binding?.cancelButton?.visibility = View.GONE
         binding?.progressBar?.visibility = View.VISIBLE
     }
 

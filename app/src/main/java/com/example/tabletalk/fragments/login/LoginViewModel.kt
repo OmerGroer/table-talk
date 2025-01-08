@@ -22,18 +22,17 @@ class LoginViewModel : ViewModel() {
     val isFormValid: Boolean
         get() = isEmailValid.value == true && isPasswordValid.value == true
 
-    fun login(onSuccess: () -> Unit, onFailure: (error: Exception?) -> Unit) {
+    fun login(onFailure: (error: Exception?) -> Unit) {
         validateForm()
         if (!isFormValid) {
             onFailure(null)
             return
         }
 
-        signInUserConcurrently(onSuccess, onFailure)
+        signInUser(onFailure)
     }
 
-    private fun signInUserConcurrently(
-        onSuccess: () -> Unit,
+    private fun signInUser(
         onFailure: (error: Exception?) -> Unit
     ) {
         viewModelScope.launch {
@@ -41,7 +40,6 @@ class LoginViewModel : ViewModel() {
                 withContext(Dispatchers.IO) {
                     UserRepository.getInstance().signIn(email.value!!, password.value!!)
                 }
-                withContext(Dispatchers.Main) { onSuccess() }
             } catch (e: Exception) {
                 Log.e("Login", "Error signing in user", e)
                 withContext(Dispatchers.Main) { onFailure(e) }

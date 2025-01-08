@@ -25,9 +25,9 @@ class ProfileFragment : Fragment() {
             override fun onCreate(view: View) {
                 val toolbar: androidx.appcompat.widget.Toolbar = view.findViewById(R.id.profile_toolbar)
                 toolbar.inflateMenu(R.menu.profile_menu)
-                toolbar.menu
-                toolbar.menu.getItem(0).setOnMenuItemClickListener { onOptionsItemSelected(it) }
-                toolbar.menu.getItem(1).setOnMenuItemClickListener { onOptionsItemSelected(it) }
+                toolbar.setOnMenuItemClickListener {
+                    onMenuItemClick(it)
+                }
             }
         })
         fragment.setOnRestaurantClickListener(object : OnPostItemClickListener {
@@ -56,7 +56,7 @@ class ProfileFragment : Fragment() {
         return view
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.edit_profile -> {
                 TODO("Not yet implemented")
