@@ -1,20 +1,24 @@
 package com.example.tabletalk.data.repositories
 
+import android.content.Context
 import android.net.Uri
 import com.bumptech.glide.Glide
-import com.example.tabletalk.MyApplication
 import com.example.tabletalk.data.local.AppLocalDb
 import com.example.tabletalk.data.model.Image
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 
-class ImageRepository {
+class ImageRepository(private val context: Context) {
     companion object {
         const val IMAGES_REF = "images"
-        private val imageRepository = ImageRepository()
+        private var imageRepository: ImageRepository? = null
 
         fun getInstance(): ImageRepository {
-            return imageRepository
+            return imageRepository ?: throw IllegalStateException("Image Repository was not created")
+        }
+
+        fun create(context: Context) {
+            imageRepository = ImageRepository(context)
         }
     }
 
@@ -34,7 +38,7 @@ class ImageRepository {
     }
 
     fun downloadAndCacheImage(uri: Uri, imageId: String): String {
-        val file = Glide.with(MyApplication.Globals.context!!)
+        val file = Glide.with(context)
             .asFile()
             .load(uri)
             .submit()
@@ -72,7 +76,7 @@ class ImageRepository {
     private fun deleteLocalImage(imageId: String) {
         val image = AppLocalDb.getInstance().imageDao().getImageById(imageId).value
         image?.let {
-            val file = Glide.with(MyApplication.Globals.context!!)
+            val file = Glide.with(context)
                 .asFile()
                 .load(it.uri)
                 .submit()

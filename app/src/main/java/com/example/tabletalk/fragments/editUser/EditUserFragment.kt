@@ -1,5 +1,6 @@
-package com.example.tabletalk.fragments.register
+package com.example.tabletalk.fragments.editUser
 
+import android.accounts.AuthenticatorException
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -10,20 +11,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.tabletalk.R
-import com.example.tabletalk.data.repositories.UserRepository
-import com.example.tabletalk.databinding.FragmentRegisterBinding
+import com.example.tabletalk.databinding.FragmentEditUserBinding
 import com.example.tabletalk.utils.BasicAlert
-import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.yalantis.ucrop.UCrop
 
-class RegisterFragment : Fragment() {
-    private val viewModel: RegisterViewModel by viewModels()
-    private var binding: FragmentRegisterBinding? = null
+class EditUserFragment : Fragment() {
+    private val viewModel: EditUserViewModel by viewModels()
+    private var binding: FragmentEditUserBinding? = null
 
     private val imagePicker: ActivityResultLauncher<String> = getImagePicker()
     private val uCropLauncher: ActivityResultLauncher<Intent> = getUCropLauncher()
@@ -33,16 +35,17 @@ class RegisterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_register, container, false
+            inflater, R.layout.fragment_edit_user, container, false
         )
-        bindViews(binding)
+        bindViews()
 
-        binding?.registerButton?.setOnClickListener {
+        binding?.submitButton?.setOnClickListener {
             showProgressBar()
-            viewModel.register({ error -> onRegisterFailure(error) })
+            viewModel.submit({ onUpdateSuccess() }) { error -> onUpdateFailure(error) }
         }
 
         setupToolbar()
+        setupLoading()
 
         setupUploadButton()
         binding?.imageView?.requestStoragePermission(requireContext(), requireActivity())
@@ -50,37 +53,40 @@ class RegisterFragment : Fragment() {
         return binding?.root
     }
 
-    private fun bindViews(binding: FragmentRegisterBinding?) {
+    private fun bindViews() {
         binding?.viewModel = viewModel
         binding?.lifecycleOwner = viewLifecycleOwner
     }
 
-    private fun onRegisterFailure(error: Exception?) {
+    private fun onUpdateSuccess() {
+        BasicAlert("Success", "User updated successfully", requireContext()).show()
+    }
+
+    private fun onUpdateFailure(error: Exception?) {
         if (error != null) {
-            Log.e("Register", "Error Registering", error)
-            UserRepository.getInstance().logout()
+            Log.e("Edit", "Error Editing", error)
             when (error) {
-                is FirebaseAuthUserCollisionException -> {
+                is AuthenticatorException, is FirebaseAuthInvalidUserException, is FirebaseAuthInvalidCredentialsException -> {
                     BasicAlert(
-                        "Register Error",
-                        "User with this email already exists",
+                        "Edit Error",
+                        "Password is not correct",
                         requireContext()
                     ).show()
                 }
 
                 else -> {
-                    BasicAlert("Register Error", "An error occurred", requireContext()).show()
+                    BasicAlert("Edit Error", "An error occurred", requireContext()).show()
                 }
             }
         }
 
-        showRegisterButton()
+        showSubmitButton()
     }
 
     private fun setupToolbar() {
-        binding?.loginToolbar?.setNavigationIcon(R.drawable.arrow_back)
-        binding?.loginToolbar?.setNavigationOnClickListener {
-            if (!viewModel.isLoading) {
+        binding?.editUserToolbar?.setNavigationIcon(R.drawable.arrow_back)
+        binding?.editUserToolbar?.setNavigationOnClickListener {
+            if (viewModel.isLoading.value == false) {
                 findNavController().popBackStack()
             }
         }
@@ -90,22 +96,26 @@ class RegisterFragment : Fragment() {
         binding?.imageView?.setOnClickListener {
             imagePicker.launch("image/*")
         }
-
-        viewModel.isAvatarUriValid.observe(viewLifecycleOwner) {
-            if (!viewModel.isAvatarUriValid.value!!) {
-                BasicAlert("Invalid Input", "Please upload an image", requireContext()).show()
-            }
+        viewModel.avatarUri.observe(viewLifecycleOwner) { uri ->
+            binding?.imageView?.setImageURI(uri.toUri())
         }
     }
 
-    private fun showRegisterButton() {
-        binding?.registerButton?.visibility = View.VISIBLE
+    private fun showSubmitButton() {
+        binding?.submitButton?.visibility = View.VISIBLE
         binding?.progressBar?.visibility = View.INVISIBLE
     }
 
     private fun showProgressBar() {
-        binding?.registerButton?.visibility = View.GONE
+        binding?.submitButton?.visibility = View.GONE
         binding?.progressBar?.visibility = View.VISIBLE
+    }
+
+    private fun setupLoading() {
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) showProgressBar()
+            else showSubmitButton()
+        }
     }
 
     override fun onDestroy() {

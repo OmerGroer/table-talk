@@ -40,25 +40,20 @@ class RegisterViewModel : ViewModel() {
         }
 
         try {
-            createUser(onFailure)
+            isLoading = true
+            viewModelScope.launch(Dispatchers.IO) {
+                try {
+                    UserRepository.getInstance().createUser(email.value!!, password.value!!, name.value!!, avatarUri.value!!)
+                } catch (e: Exception) {
+                    Log.e("Register", "Error registering user", e)
+                    withContext(Dispatchers.Main) { onFailure(e) }
+                } finally {
+                    isLoading = false
+                }
+            }
         } catch (e: Exception) {
             Log.e("Register", "Error registering user", e)
             onFailure(e)
-        }
-    }
-
-    private fun createUser(
-        onFailure: (error: Exception?) -> Unit
-    ) {
-        isLoading = true
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                UserRepository.getInstance().createUser(email.value!!, password.value!!, name.value!!, avatarUri.value!!)
-                isLoading = false
-            } catch (e: Exception) {
-                Log.e("Register", "Error registering user", e)
-                withContext(Dispatchers.Main) { onFailure(e) }
-            }
         }
     }
 

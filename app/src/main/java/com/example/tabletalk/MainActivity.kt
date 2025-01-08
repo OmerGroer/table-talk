@@ -12,6 +12,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.example.tabletalk.data.local.AppLocalDb
 import com.example.tabletalk.data.repositories.AuthListener
+import com.example.tabletalk.data.repositories.ImageRepository
 import com.example.tabletalk.data.repositories.UserRepository
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         AppLocalDb.create(this)
+        ImageRepository.create(this)
 
         val navHostFragment: NavHostFragment? =
             supportFragmentManager.findFragmentById(R.id.main_nav_host) as? NavHostFragment

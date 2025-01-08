@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".fragments.editUser.EditUserFragment">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.tabletalk.fragments.editUser.EditUserViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="ScrollViewSize">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/edit_user_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/blue"
+            android:minHeight="?android:attr/actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:theme="@style/ThemeOverlay.Material3.ActionBar">
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Table Talk"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scroll_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_user_toolbar">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:ignore="ScrollViewSize">
+
+                <LinearLayout
+                    android:id="@+id/inputs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toTopOf="@id/progress_bar"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.example.tabletalk.views.CustomTextInput
+                        android:id="@+id/name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="64dp"
+                        android:layout_marginEnd="64dp"
+                        android:ems="10"
+                        android:hint="Name"
+                        android:text="@={viewModel.name}"
+                        android:theme="@style/Theme.TableTalk.EditText"
+                        app:helperText="@{ viewModel.isNameValid() ? null : @string/name_error}"
+                        app:helperTextEnabled="@{!viewModel.isNameValid()}"
+                        app:helperTextTextColor="@color/design_default_color_error" />
+
+                    <com.example.tabletalk.views.CustomTextInput
+                        android:id="@+id/old_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="64dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="64dp"
+                        android:ems="10"
+                        android:hint="Old Password"
+                        android:inputType="textPassword"
+                        android:text="@={viewModel.oldPassword}"
+                        android:theme="@style/Theme.TableTalk.EditText" />
+
+                    <com.example.tabletalk.views.CustomTextInput
+                        android:id="@+id/password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="64dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="64dp"
+                        android:ems="10"
+                        android:hint="Password"
+                        android:inputType="textPassword"
+                        android:text="@={viewModel.password}"
+                        android:theme="@style/Theme.TableTalk.EditText"
+                        app:helperText="@{viewModel.isPasswordValid() ? null :@string/password_error}"
+                        app:helperTextEnabled="@{!viewModel.isPasswordValid()}"
+                        app:helperTextTextColor="@color/design_default_color_error" />
+
+                    <com.example.tabletalk.views.CustomTextInput
+                        android:id="@+id/confirm_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="64dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="64dp"
+                        android:ems="10"
+                        android:hint="Confirm Password"
+                        android:inputType="textPassword"
+                        android:text="@={viewModel.confirmPassword}"
+                        android:theme="@style/Theme.TableTalk.EditText"
+                        app:helperText="@{viewModel.isConfirmPasswordValid() ? null :@string/confirm_password_error}"
+                        app:helperTextEnabled="@{!viewModel.isConfirmPasswordValid()}"
+                        app:helperTextTextColor="@color/design_default_color_error" />
+
+                    <com.example.tabletalk.views.ImagePicker
+                        android:id="@+id/image_view"
+                        android:layout_width="150sp"
+                        android:layout_height="150sp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="20dp"
+                        android:contentDescription="@string/uploaded_image"
+                        android:src="@drawable/add_photo" />
+
+                </LinearLayout>
+
+                <android.widget.Button
+                    android:id="@+id/submit_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/blue"
+                    android:paddingStart="30dp"
+                    android:paddingEnd="30dp"
+                    android:text="Save Changes"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/inputs" />
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/progress_bar"
+                    style="@style/Widget.MaterialComponents.CircularProgressIndicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:indeterminate="true"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/inputs" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
