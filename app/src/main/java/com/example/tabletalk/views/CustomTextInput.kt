@@ -1,4 +1,4 @@
-package com.example.tabletalk.customEditText
+package com.example.tabletalk.views
 
 import android.content.Context
 import android.content.res.ColorStateList

@@ -1,27 +1,35 @@
 package com.example.tabletalk.data.local
 
+import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.tabletalk.MyApplication
+import com.example.tabletalk.data.local.dao.ImageDao
 import com.example.tabletalk.data.local.dao.UserDao
+import com.example.tabletalk.data.model.Image
 import com.example.tabletalk.data.model.User
 
 
-@Database(entities = [User::class], version = 1)
+@Database(entities = [User::class, Image::class], version = 1)
 abstract class AppLocalDbRepository: RoomDatabase() {
     abstract fun userDao(): UserDao
+    abstract fun imageDao(): ImageDao
 }
 
 object AppLocalDb {
-    val database: AppLocalDbRepository by lazy {
-        val context = MyApplication.Globals.context ?: throw IllegalStateException("Application context is missing")
-        Room.databaseBuilder(
+    private var database: AppLocalDbRepository? = null
+
+    fun create(context: Context) {
+        database = Room.databaseBuilder(
             context = context,
             klass = AppLocalDbRepository::class.java,
             name = "dbFileName.db"
         )
             .fallbackToDestructiveMigration()
             .build()
+    }
+
+    fun getInstance(): AppLocalDbRepository {
+        return database ?: throw IllegalStateException("App Local DB was not created")
     }
 }

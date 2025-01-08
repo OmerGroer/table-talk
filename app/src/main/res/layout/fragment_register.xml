@@ -73,12 +73,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    app:layout_constraintBottom_toTopOf="@id/register_button"
+                    app:layout_constraintBottom_toTopOf="@id/progress_bar"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/title">
 
-                    <com.example.tabletalk.customEditText.CustomTextInput
+                    <com.example.tabletalk.views.CustomTextInput
                         android:id="@+id/name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -92,12 +92,12 @@
                         app:helperTextEnabled="@{!viewModel.isNameValid()}"
                         app:helperTextTextColor="@color/design_default_color_error" />
 
-                    <com.example.tabletalk.customEditText.CustomTextInput
+                    <com.example.tabletalk.views.CustomTextInput
                         android:id="@+id/email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="64dp"
-                        android:layout_marginTop="32dp"
+                        android:layout_marginTop="20dp"
                         android:layout_marginEnd="64dp"
                         android:ems="10"
                         android:hint="Email"
@@ -108,12 +108,12 @@
                         app:helperTextEnabled="@{!viewModel.isEmailValid()}"
                         app:helperTextTextColor="@color/design_default_color_error" />
 
-                    <com.example.tabletalk.customEditText.CustomTextInput
+                    <com.example.tabletalk.views.CustomTextInput
                         android:id="@+id/password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="64dp"
-                        android:layout_marginTop="32dp"
+                        android:layout_marginTop="20dp"
                         android:layout_marginEnd="64dp"
                         android:ems="10"
                         android:hint="Password"
@@ -124,12 +124,12 @@
                         app:helperTextEnabled="@{!viewModel.isPasswordValid()}"
                         app:helperTextTextColor="@color/design_default_color_error" />
 
-                    <com.example.tabletalk.customEditText.CustomTextInput
+                    <com.example.tabletalk.views.CustomTextInput
                         android:id="@+id/confirm_password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="64dp"
-                        android:layout_marginTop="32dp"
+                        android:layout_marginTop="20dp"
                         android:layout_marginEnd="64dp"
                         android:ems="10"
                         android:hint="Confirm Password"
@@ -139,6 +139,15 @@
                         app:helperText="@{viewModel.isConfirmPasswordValid() ? null :@string/confirm_password_error}"
                         app:helperTextEnabled="@{!viewModel.isConfirmPasswordValid()}"
                         app:helperTextTextColor="@color/design_default_color_error" />
+
+                    <com.example.tabletalk.views.ImagePicker
+                        android:id="@+id/image_view"
+                        android:layout_width="150sp"
+                        android:layout_height="150sp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="20dp"
+                        android:contentDescription="@string/uploaded_image"
+                        android:src="@drawable/add_photo" />
 
                 </LinearLayout>
 
@@ -163,10 +172,10 @@
                     android:id="@+id/progress_bar"
                     style="@style/Widget.MaterialComponents.CircularProgressIndicator"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="35dp"
                     android:layout_gravity="center"
                     android:indeterminate="true"
-                    android:visibility="gone"
+                    android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

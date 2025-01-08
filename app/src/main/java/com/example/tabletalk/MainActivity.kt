@@ -10,11 +10,14 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import com.example.tabletalk.data.local.AppLocalDb
+import com.example.tabletalk.data.repositories.AuthListener
 import com.example.tabletalk.data.repositories.UserRepository
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
     var navController: NavController? = null
+    var previousIsLogged: Boolean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +28,7 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
             insets
         }
+        AppLocalDb.create(this)
 
         val navHostFragment: NavHostFragment? =
             supportFragmentManager.findFragmentById(R.id.main_nav_host) as? NavHostFragment
@@ -37,15 +41,20 @@ class MainActivity : AppCompatActivity() {
             bottomNavigationView.visibility = View.VISIBLE
         }
 
-        UserRepository.getInstance().addAuthStateListener {
-            if (UserRepository.getInstance().isLogged()) {
-                bottomNavigationView.visibility = View.VISIBLE
-                navController?.navigate(R.id.postsListFragment)
-            } else {
-                bottomNavigationView.visibility = View.GONE
-                navController?.navigate(R.id.loginFragment)
+        UserRepository.getInstance().addAuthStateListener(object : AuthListener {
+            override fun onAuthStateChanged() {
+                if (previousIsLogged == UserRepository.getInstance().isLogged()) return
+
+                previousIsLogged = UserRepository.getInstance().isLogged()
+                if (previousIsLogged == true) {
+                    bottomNavigationView.visibility = View.VISIBLE
+                    navController?.navigate(R.id.postsListFragment)
+                } else {
+                    bottomNavigationView.visibility = View.GONE
+                    navController?.navigate(R.id.loginFragment)
+                }
             }
-        }
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
