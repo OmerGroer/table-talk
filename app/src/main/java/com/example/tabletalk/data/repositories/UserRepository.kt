@@ -155,6 +155,9 @@ class UserRepository {
 
         for (user in users) {
             if (user == null) continue
+
+            user.avatarUrl = imageRepository.downloadAndCacheImage(imageRepository.getImageRemoteUri(user.id), user.id)
+
             AppLocalDb.getInstance().userDao().insertAll(user)
             val lastUpdated = user.lastUpdated
             if (lastUpdated != null && lastUpdated > time) {

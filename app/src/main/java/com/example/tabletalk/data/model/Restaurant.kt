@@ -18,19 +18,6 @@ data class Restaurant (
     val priceTypes: String = "",
     var lastUpdated: Long? = null
 ) : Parcelable {
-    val json: HashMap<String, Any?>
-        get() {
-            return hashMapOf(
-                ID_KEY to id,
-                NAME_KEY to name,
-                RATING_KEY to rating,
-                RATING_COUNT_KEY to ratingCount,
-                CATEGORY_KEY to category,
-                ADDRESS_KEY to address,
-                PRICE_TYPES_KEY to priceTypes,
-                TIMESTAMP_KEY to lastUpdated
-            )
-        }
 
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
@@ -81,12 +68,12 @@ data class Restaurant (
             val id = json[ID_KEY] as? String ?: ""
             val name = json[NAME_KEY] as? String ?: ""
             val rating = json[RATING_KEY] as? Double ?: 0.0
-            val ratingCount = json[RATING_COUNT_KEY] as? Int ?: 0
+            val ratingCount = json[RATING_COUNT_KEY] as? Long ?: 0
             val category = json[CATEGORY_KEY] as? String ?: ""
             val address = json[ADDRESS_KEY] as? String ?: ""
             val priceTypes = json[PRICE_TYPES_KEY] as? String ?: ""
             val lastUpdated = (json[TIMESTAMP_KEY] as? Timestamp ?: Timestamp(0,0)).seconds
-            return Restaurant(id, name, rating, ratingCount, category, address, priceTypes, lastUpdated)
+            return Restaurant(id, name, rating, ratingCount.toInt(), category, address, priceTypes, lastUpdated)
         }
     }
 }

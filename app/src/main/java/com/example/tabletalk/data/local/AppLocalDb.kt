@@ -19,7 +19,7 @@ import com.example.tabletalk.data.model.User
 import java.util.Date
 
 
-@Database(entities = [User::class, Image::class, Post::class, Restaurant::class], views = [InflatedPost::class], version = 6)
+@Database(entities = [User::class, Image::class, Post::class, Restaurant::class], views = [InflatedPost::class], version = 7)
 @TypeConverters(Converters::class)
 abstract class AppLocalDbRepository: RoomDatabase() {
     abstract fun userDao(): UserDao

@@ -30,22 +30,9 @@ data class Post (
             val restaurantId = json[RESTAURANT_ID_KEY] as? String ?: ""
             val review = json[REVIEW_KEY] as? String ?: ""
             val restaurantUrl = json[IMAGE_URI_KEY] as? String ?: ""
-            val rating = json[RATING_KEY] as? Int ?: 0
+            val rating = json[RATING_KEY] as? Long ?: 0
             val lastUpdated = (json[TIMESTAMP_KEY] as? Timestamp ?: Timestamp(0,0)).seconds
-            return Post(id, userId, restaurantId, review, restaurantUrl, rating, lastUpdated)
+            return Post(id, userId, restaurantId, review, restaurantUrl, rating.toInt(), lastUpdated)
         }
     }
-
-    val json: HashMap<String, Any?>
-        get() {
-            return hashMapOf(
-                ID_KEY to id,
-                USER_ID_KEY to userId,
-                RESTAURANT_ID_KEY to restaurantId,
-                REVIEW_KEY to review,
-                IMAGE_URI_KEY to restaurantUrl,
-                RATING_KEY to rating,
-                TIMESTAMP_KEY to lastUpdated
-            )
-        }
 }

@@ -10,6 +10,8 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import java.util.concurrent.Callable
+import java.util.concurrent.Executors
 
 class PostRepository {
     companion object {
@@ -25,6 +27,7 @@ class PostRepository {
 
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val imageRepository = ImageRepository(COLLECTION)
+    private val executor = Executors.newSingleThreadExecutor()
 
     suspend fun save(post: Post) {
         val documentRef = if (post.id.isNotEmpty())
@@ -76,6 +79,12 @@ class PostRepository {
 
         for (post in posts) {
             if (post == null) continue
+
+            post.restaurantUrl = imageRepository.downloadAndCacheImage(
+                imageRepository.getImageRemoteUri(post.id),
+                post.id
+            )
+
             AppLocalDb.getInstance().postDao().insertAll(post)
             val lastUpdated = post.lastUpdated
             if (lastUpdated != null && lastUpdated > time) {

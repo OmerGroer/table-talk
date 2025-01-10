@@ -28,15 +28,4 @@ data class User (
             return User(id, email, username, avatarUrl, lastUpdated)
         }
     }
-
-    val json: HashMap<String, Any?>
-        get() {
-            return hashMapOf(
-                ID_KEY to id,
-                EMAIL_KEY to email,
-                USERNAME_KEY to username,
-                IMAGE_URI_KEY to avatarUrl,
-                TIMESTAMP_KEY to lastUpdated,
-            )
-        }
 }

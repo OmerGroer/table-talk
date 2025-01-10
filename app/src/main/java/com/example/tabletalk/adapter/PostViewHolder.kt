@@ -11,6 +11,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.tabletalk.CommentsFragment
 import com.example.tabletalk.R
 import com.example.tabletalk.data.model.InflatedPost
@@ -83,6 +84,13 @@ class PostViewHolder(
         username.text = post?.userName
         restaurant.text = post?.restaurantName
         review.text = post?.review
+
+        Glide.with(itemView.context)
+            .load(post?.restaurantUrl)
+            .into(restaurantImage)
+        Glide.with(itemView.context)
+            .load(post?.avatarUrl)
+            .into(avatar)
 
         val rate = post?.rating as Int
         val startsSize = stars.size - 1
