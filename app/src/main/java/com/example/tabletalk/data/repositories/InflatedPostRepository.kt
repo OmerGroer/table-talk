@@ -16,4 +16,10 @@ class InflatedPostRepository {
     fun getAll(): LiveData<List<InflatedPost>> {
         return AppLocalDb.getInstance().inflatedPostDao().getAll()
     }
+
+    suspend fun refresh() {
+        PostRepository.getInstance().refresh()
+        RestaurantRepository.getInstance().refresh()
+        UserRepository.getInstance().refresh()
+    }
 }

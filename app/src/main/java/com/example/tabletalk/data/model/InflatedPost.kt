@@ -14,7 +14,7 @@ data class InflatedPost (
     var id: String = "",
     var userId: String = "",
     var userName: String = "",
-    var restaurantId: Int = 0,
+    var restaurantId: String = "",
     var restaurantName: String = "",
     var review: String = "",
     var restaurantUrl: String = "",

@@ -86,17 +86,17 @@ class Model {
         listener.onComplete(user)
     }
 
-    fun getPostsByRestaurantNameAndUserId(restaurantName: Int, userId: String): List<Post> {
+    fun getPostsByRestaurantNameAndUserId(restaurantName: String, userId: String): List<Post> {
         return emptyList()
     }
 
-    fun getPostsByRestaurantName(restaurantName: Int): List<Post> {
+    fun getPostsByRestaurantName(restaurantName: String): List<Post> {
         return emptyList()
     }
 
-    fun getRestaurantById(id: Int): Restaurant {
+    fun getRestaurantById(id: String): Restaurant {
         return Restaurant(
-            1,
+            "1",
             "Mcdonalds",
             4.9,
             1,
