@@ -59,9 +59,7 @@ class SearchFragment : Fragment() {
         restaurantRecyclerAdapter.listener = object : OnRestaurantItemClickListener {
             override fun onRestaurantClickListener(restaurant: Restaurant) {
                 val action =
-                    SearchFragmentDirections.actionGlobalRestaurantPageFragment(
-                        restaurant.name
-                    )
+                    SearchFragmentDirections.actionGlobalRestaurantPageFragment(restaurant.id)
                 Navigation.findNavController(view).navigate(action)
             }
         }
@@ -70,9 +68,7 @@ class SearchFragment : Fragment() {
         userRecyclerAdapter.listener = object : OnUserItemClickListener {
             override fun onUsernameClickListener(user: User) {
                 val action =
-                    SearchFragmentDirections.actionGlobalUserPageFragment(
-                        user.username, user.id
-                    )
+                    SearchFragmentDirections.actionGlobalUserPageFragment(user.id)
                 Navigation.findNavController(view).navigate(action)
             }
         }

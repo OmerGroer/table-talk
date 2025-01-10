@@ -1,5 +1,7 @@
 package com.example.tabletalk.utils
 
+import android.widget.EditText
+import android.widget.RatingBar
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
@@ -27,7 +29,6 @@ fun setText(customTextInput: CustomTextInput, text: LiveData<String>) {
 fun getText(customTextInput: CustomTextInput): String {
     return customTextInput.text
 }
-
 
 @BindingAdapter("android:textAttrChanged")
 fun setTextWatcher(customTextInput: CustomTextInput, textAttrChanged: InverseBindingListener) {
@@ -71,4 +72,42 @@ fun setHelperTextWatcher(customTextInput: CustomTextInput, helperTextAttrChanged
         .doOnTextChanged { _, _, _, _ ->
             helperTextAttrChanged.onChange()
         }
+}
+
+@BindingAdapter("android:text")
+fun setText(editText: EditText, text: String) {
+    if (editText.text.toString() != text) {
+        editText.setText(text)
+    }
+}
+
+@BindingAdapter("android:text")
+fun setText(editText: EditText, text: LiveData<String>) {
+    if (editText.text.toString() != text.value) {
+        editText.setText(text.value ?: "")
+    }
+}
+
+@InverseBindingAdapter(attribute = "android:text")
+fun getText(editText: EditText): String {
+    return editText.text.toString()
+}
+
+@BindingAdapter("android:rating")
+fun setRating(ratingBar: RatingBar, rating: Float) {
+    if (ratingBar.rating != rating) {
+        ratingBar.rating = rating
+    }
+}
+
+@BindingAdapter("android:rating")
+fun setRating(ratingBar: RatingBar, rating: LiveData<Float>) {
+    if (ratingBar.rating != rating.value) {
+        ratingBar.rating = rating.value ?: 0.0F
+    }
+}
+
+@InverseBindingAdapter(attribute = "android:rating")
+fun getRating(ratingBar: RatingBar): Float {
+    return ratingBar.rating
 }

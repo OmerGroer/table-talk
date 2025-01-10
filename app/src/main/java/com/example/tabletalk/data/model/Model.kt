@@ -11,44 +11,7 @@ class Model {
     }
 
     fun getAllPostsWithoutUser(userId: String): List<Post> {
-        return listOf(
-            Post(
-                "1",
-                "Gal5",
-                "Gal",
-                "",
-                "Mcdonalds",
-                "Great",
-                "",
-                5,
-                null
-            ),
-            Post(
-                "2",
-                "Gal7",
-                "Gal",
-                "",
-                "Mcdonalds",
-                "Great",
-                "",
-                3,
-                null
-            )
-        )
-    }
-
-    fun getPostById(id: String): Post {
-        return Post(
-            "1",
-            "Gal",
-            "Gal",
-            "",
-            "Mcdonalds",
-            "Great",
-            "",
-            5,
-            null
-        )
+        return emptyList()
     }
 
     fun getCommentsByPostId(postId: String): List<Comment> {
@@ -107,30 +70,7 @@ class Model {
     }
 
     fun getPostsByUserId(userId: String): List<Post> {
-        return listOf(
-            Post(
-                "1",
-                "dgo3ezbMuDarzoKbDMv1PVhHqFg2",
-                "Gal",
-                "",
-                "Mcdonalds",
-                "Great",
-                "",
-                5,
-                null
-            ),
-            Post(
-                "2",
-                "dgo3ezbMuDarzoKbDMv1PVhHqFg2",
-                "Gal",
-                "",
-                "Mcdonalds",
-                "Great",
-                "",
-                5,
-                null
-            )
-        )
+        return emptyList()
     }
 
     fun getLoggedInUser(): User {
@@ -146,76 +86,28 @@ class Model {
         listener.onComplete(user)
     }
 
-    fun getPostsByRestaurantNameAndUserId(restaurantName: String, userId: String): List<Post> {
-        return mutableListOf(
-            Post(
-                "1",
-                "Gal",
-                "Gal",
-                "",
-                "Mcdonalds",
-                "Great",
-                "",
-                5,
-                null
-            )
-        )
+    fun getPostsByRestaurantNameAndUserId(restaurantName: Int, userId: String): List<Post> {
+        return emptyList()
     }
 
-    fun getPostsByRestaurantName(restaurantName: String): List<Post> {
-        return mutableListOf(
-            Post(
-                "1",
-                "Gal3",
-                "Gal",
-                "",
-                "Mcdonalds",
-                "Great",
-                "",
-                5,
-                null
-            ),
-            Post(
-                "2",
-                "Gal2",
-                "Gal",
-                "",
-                "Mcdonalds",
-                "Great",
-                "",
-                5,
-                null
-            )
-        )
+    fun getPostsByRestaurantName(restaurantName: Int): List<Post> {
+        return emptyList()
     }
 
-    fun getRestaurantByName(name: String): Restaurant {
+    fun getRestaurantById(id: Int): Restaurant {
         return Restaurant(
             1,
             "Mcdonalds",
             4.9,
-            "Fast Food",
-            "Tel Aviv"
+            1,
+            "Tel Aviv",
+            address = "",
+            priceTypes = "",
         )
     }
 
     fun getAllRestaurants(name: String): List<Restaurant> {
-        return listOf(
-            Restaurant(
-                1,
-                "Mcdonalds",
-                5.0,
-                "Fast Food",
-                "Tel Aviv"
-            ),
-            Restaurant(
-                2,
-                "Burgranch",
-                1.0,
-                "Fast Food",
-                "Yavne"
-            )
-        )
+        return emptyList()
     }
 
     fun getAllUsers(name: String): MutableList<User> {

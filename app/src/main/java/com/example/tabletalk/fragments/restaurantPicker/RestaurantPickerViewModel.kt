@@ -55,6 +55,6 @@ class RestaurantPickerViewModel : ViewModel() {
         val restaurantsPage = RestaurantsApiService.getRestaurantsByLocation(location = location, cursor = endCursor)
         endCursor = restaurantsPage.pageInfo.endCursor
         hasNextPage = restaurantsPage.pageInfo.hasNextPage
-        return restaurantsPage.data.map { Restaurant(id = it.id, name = it.name, address = it.address.fullAddress, category = it.cuisines?.joinToString("/")) }
+        return restaurantsPage.data.map { Restaurant(id = it.id, name = it.name, address = it.address.fullAddress, category = it.cuisines?.joinToString("/"), priceTypes = it.priceTypes) }
     }
 }

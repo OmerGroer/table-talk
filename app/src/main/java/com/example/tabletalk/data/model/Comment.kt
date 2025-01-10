@@ -1,6 +1,6 @@
 package com.example.tabletalk.data.model
 
-class Comment (
+data class Comment (
     var id: String,
     var userId: String,
     var userName: String,

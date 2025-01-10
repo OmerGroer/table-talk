@@ -21,7 +21,7 @@ class ProfileFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
         val user = Model.shared.getLoggedInUser()
-        val fragment = UserFragment.newInstance(user.id, user.username)
+        val fragment = UserFragment.newInstance(user.id)
         fragment.setOnCreate(object : OnCreateListener {
             override fun onCreate(view: View) {
                 val toolbar: androidx.appcompat.widget.Toolbar = view.findViewById(R.id.profile_toolbar)
@@ -35,7 +35,7 @@ class ProfileFragment : Fragment() {
             override fun onClickListener(post: Post) {
                 val action =
                     ProfileFragmentDirections.actionGlobalRestaurantPageFragment(
-                        post.restaurantName
+                        post.restaurantId
                     )
                 Navigation.findNavController(view).navigate(action)
             }

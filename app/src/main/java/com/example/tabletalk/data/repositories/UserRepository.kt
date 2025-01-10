@@ -30,7 +30,7 @@ class UserRepository {
     private val authListeners: MutableList<AuthListener> = mutableListOf()
     private var isInUserCreation: Boolean = false
 
-    suspend fun createUser(email: String, password: String, username: String, avatarUri: String) {
+    suspend fun create(email: String, password: String, username: String, avatarUri: String) {
         isInUserCreation = true
 
         createAuthUser(email, password)
@@ -40,8 +40,8 @@ class UserRepository {
             email = email,
             avatarUrl = avatarUri
         )
-        saveUser(user)
-        saveUserImage(user.avatarUrl!!, user.id)
+        save(user)
+        saveImage(user.avatarUrl!!, user.id)
 
         isInUserCreation = false
 
@@ -50,7 +50,7 @@ class UserRepository {
         }
     }
 
-    suspend fun updateUser(oldPassword: String, password: String, username: String, avatarUri: String) {
+    suspend fun update(oldPassword: String, password: String, username: String, avatarUri: String) {
         if (password.isNotEmpty()) {
             if (oldPassword.isEmpty()) {
                 throw AuthenticatorException("Old password is required")
@@ -67,11 +67,11 @@ class UserRepository {
             avatarUrl = if (!avatarUri.startsWith("file:///")) "file://${avatarUri}" else avatarUri
         )
 
-        saveUser(user)
-        saveUserImage(user.avatarUrl!!, user.id)
+        save(user)
+        saveImage(user.avatarUrl!!, user.id)
     }
 
-    private suspend fun saveUser(user: User) {
+    private suspend fun save(user: User) {
         db.collection(USERS_COLLECTION)
             .document(user.id)
             .set(user)
@@ -80,29 +80,23 @@ class UserRepository {
         AppLocalDb.getInstance().userDao().insertAll(user)
     }
 
-    suspend fun getUserByUserId(userId: String): User? {
-        var user = AppLocalDb.getInstance().userDao().getUserByUserId(userId)
+    suspend fun getById(userId: String): User? {
+        var user = AppLocalDb.getInstance().userDao().getById(userId)
 
-        if (user != null) return user.apply { avatarUrl = ImageRepository.getInstance().getImagePathById(userId) }
+        if (user == null) {
+            user = db.collection(USERS_COLLECTION)
+                .document(userId)
+                .get()
+                .await()
+                .toObject(User::class.java)
+            user?.avatarUrl = ImageRepository.getInstance().downloadAndCacheImage(ImageRepository.getInstance().getImageRemoteUri(userId), userId)
 
-        user = getUserFromFireStore(userId)
+            if (user == null) return null
 
-        if (user == null) return null
-
-        AppLocalDb.getInstance().userDao().insertAll(user)
+            AppLocalDb.getInstance().userDao().insertAll(user)
+        }
 
         return user.apply { avatarUrl = ImageRepository.getInstance().getImagePathById(userId) }
-    }
-
-    private suspend fun getUserFromFireStore(userId: String): User? {
-        val user = db.collection(USERS_COLLECTION)
-            .document(userId)
-            .get()
-            .await()
-            .toObject(User::class.java)
-        user?.avatarUrl = ImageRepository.getInstance().downloadAndCacheImage(ImageRepository.getInstance().getImageRemoteUri(userId), userId)
-
-        return user
     }
 
     private suspend fun createAuthUser(email: String, password: String) {
@@ -137,6 +131,6 @@ class UserRepository {
         authListeners.add(listener)
     }
 
-    private suspend fun saveUserImage(imageUri: String, userId: String) =
-        ImageRepository.getInstance().uploadImage(imageUri.toUri(), userId)
+    private suspend fun saveImage(imageUri: String, userId: String) =
+        ImageRepository.getInstance().upload(imageUri.toUri(), userId)
 }

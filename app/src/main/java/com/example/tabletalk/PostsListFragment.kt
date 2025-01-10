@@ -35,7 +35,7 @@ class PostsListFragment : Fragment() {
             override fun onClickListener(post: Post) {
                 val action =
                     PostsListFragmentDirections.actionGlobalRestaurantPageFragment(
-                        post.restaurantName
+                        post.restaurantId
                     )
                 Navigation.findNavController(view).navigate(action)
             }
@@ -43,9 +43,7 @@ class PostsListFragment : Fragment() {
         adapter.userListener = object : OnPostItemClickListener {
             override fun onClickListener(post: Post) {
                 val action =
-                    PostsListFragmentDirections.actionGlobalUserPageFragment(
-                        post.userName, post.userId
-                    )
+                    PostsListFragmentDirections.actionGlobalUserPageFragment(post.userId)
                 Navigation.findNavController(view).navigate(action)
             }
         }

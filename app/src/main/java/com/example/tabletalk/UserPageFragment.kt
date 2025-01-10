@@ -18,12 +18,10 @@ class UserPageFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_user_page, container, false)
 
         val user = UserPageFragmentArgs.fromBundle(requireArguments())
-        val fragment = UserFragment.newInstance(user.userId, user.username).setOnRestaurantClickListener(object : OnPostItemClickListener {
+        val fragment = UserFragment.newInstance(user.userId).setOnRestaurantClickListener(object : OnPostItemClickListener {
             override fun onClickListener(post: Post) {
                 val action =
-                    UserPageFragmentDirections.actionGlobalRestaurantPageFragment(
-                        post.restaurantName
-                    )
+                    UserPageFragmentDirections.actionGlobalRestaurantPageFragment(post.restaurantId)
                 Navigation.findNavController(view).navigate(action)
             }
         })

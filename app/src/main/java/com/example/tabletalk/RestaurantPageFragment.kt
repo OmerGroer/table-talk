@@ -23,11 +23,11 @@ class RestaurantPageFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_restaurant_page, container, false)
 
         val loggedUser = Model.shared.getLoggedInUser()
-        val restaurantName = RestaurantPageFragmentArgs.fromBundle(requireArguments()).restaurantName
-        val restaurant = Model.shared.getRestaurantByName(restaurantName)
+        val restaurantId = RestaurantPageFragmentArgs.fromBundle(requireArguments()).restaurantId
+        val restaurant = Model.shared.getRestaurantById(restaurantId)
 
-        val posts = Model.shared.getPostsByRestaurantName(restaurantName)
-        val loggedUserPosts = Model.shared.getPostsByRestaurantNameAndUserId(restaurantName, loggedUser.id)
+        val posts = Model.shared.getPostsByRestaurantName(restaurantId)
+        val loggedUserPosts = Model.shared.getPostsByRestaurantNameAndUserId(restaurantId, loggedUser.id)
         val allPosts = loggedUserPosts + posts
 
         val restaurantNameTextView: TextView = view.findViewById(R.id.restaurant_name)
@@ -49,9 +49,7 @@ class RestaurantPageFragment : Fragment() {
         adapter.userListener = object : OnPostItemClickListener {
             override fun onClickListener(post: Post) {
                 val action =
-                    RestaurantPageFragmentDirections.actionGlobalUserPageFragment(
-                        post.userName, post.userId
-                    )
+                    RestaurantPageFragmentDirections.actionGlobalUserPageFragment(post.userId)
                 Navigation.findNavController(view).navigate(action)
             }
         }
