@@ -27,7 +27,7 @@ class LoginFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_login, container, false
         )
-        bindViews(binding)
+        bindViews()
 
         if (UserRepository.getInstance().isLogged()) {
             findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToPostsListFragment())
@@ -45,7 +45,7 @@ class LoginFragment : Fragment() {
         return binding?.root
     }
 
-    private fun bindViews(binding: FragmentLoginBinding?) {
+    private fun bindViews() {
         binding?.viewModel = viewModel
         binding?.lifecycleOwner = viewLifecycleOwner
     }

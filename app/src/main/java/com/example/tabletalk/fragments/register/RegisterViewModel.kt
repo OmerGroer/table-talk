@@ -43,7 +43,7 @@ class RegisterViewModel : ViewModel() {
             isLoading = true
             viewModelScope.launch(Dispatchers.IO) {
                 try {
-                    UserRepository.getInstance().createUser(email.value!!, password.value!!, name.value!!, avatarUri.value!!)
+                    UserRepository.getInstance().create(email.value!!, password.value!!, name.value!!, avatarUri.value!!)
                 } catch (e: Exception) {
                     Log.e("Register", "Error registering user", e)
                     withContext(Dispatchers.Main) { onFailure(e) }

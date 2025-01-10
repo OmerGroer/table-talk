@@ -35,7 +35,7 @@ class RegisterFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_register, container, false
         )
-        bindViews(binding)
+        bindViews()
 
         binding?.registerButton?.setOnClickListener {
             showProgressBar()
@@ -50,7 +50,7 @@ class RegisterFragment : Fragment() {
         return binding?.root
     }
 
-    private fun bindViews(binding: FragmentRegisterBinding?) {
+    private fun bindViews() {
         binding?.viewModel = viewModel
         binding?.lifecycleOwner = viewLifecycleOwner
     }

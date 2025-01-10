@@ -40,7 +40,7 @@ class EditUserViewModel : ViewModel() {
                 try {
                     val userId = UserRepository.getInstance().getLoggedUserId()
                         ?: throw Exception("User not logged in")
-                    val user = UserRepository.getInstance().getUserByUserId(userId)
+                    val user = UserRepository.getInstance().getById(userId)
                         ?: throw Exception("User not found")
 
                     withContext(Dispatchers.Main) {
@@ -71,18 +71,18 @@ class EditUserViewModel : ViewModel() {
             viewModelScope.launch(Dispatchers.IO) {
                 try {
                     UserRepository.getInstance()
-                        .updateUser(oldPassword.value!!, password.value!!, name.value!!, avatarUri.value!!)
+                        .update(oldPassword.value!!, password.value!!, name.value!!, avatarUri.value!!)
 
                     withContext(Dispatchers.Main) { onSuccess() }
                 } catch (e: Exception) {
-                    Log.e("Register", "Error registering user", e)
+                    Log.e("Edit", "Error registering user", e)
                     withContext(Dispatchers.Main) { onFailure(e) }
                 } finally {
                     withContext(Dispatchers.Main) { isLoading.value = false }
                 }
             }
         } catch (e: Exception) {
-            Log.e("Register", "Error registering user", e)
+            Log.e("Edit", "Error registering user", e)
             onFailure(e)
         }
     }

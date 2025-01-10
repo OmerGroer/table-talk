@@ -24,7 +24,7 @@ class ImageRepository(private val context: Context) {
 
     private val storage: FirebaseStorage = FirebaseStorage.getInstance()
 
-    suspend fun uploadImage(imageUri: Uri, imageId: String) {
+    suspend fun upload(imageUri: Uri, imageId: String) {
         val imageRef = storage.reference.child("$IMAGES_REF/$imageId")
         imageRef.putFile(imageUri).await()
 
@@ -50,11 +50,11 @@ class ImageRepository(private val context: Context) {
     }
 
     fun getImageLocalUri(imageId: String): String {
-        return AppLocalDb.getInstance().imageDao().getImageById(imageId).value?.uri ?: ""
+        return AppLocalDb.getInstance().imageDao().getById(imageId).value?.uri ?: ""
     }
 
     suspend fun getImagePathById(imageId: String): String {
-        val image = AppLocalDb.getInstance().imageDao().getImageById(imageId).value
+        val image = AppLocalDb.getInstance().imageDao().getById(imageId).value
 
         if (image != null) return image.uri
 
@@ -74,7 +74,7 @@ class ImageRepository(private val context: Context) {
     }
 
     private fun deleteLocalImage(imageId: String) {
-        val image = AppLocalDb.getInstance().imageDao().getImageById(imageId).value
+        val image = AppLocalDb.getInstance().imageDao().getById(imageId).value
         image?.let {
             val file = Glide.with(context)
                 .asFile()
@@ -86,7 +86,7 @@ class ImageRepository(private val context: Context) {
                 file.delete()
             }
 
-            AppLocalDb.getInstance().imageDao().deleteImage(imageId)
+            AppLocalDb.getInstance().imageDao().delete(imageId)
         }
     }
 }

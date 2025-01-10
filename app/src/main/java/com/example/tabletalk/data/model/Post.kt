@@ -1,13 +1,16 @@
 package com.example.tabletalk.data.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "posts")
 class Post (
-    var id: String,
+    @PrimaryKey
+    var id: String = "",
     var userId: String,
-    var userName: String,
-    var avatarUrl: String,
-    var restaurantName: String,
+    var restaurantId: Int,
     var review: String,
     var restaurantUrl: String,
     var rating: Int,
-    var lastUpdated: Long?
+    var lastUpdated: Long? = null
 )
