@@ -28,7 +28,7 @@ class RestaurantPickerFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_restaurant_picker, container, false
         )
-        bindViews(binding)
+        bindViews()
 
         setUpList()
         setupLoading()
@@ -41,7 +41,7 @@ class RestaurantPickerFragment : Fragment() {
         return binding?.root
     }
 
-    private fun bindViews(binding: FragmentRestaurantPickerBinding?) {
+    private fun bindViews() {
         binding?.viewModel = viewModel
         binding?.lifecycleOwner = viewLifecycleOwner
     }

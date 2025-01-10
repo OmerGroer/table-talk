@@ -30,7 +30,7 @@ class RestaurantsRecyclerAdapter(private var restaurants: List<Restaurant>) :
 
     override fun onBindViewHolder(holder: RestaurantViewHolder, position: Int) {
         holder.bind(
-            restaurant = restaurants?.get(position),
+            restaurant = restaurants.get(position),
             position = position
         )
     }

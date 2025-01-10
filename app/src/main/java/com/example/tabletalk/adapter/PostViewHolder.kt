@@ -13,8 +13,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tabletalk.CommentsFragment
 import com.example.tabletalk.R
-import com.example.tabletalk.data.model.Model
-import com.example.tabletalk.data.model.Post
+import com.example.tabletalk.data.model.InflatedPost
 import com.example.tabletalk.data.repositories.UserRepository
 
 class PostViewHolder(
@@ -24,61 +23,48 @@ class PostViewHolder(
     editPostListener: OnPostItemClickListener?,
     fragmentManager: FragmentManager?,
 ): RecyclerView.ViewHolder(itemView) {
-    private var layout: ConstraintLayout? = null
-    private var menu: ImageView? = null
-    private var username: TextView? = null
-    private var restaurant: TextView? = null
-    private var stars: Array<ImageView>? = null
-    private var review: TextView? = null
-    private var restaurantImage: ImageView? = null
-    private var avatar: ImageView? = null
-    private var comment: Button? = null
+    private var layout: ConstraintLayout = itemView.findViewById(R.id.post_row_main)
+    private var menu: ImageView = itemView.findViewById(R.id.post_row_menu)
+    private var username: TextView = itemView.findViewById(R.id.post_row_username)
+    private var restaurant: TextView = itemView.findViewById(R.id.post_row_restaurant)
+    private var stars: Array<ImageView> = arrayOf(
+        itemView.findViewById(R.id.post_row_first_star),
+        itemView.findViewById(R.id.post_row_second_star),
+        itemView.findViewById(R.id.post_row_third_star),
+        itemView.findViewById(R.id.post_row_fourth_star),
+        itemView.findViewById(R.id.post_row_fifth_star)
+    )
+    private var review: TextView = itemView.findViewById(R.id.post_row_review)
+    private var restaurantImage: ImageView = itemView.findViewById(R.id.post_row_restaurant_image)
+    private var avatar: ImageView = itemView.findViewById(R.id.post_row_avatar)
+    private var comment: Button = itemView.findViewById(R.id.post_row_comment_button)
 
-    private var post: Post? = null
+    private var post: InflatedPost? = null
 
     init {
-        layout = itemView.findViewById(R.id.post_row_main)
-        menu = itemView.findViewById(R.id.post_row_menu)
-        username = itemView.findViewById(R.id.post_row_username)
-        avatar = itemView.findViewById(R.id.post_row_avatar)
-        restaurant = itemView.findViewById(R.id.post_row_restaurant)
-        stars = arrayOf(
-            itemView.findViewById(R.id.post_row_first_star),
-            itemView.findViewById(R.id.post_row_second_star),
-            itemView.findViewById(R.id.post_row_third_star),
-            itemView.findViewById(R.id.post_row_fourth_star),
-            itemView.findViewById(R.id.post_row_fifth_star)
-        )
-        review = itemView.findViewById(R.id.post_row_review)
-        restaurantImage = itemView.findViewById(R.id.post_row_restaurant_image)
-        comment = itemView.findViewById(R.id.post_row_comment_button)
-
-        username?.setOnClickListener {
-            userListener?.onClickListener(post as Post)
+        username.setOnClickListener {
+            userListener?.onClickListener(post!!)
         }
-        avatar?.setOnClickListener {
-            userListener?.onClickListener(post as Post)
+        avatar.setOnClickListener {
+            userListener?.onClickListener(post!! )
         }
-        restaurant?.setOnClickListener {
-            restaurantListener?.onClickListener(post as Post)
+        restaurant.setOnClickListener {
+            restaurantListener?.onClickListener(post!!)
         }
-        comment?.setOnClickListener {
+        comment.setOnClickListener {
             if (fragmentManager != null) CommentsFragment.display(fragmentManager, post?.id as String)
         }
 
-        menu?.setOnClickListener {
-            PopupMenu(menu?.context, menu).apply {
+        menu.setOnClickListener {
+            PopupMenu(menu.context, menu).apply {
                 setOnMenuItemClickListener(object : OnMenuItemClickListener {
                     override fun onMenuItemClick(item: MenuItem?): Boolean {
                         when (item?.itemId) {
                             R.id.edit_post -> {
-                                editPostListener?.onClickListener(post as Post)
+                                editPostListener?.onClickListener(post!!)
                             }
                             R.id.delete_post -> {
-                                Model.shared.deletePost(post as Post, object : Model.Listener<Post> {
-                                    override fun onComplete(data: Post) {
-                                    }
-                                })
+                                TODO("implement")
                             }
                             else -> return false
                             }
@@ -91,29 +77,29 @@ class PostViewHolder(
         }
     }
 
-    fun bind(post: Post?, position: Int, postType: PostType) {
+    fun bind(post: InflatedPost?, position: Int, postType: PostType) {
         this.post = post
 
-//        username?.text = post?.userName
-//        restaurant?.text = post?.restaurantName
-        review?.text = post?.review
+        username.text = post?.userName
+        restaurant.text = post?.restaurantName
+        review.text = post?.review
 
         val rate = post?.rating as Int
-        val startsSize = stars?.size as Int - 1
+        val startsSize = stars.size - 1
 
         for (i in rate..startsSize) {
-            stars?.get(i)?.visibility = View.GONE
+            stars.get(i).visibility = View.GONE
         }
 
         val isMenuShown = post.userId == UserRepository.getInstance().getLoggedUserId()
         if (isMenuShown) {
-            menu?.visibility = View.VISIBLE
+            menu.visibility = View.VISIBLE
         }
 
         when (postType) {
             PostType.PROFILE -> {
-                username?.visibility = View.GONE
-                avatar?.visibility = View.GONE
+                username.visibility = View.GONE
+                avatar.visibility = View.GONE
 
                 val constraintSet = ConstraintSet()
                 constraintSet.clone(layout)

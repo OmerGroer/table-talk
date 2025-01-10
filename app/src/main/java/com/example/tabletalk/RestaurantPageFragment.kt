@@ -43,25 +43,25 @@ class RestaurantPageFragment : Fragment() {
         val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
 
-        val adapter = PostsRecyclerAdapter(allPosts)
+        val adapter = PostsRecyclerAdapter(emptyList())
 
         adapter.fragmentManager = getChildFragmentManager()
-        adapter.userListener = object : OnPostItemClickListener {
-            override fun onClickListener(post: Post) {
-                val action =
-                    RestaurantPageFragmentDirections.actionGlobalUserPageFragment(post.userId)
-                Navigation.findNavController(view).navigate(action)
-            }
-        }
-        adapter.editPostListener = object : OnPostItemClickListener {
-            override fun onClickListener(post: Post) {
-                val action =
-                    RestaurantPageFragmentDirections.actionRestaurantPageFragmentToEditPostFragment(
-                        post.id
-                    )
-                Navigation.findNavController(view).navigate(action)
-            }
-        }
+//        adapter.userListener = object : OnPostItemClickListener {
+//            override fun onClickListener(post: Post) {
+//                val action =
+//                    RestaurantPageFragmentDirections.actionGlobalUserPageFragment(post.userId)
+//                Navigation.findNavController(view).navigate(action)
+//            }
+//        }
+//        adapter.editPostListener = object : OnPostItemClickListener {
+//            override fun onClickListener(post: Post) {
+//                val action =
+//                    RestaurantPageFragmentDirections.actionRestaurantPageFragmentToEditPostFragment(
+//                        post.id
+//                    )
+//                Navigation.findNavController(view).navigate(action)
+//            }
+//        }
 
         adapter.postType = PostType.RESTAURANT
 

@@ -5,17 +5,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tabletalk.R
-import com.example.tabletalk.data.model.Post
+import com.example.tabletalk.data.model.InflatedPost
 
 enum class PostType {
     REGULAR, PROFILE, RESTAURANT
 }
 
 interface OnPostItemClickListener {
-    fun onClickListener(post: Post)
+    fun onClickListener(post: InflatedPost)
 }
 
-class PostsRecyclerAdapter(private val posts: List<Post>?) :
+class PostsRecyclerAdapter(private var posts: List<InflatedPost>) :
     RecyclerView.Adapter<PostViewHolder>() {
 
     var restaurantListener: OnPostItemClickListener? = null
@@ -24,7 +24,7 @@ class PostsRecyclerAdapter(private val posts: List<Post>?) :
     var fragmentManager: FragmentManager? = null
     var postType = PostType.REGULAR
 
-    override fun getItemCount(): Int = posts?.size ?: 0
+    override fun getItemCount(): Int = posts.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(
@@ -32,14 +32,25 @@ class PostsRecyclerAdapter(private val posts: List<Post>?) :
             parent,
             false
         )
-        return PostViewHolder(itemView, restaurantListener, userListener, editPostListener, fragmentManager)
+        return PostViewHolder(
+            itemView,
+            restaurantListener,
+            userListener,
+            editPostListener,
+            fragmentManager
+        )
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         holder.bind(
-            post = posts?.get(position),
+            post = posts.get(position),
             position = position,
             postType = postType
         )
+    }
+
+    fun updatePosts(newPosts: List<InflatedPost>) {
+        posts = newPosts
+        notifyDataSetChanged()
     }
 }
