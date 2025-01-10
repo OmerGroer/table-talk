@@ -1,16 +1,21 @@
 package com.example.tabletalk.data.repositories
 
 import android.accounts.AuthenticatorException
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.core.net.toUri
+import com.example.tabletalk.MyApplication
 import com.example.tabletalk.data.local.AppLocalDb
+import com.example.tabletalk.data.model.Post
 import com.example.tabletalk.data.model.User
+import com.example.tabletalk.data.repositories.PostRepository.Companion
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-
-const val USERS_COLLECTION = "users"
 
 interface AuthListener {
     fun onAuthStateChanged()
@@ -18,6 +23,9 @@ interface AuthListener {
 
 class UserRepository {
     companion object {
+        private const val COLLECTION = "users"
+        private const val LAST_UPDATED = "usersLastUpdated"
+
         private val userRepository = UserRepository()
 
         fun getInstance(): UserRepository {
@@ -27,6 +35,7 @@ class UserRepository {
 
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val imageRepository = ImageRepository(COLLECTION)
     private val authListeners: MutableList<AuthListener> = mutableListOf()
     private var isInUserCreation: Boolean = false
 
@@ -72,10 +81,13 @@ class UserRepository {
     }
 
     private suspend fun save(user: User) {
-        db.collection(USERS_COLLECTION)
-            .document(user.id)
-            .set(user)
-            .await()
+        val documentRef = db.collection(COLLECTION).document(user.id)
+
+        db.runBatch { batch ->
+            batch.set(documentRef, user)
+            batch.update(documentRef, "avatarUrl", null)
+            batch.update(documentRef, "lastUpdated", FieldValue.serverTimestamp())
+        }.await()
 
         AppLocalDb.getInstance().userDao().insertAll(user)
     }
@@ -84,19 +96,19 @@ class UserRepository {
         var user = AppLocalDb.getInstance().userDao().getById(userId)
 
         if (user == null) {
-            user = db.collection(USERS_COLLECTION)
+            user = db.collection(COLLECTION)
                 .document(userId)
                 .get()
                 .await()
                 .toObject(User::class.java)
-            user?.avatarUrl = ImageRepository.getInstance().downloadAndCacheImage(ImageRepository.getInstance().getImageRemoteUri(userId), userId)
+            user?.avatarUrl = imageRepository.downloadAndCacheImage(imageRepository.getImageRemoteUri(userId), userId)
 
             if (user == null) return null
 
             AppLocalDb.getInstance().userDao().insertAll(user)
         }
 
-        return user.apply { avatarUrl = ImageRepository.getInstance().getImagePathById(userId) }
+        return user.apply { avatarUrl = imageRepository.getImagePathById(userId) }
     }
 
     private suspend fun createAuthUser(email: String, password: String) {
@@ -132,5 +144,37 @@ class UserRepository {
     }
 
     private suspend fun saveImage(imageUri: String, userId: String) =
-        ImageRepository.getInstance().upload(imageUri.toUri(), userId)
+        imageRepository.upload(imageUri.toUri(), userId)
+
+    suspend fun refresh() {
+        var time: Long = getLastUpdate()
+
+        val users = db.collection(COLLECTION)
+            .whereGreaterThanOrEqualTo(User.TIMESTAMP_KEY, Timestamp(time, 0))
+            .get().await().documents.map { document -> document.data?.let { User.fromJSON(it).apply { id = document.id } }}
+
+        for (user in users) {
+            if (user == null) continue
+
+            user.avatarUrl = imageRepository.downloadAndCacheImage(imageRepository.getImageRemoteUri(user.id), user.id)
+
+            AppLocalDb.getInstance().userDao().insertAll(user)
+            val lastUpdated = user.lastUpdated
+            if (lastUpdated != null && lastUpdated > time) {
+                time = lastUpdated
+            }
+        }
+
+        setLastUpdate(time)
+    }
+
+    private fun getLastUpdate(): Long {
+        val sharedPef: SharedPreferences = MyApplication.context.getSharedPreferences("TAG", Context.MODE_PRIVATE)
+        return sharedPef.getLong(LAST_UPDATED, 0)
+    }
+
+    private fun setLastUpdate(time: Long) {
+        MyApplication.context.getSharedPreferences("TAG", Context.MODE_PRIVATE)
+            .edit().putLong(LAST_UPDATED, time).apply()
+    }
 }

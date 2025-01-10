@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.example.tabletalk.adapter.OnPostItemClickListener
+import com.example.tabletalk.data.model.InflatedPost
 import com.example.tabletalk.data.model.Model
-import com.example.tabletalk.data.model.Post
 import com.example.tabletalk.data.repositories.UserRepository
 
 class ProfileFragment : Fragment() {
@@ -32,7 +32,7 @@ class ProfileFragment : Fragment() {
             }
         })
         fragment.setOnRestaurantClickListener(object : OnPostItemClickListener {
-            override fun onClickListener(post: Post) {
+            override fun onClickListener(post: InflatedPost) {
                 val action =
                     ProfileFragmentDirections.actionGlobalRestaurantPageFragment(
                         post.restaurantId
@@ -41,7 +41,7 @@ class ProfileFragment : Fragment() {
             }
         })
         fragment.setOnEditPostListener(object : OnPostItemClickListener {
-            override fun onClickListener(post: Post) {
+            override fun onClickListener(post: InflatedPost) {
                 val action =
                     ProfileFragmentDirections.actionProfileFragmentToEditPostFragment(
                         post.id

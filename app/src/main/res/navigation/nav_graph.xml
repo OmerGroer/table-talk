@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/postsListFragment"
-        android:name="com.example.tabletalk.PostsListFragment"
+        android:name="com.example.tabletalk.fragments.postsList.PostsListFragment"
         android:label="fragment_posts_list"
         tools:layout="@layout/fragment_posts_list" />
     <fragment
@@ -33,7 +33,7 @@
         android:label="fragment_restaurant_page"
         tools:layout="@layout/fragment_restaurant_page" >
         <argument android:name="restaurantId"
-            app:argType="integer" />
+            app:argType="string" />
         <action
             android:id="@+id/action_restaurantPageFragment_to_editPostFragment"
             app:destination="@id/editPostFragment" />

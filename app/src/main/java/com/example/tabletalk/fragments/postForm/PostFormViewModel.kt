@@ -20,7 +20,7 @@ class PostFormViewModel : ViewModel() {
     val restaurantName = MutableLiveData("")
 
     var postId: String? = null
-    var restaurantId: Int? = null
+    var restaurantId: String? = null
     var restaurant: Restaurant? = null
 
     val isReviewValid = MutableLiveData(true)

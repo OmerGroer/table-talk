@@ -12,5 +12,5 @@ interface RestaurantDao {
     fun insertAll(vararg restaurant: Restaurant)
 
     @Query("SELECT * FROM restaurants WHERE id = :restaurantId")
-    fun getById(restaurantId: Int): Restaurant?
+    fun getById(restaurantId: String): Restaurant?
 }

@@ -50,7 +50,7 @@ class UserFragment : Fragment() {
         val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
 
-        val adapter = PostsRecyclerAdapter(posts)
+        val adapter = PostsRecyclerAdapter(emptyList())
 
         adapter.restaurantListener = onRestaurantClickListener
         adapter.editPostListener = onEditPostListener
