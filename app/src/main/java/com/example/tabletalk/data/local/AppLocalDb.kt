@@ -14,7 +14,7 @@ import com.example.tabletalk.data.model.Restaurant
 import com.example.tabletalk.data.model.User
 
 
-@Database(entities = [User::class, Image::class, Post::class, Restaurant::class], version = 2)
+@Database(entities = [User::class, Image::class, Post::class, Restaurant::class], version = 3)
 abstract class AppLocalDbRepository: RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun imageDao(): ImageDao

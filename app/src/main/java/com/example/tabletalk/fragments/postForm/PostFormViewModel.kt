@@ -15,7 +15,7 @@ import kotlinx.coroutines.withContext
 
 class PostFormViewModel : ViewModel() {
     val review = MutableLiveData("")
-    val rating = MutableLiveData(0)
+    val rating = MutableLiveData(0.0F)
     val imageUri = MutableLiveData("")
     val restaurantName = MutableLiveData("")
 
@@ -24,11 +24,12 @@ class PostFormViewModel : ViewModel() {
     var restaurant: Restaurant? = null
 
     val isReviewValid = MutableLiveData(true)
+    val isRatingValid = MutableLiveData(true)
     val isImageUriValid = MutableLiveData(true)
 
     val isLoading = MutableLiveData(false)
 
-    val isFormValid: Boolean get() = isReviewValid.value == true && isImageUriValid.value == true
+    val isFormValid: Boolean get() = isReviewValid.value == true && isImageUriValid.value == true && isRatingValid.value == true
 
     fun initForm(postId: String) {
         isLoading.value = true
@@ -42,7 +43,7 @@ class PostFormViewModel : ViewModel() {
                 withContext(Dispatchers.Main) {
                     restaurantName.value = restaurant.name
                     review.value = post.review
-                    rating.value = post.rating
+                    rating.value = post.rating.toFloat()
                     imageUri.value = post.restaurantUrl
                 }
             } catch (e: Exception) {
@@ -90,17 +91,18 @@ class PostFormViewModel : ViewModel() {
 
     private fun validateForm() {
         isReviewValid.value = review.value?.isNotEmpty() == true
+        isRatingValid.value = rating.value != 0.0F
         isImageUriValid.value = imageUri.value?.isNotEmpty() == true
     }
 
     private fun getPost(): Post {
         val userId = UserRepository.getInstance().getLoggedUserId() ?: throw Exception("User not logged in")
         return Post(
-            id = postId!!,
+            id = postId ?: "",
             userId = userId,
             restaurantId = restaurantId!!,
             review = review.value!!,
-            rating = rating.value!!,
+            rating = rating.value!!.toInt(),
             restaurantUrl = imageUri.value!!.let {
                 if (!it.startsWith("file:///")) "file://$it" else it
             }

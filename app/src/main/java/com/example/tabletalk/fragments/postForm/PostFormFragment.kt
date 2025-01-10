@@ -88,11 +88,15 @@ class PostFormFragment : Fragment() {
                 viewModel.submit({
                     BasicAlert("Success", "Review saved successfully", requireContext()).show()
                     findNavController().popBackStack()
-                }, {
-                    BasicAlert("Fail", "Failed to save review", requireContext()).show()
+                }, { error ->
+                    BasicAlert("Fail", if (error == null) "Invalid form" else "Failed to save review", requireContext()).show()
                 })
             }
             true
+        }
+
+        viewModel.restaurantName.observe(viewLifecycleOwner) { restaurantName ->
+            binding?.toolbarTitle?.text = restaurantName
         }
     }
 
