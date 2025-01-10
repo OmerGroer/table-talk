@@ -94,8 +94,8 @@ class PostViewHolder(
     fun bind(post: Post?, position: Int, postType: PostType) {
         this.post = post
 
-        username?.text = post?.userName
-        restaurant?.text = post?.restaurantName
+//        username?.text = post?.userName
+//        restaurant?.text = post?.restaurantName
         review?.text = post?.review
 
         val rate = post?.rating as Int

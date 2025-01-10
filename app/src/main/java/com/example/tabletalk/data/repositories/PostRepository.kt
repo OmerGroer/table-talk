@@ -20,7 +20,7 @@ class PostRepository {
 
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
-    suspend fun savePost(post: Post) {
+    suspend fun save(post: Post) {
         val documentRef = if (post.id.isNotEmpty())
             db.collection(POSTS_COLLECTION).document(post.id)
         else

@@ -14,7 +14,6 @@ import com.example.tabletalk.adapter.PostsRecyclerAdapter
 import com.example.tabletalk.data.model.Model
 
 private const val USER_ID = "user_ID"
-private const val USERNAME = "username"
 
 interface OnCreateListener {
     fun onCreate(view: View)
@@ -26,13 +25,11 @@ class UserFragment : Fragment() {
     private var onEditPostListener: OnPostItemClickListener? = null
 
     private var userId: String? = null
-    private var username: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             userId = it.getString(USER_ID)
-            username = it.getString(USERNAME)
         }
     }
 
@@ -45,7 +42,7 @@ class UserFragment : Fragment() {
         val posts = Model.shared.getPostsByUserId(userId as String)
 
         val usernameTextView: TextView = view.findViewById(R.id.profile_username)
-        usernameTextView.text = username as String
+        usernameTextView.text = ""
 
         val recyclerView: RecyclerView = view.findViewById(R.id.posts_recycler_view)
         recyclerView.setHasFixedSize(true)
@@ -69,11 +66,10 @@ class UserFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(userId: String, username: String) =
+        fun newInstance(userId: String) =
             UserFragment().apply {
                 arguments = Bundle().apply {
                     putString(USER_ID, userId)
-                    putString(USERNAME, username)
                 }
             }
     }

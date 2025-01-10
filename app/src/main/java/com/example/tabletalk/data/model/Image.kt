@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "images")
-class Image(
+data class Image(
     @PrimaryKey
     val id: String = "",
     val uri: String = ""

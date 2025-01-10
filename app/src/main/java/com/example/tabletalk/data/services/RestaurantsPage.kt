@@ -12,7 +12,7 @@ class Address(
 
 class ApiRestaurant(
     val address: Address,
-    val cuisines: List<String>,
+    val cuisines: List<String>?,
     val id: Int,
     val name: String,
     val priceTypes: String

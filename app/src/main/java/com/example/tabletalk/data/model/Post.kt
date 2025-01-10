@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "posts")
-class Post (
+data class Post (
     @PrimaryKey
     var id: String = "",
     var userId: String,

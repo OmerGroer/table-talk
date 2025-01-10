@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.tabletalk.fragments.postForm.PostFormFragment
 
 class AddPostFragment : Fragment() {
     override fun onCreateView(
@@ -13,9 +14,9 @@ class AddPostFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_add_post, container, false)
 
-        val restaurantId = AddPostFragmentArgs.fromBundle(requireArguments()).restaurantId
+        val restaurant = AddPostFragmentArgs.fromBundle(requireArguments()).restaurant
         getChildFragmentManager().beginTransaction()
-            .replace(R.id.container, PostFormFragment.newInstance(restaurantId))
+            .replace(R.id.container, PostFormFragment.newInstance(restaurant))
             .commitNow()
 
         return view
