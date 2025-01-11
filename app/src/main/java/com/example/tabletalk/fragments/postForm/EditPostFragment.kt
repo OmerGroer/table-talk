@@ -1,11 +1,11 @@
-package com.example.tabletalk
+package com.example.tabletalk.fragments.postForm
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.tabletalk.fragments.postForm.PostFormFragment
+import com.example.tabletalk.R
 
 class EditPostFragment : Fragment() {
     override fun onCreateView(

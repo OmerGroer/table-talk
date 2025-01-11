@@ -17,7 +17,7 @@
         tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.tabletalk.ProfileFragment"
+        android:name="com.example.tabletalk.fragments.user.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
@@ -44,7 +44,7 @@
         app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/userPageFragment"
-        android:name="com.example.tabletalk.UserPageFragment"
+        android:name="com.example.tabletalk.fragments.user.UserPageFragment"
         android:label="fragment_user_page"
         tools:layout="@layout/fragment_user_page" >
         <argument
@@ -57,7 +57,7 @@
         app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/addPostFragment"
-        android:name="com.example.tabletalk.AddPostFragment"
+        android:name="com.example.tabletalk.fragments.postForm.AddPostFragment"
         android:label="fragment_add_post"
         tools:layout="@layout/fragment_add_post" >
         <argument
@@ -66,7 +66,7 @@
     </fragment>
     <fragment
         android:id="@+id/editPostFragment"
-        android:name="com.example.tabletalk.EditPostFragment"
+        android:name="com.example.tabletalk.fragments.postForm.EditPostFragment"
         android:label="fragment_edit_post"
         tools:layout="@layout/fragment_edit_post" >
         <argument

@@ -28,7 +28,7 @@ class PostsListFragment : Fragment() {
         )
         bindViews()
 
-        setUpList()
+        setupList()
 
         return binding?.root
     }
@@ -43,7 +43,7 @@ class PostsListFragment : Fragment() {
         binding = null
     }
 
-    private fun setUpList() {
+    private fun setupList() {
         binding?.postsRecyclerView?.setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(context)
         binding?.postsRecyclerView?.layoutManager = layoutManager

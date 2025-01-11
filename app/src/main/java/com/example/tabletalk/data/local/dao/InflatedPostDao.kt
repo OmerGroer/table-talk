@@ -9,4 +9,7 @@ import com.example.tabletalk.data.model.InflatedPost
 interface InflatedPostDao {
     @Query("SELECT * FROM inflatedPosts")
     fun getAll(): LiveData<List<InflatedPost>>
+
+    @Query("SELECT * FROM inflatedPosts WHERE userId = :id")
+    fun getByUserId(id: String): LiveData<List<InflatedPost>>
 }
