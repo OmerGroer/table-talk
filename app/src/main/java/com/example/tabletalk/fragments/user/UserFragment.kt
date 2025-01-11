@@ -1,25 +1,30 @@
-package com.example.tabletalk
+package com.example.tabletalk.fragments.user
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.tabletalk.R
 import com.example.tabletalk.adapter.OnPostItemClickListener
 import com.example.tabletalk.adapter.PostType
 import com.example.tabletalk.adapter.PostsRecyclerAdapter
-import com.example.tabletalk.data.model.Model
+import com.example.tabletalk.databinding.FragmentUserBinding
 
 private const val USER_ID = "user_ID"
 
 interface OnCreateListener {
-    fun onCreate(view: View)
+    fun onCreate(binding: FragmentUserBinding?)
 }
 
 class UserFragment : Fragment() {
+    private var viewModel: UserViewModel? = null
+    private var binding: FragmentUserBinding? = null
+
     private var onCreateListener: OnCreateListener? = null
     private var onRestaurantClickListener: OnPostItemClickListener? = null
     private var onEditPostListener: OnPostItemClickListener? = null
@@ -37,20 +42,37 @@ class UserFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_user, container, false)
+        binding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_user, container, false
+        )
+        bindViews()
 
-        val posts = Model.shared.getPostsByUserId(userId as String)
+        viewModel = userId?.let { UserViewModel(it) }
 
-        val usernameTextView: TextView = view.findViewById(R.id.profile_username)
-        usernameTextView.text = ""
+        setupList()
+        setupUser()
 
-        val recyclerView: RecyclerView = view.findViewById(R.id.posts_recycler_view)
-        recyclerView.setHasFixedSize(true)
+        this.onCreateListener?.onCreate(binding)
 
+        return binding?.root
+    }
+
+    private fun bindViews() {
+        binding?.viewModel = viewModel
+        binding?.lifecycleOwner = viewLifecycleOwner
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
+    }
+
+    private fun setupList() {
+        binding?.postsRecyclerView?.setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(context)
-        recyclerView.layoutManager = layoutManager
-
+        binding?.postsRecyclerView?.layoutManager = layoutManager
         val adapter = PostsRecyclerAdapter(emptyList())
+        binding?.postsRecyclerView?.adapter = adapter
 
         adapter.restaurantListener = onRestaurantClickListener
         adapter.editPostListener = onEditPostListener
@@ -58,11 +80,24 @@ class UserFragment : Fragment() {
 
         adapter.postType = PostType.PROFILE
 
-        recyclerView.adapter = adapter
+        viewModel?.posts?.observe(viewLifecycleOwner) { posts ->
+            adapter.updatePosts(posts)
+        }
+    }
 
-        this.onCreateListener?.onCreate(view)
+    private fun setupUser() {
+        viewModel?.username?.observe(viewLifecycleOwner) { username ->
+            binding?.profileUsername?.text = username
+        }
 
-        return view
+        viewModel?.avatarUrl?.observe(viewLifecycleOwner) { avatarUrl ->
+            val avatar = binding?.profileAvatar
+            if (avatar != null) {
+                Glide.with(requireContext())
+                    .load(avatarUrl)
+                    .into(avatar)
+            }
+        }
     }
 
     companion object {

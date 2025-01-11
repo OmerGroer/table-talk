@@ -30,6 +30,11 @@ class InflatedPostRepository {
         return AppLocalDb.getInstance().inflatedPostDao().getAll()
     }
 
+    fun getByUserId(userId: String): LiveData<List<InflatedPost>> {
+        refresh()
+        return AppLocalDb.getInstance().inflatedPostDao().getByUserId(userId)
+    }
+
     fun refresh() {
         pool.execute {
             refreshHandler()

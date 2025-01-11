@@ -1,4 +1,4 @@
-package com.example.tabletalk
+package com.example.tabletalk.fragments.user
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,12 +6,12 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import com.example.tabletalk.R
 import com.example.tabletalk.adapter.OnPostItemClickListener
 import com.example.tabletalk.data.model.InflatedPost
-import com.example.tabletalk.data.model.Model
 import com.example.tabletalk.data.repositories.UserRepository
+import com.example.tabletalk.databinding.FragmentUserBinding
 
 class ProfileFragment : Fragment() {
     override fun onCreateView(
@@ -20,13 +20,12 @@ class ProfileFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        val user = Model.shared.getLoggedInUser()
-        val fragment = UserFragment.newInstance(user.id)
+        val userId = UserRepository.getInstance().getLoggedUserId() ?: throw Exception("User not logged in")
+        val fragment = UserFragment.newInstance(userId)
         fragment.setOnCreate(object : OnCreateListener {
-            override fun onCreate(view: View) {
-                val toolbar: androidx.appcompat.widget.Toolbar = view.findViewById(R.id.profile_toolbar)
-                toolbar.inflateMenu(R.menu.profile_menu)
-                toolbar.setOnMenuItemClickListener {
+            override fun onCreate(binding: FragmentUserBinding?) {
+                binding?.profileToolbar?.inflateMenu(R.menu.profile_menu)
+                binding?.profileToolbar?.setOnMenuItemClickListener {
                     onMenuItemClick(it)
                 }
             }
@@ -37,7 +36,7 @@ class ProfileFragment : Fragment() {
                     ProfileFragmentDirections.actionGlobalRestaurantPageFragment(
                         post.restaurantId
                     )
-                Navigation.findNavController(view).navigate(action)
+                findNavController().navigate(action)
             }
         })
         fragment.setOnEditPostListener(object : OnPostItemClickListener {
@@ -46,7 +45,7 @@ class ProfileFragment : Fragment() {
                     ProfileFragmentDirections.actionProfileFragmentToEditPostFragment(
                         post.id
                     )
-                Navigation.findNavController(view).navigate(action)
+                findNavController().navigate(action)
             }
         })
 
