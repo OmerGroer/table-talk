@@ -27,6 +27,7 @@ class PostFormFragment : Fragment() {
     private var postId: String? = null
     private var restaurant: Restaurant? = null
 
+    private val args: PostFormFragmentArgs by navArgs()
     private val viewModel: PostFormViewModel by viewModels()
     private var binding: FragmentPostFormBinding? = null
 
@@ -105,21 +106,6 @@ class PostFormFragment : Fragment() {
             if (isLoading) binding?.progressBar?.visibility = View.VISIBLE
             else binding?.progressBar?.visibility = View.INVISIBLE
         }
-    }
-
-    companion object {
-        fun newInstance(postId: String) =
-            PostFormFragment().apply {
-                arguments = Bundle().apply {
-                    putString(POST_ID, postId)
-                }
-            }
-        fun newInstance(restaurant: Restaurant) =
-            PostFormFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable(RESTAURANT, restaurant)
-                }
-            }
     }
 
     private fun setupImagePicker() {

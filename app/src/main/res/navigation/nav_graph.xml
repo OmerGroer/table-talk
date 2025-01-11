@@ -29,7 +29,7 @@
     </fragment>
     <fragment
         android:id="@+id/restaurantPageFragment"
-        android:name="com.example.tabletalk.RestaurantPageFragment"
+        android:name="com.example.tabletalk.fragments.restaurant.RestaurantPageFragment"
         android:label="fragment_restaurant_page"
         tools:layout="@layout/fragment_restaurant_page" >
         <argument android:name="restaurantId"
