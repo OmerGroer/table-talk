@@ -25,21 +25,33 @@ class RestaurantRepository {
 
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
-    suspend fun save(restaurantId: String, rating: Int, restaurant: Restaurant?) {
+    suspend fun save(restaurant: Restaurant, rating: Int) {
+        val documentRef = db.collection(COLLECTION).document(restaurant.id)
+
+        db.runTransaction { transaction ->
+            val restaurantDB = transaction.get(documentRef)
+            var ratingCount = (restaurantDB.getDouble("ratingCount") ?: 0.0).toInt()
+            val newRating = (restaurantDB.getDouble("rating") ?: 0.0) * ratingCount + rating
+            ratingCount = ratingCount.inc()
+
+            transaction.set(documentRef, restaurant)
+
+            transaction.update(documentRef, "lastUpdated", FieldValue.serverTimestamp())
+            transaction.update(documentRef, "rating", newRating / ratingCount)
+            transaction.update(documentRef, "ratingCount", ratingCount)
+        }.await()
+    }
+
+    suspend fun save(restaurantId: String, rating: Int, oldRating: Int) {
         val documentRef = db.collection(COLLECTION).document(restaurantId)
 
         db.runTransaction { transaction ->
             val restaurantDB = transaction.get(documentRef)
             val ratingCount = (restaurantDB.getDouble("ratingCount") ?: 0.0).toInt()
-            val newRating = (restaurantDB.getDouble("rating") ?: 0.0) * ratingCount + rating
-
-            if (restaurant != null) {
-                transaction.set(documentRef, restaurant)
-            }
+            val newRating = (restaurantDB.getDouble("rating") ?: 0.0) * ratingCount - oldRating + rating
 
             transaction.update(documentRef, "lastUpdated", FieldValue.serverTimestamp())
-            transaction.update(documentRef, "rating", newRating)
-            transaction.update(documentRef, "ratingCount", ratingCount + 1)
+            transaction.update(documentRef, "rating", newRating / ratingCount)
         }.await()
     }
 

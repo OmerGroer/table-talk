@@ -67,7 +67,13 @@ data class Restaurant (
         fun fromJSON(json: Map<String, Any>): Restaurant {
             val id = json[ID_KEY] as? String ?: ""
             val name = json[NAME_KEY] as? String ?: ""
-            val rating = json[RATING_KEY] as? Double ?: 0.0
+            val rating: Double = if (json[RATING_KEY] is Double) {
+                json[RATING_KEY] as? Double ?: 0.0
+            } else if (json[RATING_KEY] is Long) {
+                (json[RATING_KEY] as? Long ?: 0L).toDouble()
+            } else {
+                0.0
+            }
             val ratingCount = json[RATING_COUNT_KEY] as? Long ?: 0
             val category = json[CATEGORY_KEY] as? String ?: ""
             val address = json[ADDRESS_KEY] as? String ?: ""

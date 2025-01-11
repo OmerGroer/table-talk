@@ -20,8 +20,9 @@ class PostFormViewModel : ViewModel() {
     val restaurantName = MutableLiveData("")
 
     var postId: String? = null
-    var restaurantId: String? = null
+    var restaurantId: String = ""
     var restaurant: Restaurant? = null
+    var oldRating: Int = 0
 
     val isReviewValid = MutableLiveData(true)
     val isRatingValid = MutableLiveData(true)
@@ -44,10 +45,11 @@ class PostFormViewModel : ViewModel() {
                     restaurantName.value = restaurant.name
                     review.value = post.review
                     rating.value = post.rating.toFloat()
+                    oldRating = post.rating
                     imageUri.value = post.restaurantUrl
                 }
             } catch (e: Exception) {
-                Log.e("AddNewReview", "Error fetching review", e)
+                Log.e("AddNewReview", "Error fetching post", e)
             } finally {
                 withContext(Dispatchers.Main) { isLoading.value = false }
             }
@@ -74,7 +76,16 @@ class PostFormViewModel : ViewModel() {
                 try {
                     val post = getPost()
                     PostRepository.getInstance().save(post)
-                    RestaurantRepository.getInstance().save(post.restaurantId, post.rating, restaurant)
+
+                    if (postId != null) {
+                        RestaurantRepository.getInstance().save(restaurantId, post.rating, oldRating)
+                    } else {
+                        val restaurant = restaurant
+                        if (restaurant != null) {
+                            RestaurantRepository.getInstance().save(restaurant, post.rating)
+                        }
+                    }
+
                     withContext(Dispatchers.Main) { onSuccess() }
                 } catch (e: Exception) {
                     Log.e("Add Post", "Error registering user", e)
@@ -100,7 +111,7 @@ class PostFormViewModel : ViewModel() {
         return Post(
             id = postId ?: "",
             userId = userId,
-            restaurantId = restaurantId!!,
+            restaurantId = restaurantId,
             review = review.value!!,
             rating = rating.value!!.toInt(),
             restaurantUrl = imageUri.value!!.let {
