@@ -10,7 +10,7 @@ interface OnUserItemClickListener {
     fun onUsernameClickListener(user: User)
 }
 
-class UsersRecyclerAdapter(private val users: List<User>?) :
+class UsersRecyclerAdapter(private var users: List<User>?) :
     RecyclerView.Adapter<UserViewHolder>() {
 
     var listener: OnUserItemClickListener? = null
@@ -31,5 +31,10 @@ class UsersRecyclerAdapter(private val users: List<User>?) :
             user = users?.get(position),
             position = position
         )
+    }
+
+    fun updateUsers(newUsers: List<User>) {
+        users = newUsers
+        notifyDataSetChanged()
     }
 }

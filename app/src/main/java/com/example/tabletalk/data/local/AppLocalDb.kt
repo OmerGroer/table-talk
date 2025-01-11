@@ -16,8 +16,12 @@ import com.example.tabletalk.data.model.Restaurant
 import com.example.tabletalk.data.model.User
 
 
-@Database(entities = [User::class, Image::class, Post::class, Restaurant::class], views = [InflatedPost::class], version = 7)
-abstract class AppLocalDbRepository: RoomDatabase() {
+@Database(
+    entities = [User::class, Image::class, Post::class, Restaurant::class],
+    views = [InflatedPost::class],
+    version = 7
+)
+abstract class AppLocalDbRepository : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun imageDao(): ImageDao
     abstract fun postDao(): PostDao
@@ -26,13 +30,15 @@ abstract class AppLocalDbRepository: RoomDatabase() {
 }
 
 object AppLocalDb {
-    private var database = Room.databaseBuilder(
-        context = MyApplication.context,
-        klass = AppLocalDbRepository::class.java,
-        name = "dbFileName.db"
-    )
-        .fallbackToDestructiveMigration()
-        .build()
+    private val database: AppLocalDbRepository by lazy {
+        Room.databaseBuilder(
+            context = MyApplication.context,
+            klass = AppLocalDbRepository::class.java,
+            name = "dbFileName.db"
+        )
+            .fallbackToDestructiveMigration()
+            .build()
+    }
 
     fun getInstance(): AppLocalDbRepository {
         return database

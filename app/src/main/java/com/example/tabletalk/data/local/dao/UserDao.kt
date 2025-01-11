@@ -1,5 +1,6 @@
 package com.example.tabletalk.data.local.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -16,4 +17,8 @@ interface UserDao {
 
     @Query("SELECT * FROM users WHERE id = :userId")
     fun getById(userId: String): User?
+
+    @Query("SELECT * FROM users " +
+            "WHERE username LIKE '%' || :searchString || '%'")
+    fun getByIncluding(searchString: String): LiveData<List<User>>
 }

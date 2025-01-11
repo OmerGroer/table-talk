@@ -2,6 +2,7 @@ package com.example.tabletalk.data.repositories
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.lifecycle.LiveData
 import com.example.tabletalk.MyApplication
 import com.example.tabletalk.data.local.AppLocalDb
 import com.example.tabletalk.data.model.Restaurant
@@ -58,6 +59,10 @@ class RestaurantRepository {
         }
 
         return restaurant
+    }
+
+    fun getByIncluding(searchString: String): LiveData<List<Restaurant>> {
+        return AppLocalDb.getInstance().restaurantDao().getByIncluding(searchString)
     }
 
     suspend fun refresh() {
