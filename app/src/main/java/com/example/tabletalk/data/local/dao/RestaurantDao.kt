@@ -1,5 +1,6 @@
 package com.example.tabletalk.data.local.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -13,4 +14,10 @@ interface RestaurantDao {
 
     @Query("SELECT * FROM restaurants WHERE id = :restaurantId")
     fun getById(restaurantId: String): Restaurant?
+
+    @Query("SELECT * FROM restaurants " +
+            "WHERE name LIKE '%' || :searchString || '%' " +
+            "OR address LIKE '%' || :searchString || '%' " +
+            "OR category LIKE '%' || :searchString || '%'")
+    fun getByIncluding(searchString: String): LiveData<List<Restaurant>>
 }
