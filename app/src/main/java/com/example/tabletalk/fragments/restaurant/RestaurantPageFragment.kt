@@ -15,7 +15,6 @@ import com.example.tabletalk.adapter.PostType
 import com.example.tabletalk.adapter.PostsRecyclerAdapter
 import com.example.tabletalk.data.model.InflatedPost
 import com.example.tabletalk.databinding.FragmentRestaurantPageBinding
-import com.example.tabletalk.utils.BasicAlert
 
 class RestaurantPageFragment : Fragment() {
     private val args: RestaurantPageFragmentArgs by navArgs()
@@ -67,10 +66,7 @@ class RestaurantPageFragment : Fragment() {
         }
         adapter.editPostListener = object : OnPostItemClickListener {
             override fun onClickListener(post: InflatedPost) {
-                val action =
-                    RestaurantPageFragmentDirections.actionRestaurantPageFragmentToEditPostFragment(
-                        post.id
-                    )
+                val action = RestaurantPageFragmentDirections.actionRestaurantPageFragmentToEditPostFormFragment(post.id)
                 findNavController().navigate(action)
             }
         }
@@ -83,24 +79,14 @@ class RestaurantPageFragment : Fragment() {
     }
 
     private fun setupRestaurant() {
-        viewModel?.restaurantName?.observe(viewLifecycleOwner) {
-            binding?.restaurantName?.text = it
-        }
-
-        viewModel?.rating?.observe(viewLifecycleOwner) {
-            binding?.restaurantRate?.text = "$it"
-        }
-
-        viewModel?.priceTypes?.observe(viewLifecycleOwner) {
-            binding?.restaurantPrice?.text = it
-        }
-
-        viewModel?.category?.observe(viewLifecycleOwner) {
-            binding?.restaurantCategory?.text = it
-        }
-
-        viewModel?.address?.observe(viewLifecycleOwner) {
-            binding?.restaurantAddress?.text = it
+        viewModel?.restaurantData?.observe(viewLifecycleOwner) {
+            if (it != null) {
+                binding?.restaurantName?.text = it.name
+                binding?.restaurantRate?.text = it.rating.toString()
+                binding?.restaurantPrice?.text = it.priceTypes
+                binding?.restaurantCategory?.text = it.category
+                binding?.restaurantAddress?.text = it.address
+            }
         }
     }
 
@@ -111,7 +97,11 @@ class RestaurantPageFragment : Fragment() {
         }
         binding?.restaurantToolbar?.inflateMenu(R.menu.restaurant_menu)
         binding?.restaurantToolbar?.setOnMenuItemClickListener {
-
+            val restaurant = viewModel?.restaurantData?.value
+            if (restaurant != null) {
+                val action = RestaurantPageFragmentDirections.actionRestaurantPageFragmentToAddPostFormFragment(restaurant)
+                findNavController().navigate(action)
+            }
             true
         }
     }

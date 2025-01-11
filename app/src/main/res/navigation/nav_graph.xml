@@ -21,11 +21,16 @@
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
-            android:id="@+id/action_profileFragment_to_editPostFragment"
-            app:destination="@id/editPostFragment" />
-        <action
             android:id="@+id/action_profileFragment_to_editUserFragment"
             app:destination="@id/editUserFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_postFormFragment"
+            app:destination="@id/postFormFragment">
+            <argument
+                android:name="postId"
+                app:argType="string"
+                app:nullable="true" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/restaurantPageFragment"
@@ -35,8 +40,21 @@
         <argument android:name="restaurantId"
             app:argType="string" />
         <action
-            android:id="@+id/action_restaurantPageFragment_to_editPostFragment"
-            app:destination="@id/editPostFragment" />
+            android:id="@+id/action_restaurantPageFragment_to_editPostFormFragment"
+            app:destination="@id/postFormFragment">
+            <argument
+                android:name="postId"
+                app:argType="string"
+                app:nullable="true" />
+        </action>
+        <action
+            android:id="@+id/action_restaurantPageFragment_to_addPostFormFragment"
+            app:destination="@id/postFormFragment">
+            <argument
+                android:name="restaurant"
+                app:argType="com.example.tabletalk.data.model.Restaurant"
+                app:nullable="true" />
+        </action>
     </fragment>
     <action
         android:id="@+id/action_global_restaurantPageFragment"
@@ -55,24 +73,6 @@
         android:id="@+id/action_global_userPageFragment"
         app:destination="@id/userPageFragment"
         app:popUpToInclusive="true" />
-    <fragment
-        android:id="@+id/addPostFragment"
-        android:name="com.example.tabletalk.fragments.postForm.AddPostFragment"
-        android:label="fragment_add_post"
-        tools:layout="@layout/fragment_add_post" >
-        <argument
-            android:name="restaurant"
-            app:argType="com.example.tabletalk.data.model.Restaurant" />
-    </fragment>
-    <fragment
-        android:id="@+id/editPostFragment"
-        android:name="com.example.tabletalk.fragments.postForm.EditPostFragment"
-        android:label="fragment_edit_post"
-        tools:layout="@layout/fragment_edit_post" >
-        <argument
-            android:name="postId"
-            app:argType="string" />
-    </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.tabletalk.fragments.login.LoginFragment"
@@ -104,12 +104,33 @@
         android:label="fragment_restaurant_picker"
         tools:layout="@layout/fragment_restaurant_picker" >
         <action
-            android:id="@+id/action_restaurantPickerFragment_to_addPostFragment"
-            app:destination="@id/addPostFragment" />
+            android:id="@+id/action_restaurantPickerFragment_to_postFormFragment"
+            app:destination="@id/postFormFragment">
+            <argument
+                android:name="restaurant"
+                app:argType="com.example.tabletalk.data.model.Restaurant"
+                app:nullable="true" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/editUserFragment"
         android:name="com.example.tabletalk.fragments.editUser.EditUserFragment"
         android:label="fragment_edit_user"
         tools:layout="@layout/fragment_edit_user" />
+    <fragment
+        android:id="@+id/postFormFragment"
+        android:name="com.example.tabletalk.fragments.postForm.PostFormFragment"
+        android:label="fragment_post_form"
+        tools:layout="@layout/fragment_post_form" >
+        <argument
+            android:name="postId"
+            app:argType="string"
+            android:defaultValue="@null"
+            app:nullable="true" />
+        <argument
+            android:name="restaurant"
+            app:argType="com.example.tabletalk.data.model.Restaurant"
+            android:defaultValue="@null"
+            app:nullable="true" />
+    </fragment>
 </navigation>

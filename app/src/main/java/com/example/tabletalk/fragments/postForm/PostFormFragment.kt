@@ -14,33 +14,19 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.tabletalk.R
-import com.example.tabletalk.data.model.Restaurant
 import com.example.tabletalk.databinding.FragmentPostFormBinding
 import com.example.tabletalk.utils.BasicAlert
 import com.yalantis.ucrop.UCrop
 
-private const val POST_ID = "postId"
-private const val RESTAURANT = "restaurant"
-
 class PostFormFragment : Fragment() {
-    private var postId: String? = null
-    private var restaurant: Restaurant? = null
-
     private val args: PostFormFragmentArgs by navArgs()
     private val viewModel: PostFormViewModel by viewModels()
     private var binding: FragmentPostFormBinding? = null
 
     private val imagePicker: ActivityResultLauncher<String> = getImagePicker()
     private val uCropLauncher: ActivityResultLauncher<Intent> = getUCropLauncher()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            postId = it.getString(POST_ID)
-            restaurant = it.getParcelable(RESTAURANT)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,11 +41,11 @@ class PostFormFragment : Fragment() {
         setupLoading()
         setupImagePicker()
 
-        val postId = this.postId
+        val postId = args.postId
         if (postId != null) {
             viewModel.initForm(postId)
         } else {
-            val restaurant = this.restaurant ?: throw Exception("Restaurant not found")
+            val restaurant = args.restaurant ?: throw Exception("Restaurant not found")
             viewModel.initForm(restaurant)
         }
 

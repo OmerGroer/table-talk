@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @DatabaseView(viewName = "inflatedPosts",
-    value = "SELECT posts.*, restaurants.name as restaurantName, users.username as userName, users.avatarUrl as avatarUrl FROM posts " +
+    value = "SELECT posts.*, restaurants.name AS restaurantName, users.username AS userName, users.avatarUrl AS avatarUrl FROM posts " +
             "INNER JOIN restaurants ON posts.restaurantId = restaurants.id " +
             "INNER JOIN users ON posts.userId = users.id " +
             "ORDER BY posts.lastUpdated DESC")

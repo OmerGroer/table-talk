@@ -61,6 +61,7 @@ class MainActivity : AppCompatActivity() {
             return true
         }
 
-        return NavigationUI.onNavDestinationSelected(item, navController as NavController)
+        val navController = navController ?: return false
+        return NavigationUI.onNavDestinationSelected(item, navController)
     }
 }

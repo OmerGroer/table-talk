@@ -53,7 +53,8 @@ class PostViewHolder(
             restaurantListener?.onClickListener(post!!)
         }
         comment.setOnClickListener {
-            if (fragmentManager != null) CommentsFragment.display(fragmentManager, post?.id as String)
+            val postId = post?.id
+            if (fragmentManager != null && postId != null) CommentsFragment.display(fragmentManager, postId)
         }
 
         menu.setOnClickListener {
@@ -92,7 +93,7 @@ class PostViewHolder(
             .load(post?.avatarUrl)
             .into(avatar)
 
-        val rate = post?.rating as Int
+        val rate = post?.rating ?: 5
         val startsSize = stars.size - 1
 
         for (i in rate..startsSize) {
