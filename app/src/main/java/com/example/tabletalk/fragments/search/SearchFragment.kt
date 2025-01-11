@@ -43,7 +43,6 @@ class SearchFragment : Fragment() {
         bindViews()
 
         setUpList()
-
         switchToRestaurants(binding?.root)
 
         binding?.searchPeople?.setOnClickListener(::switchToPeople)
@@ -54,7 +53,7 @@ class SearchFragment : Fragment() {
                 viewModel.search = p0 ?: ""
                 when (searchType) {
                     SearchType.RESTAURANTS -> viewModel.searchRestaurants()
-                    SearchType.PEOPLE -> viewModel.searchRestaurants()
+                    SearchType.PEOPLE -> viewModel.searchUser()
                 }
                 return false
             }
@@ -101,6 +100,12 @@ class SearchFragment : Fragment() {
                 findNavController().navigate(action)
             }
         }
+
+        viewModel.users.observe(viewLifecycleOwner) { users ->
+            users.observe(viewLifecycleOwner) {
+                userRecyclerAdapter.updateUsers(it)
+            }
+        }
     }
 
     private fun switchToRestaurants(view: View?) {
@@ -122,7 +127,7 @@ class SearchFragment : Fragment() {
         binding?.searchRestaurant?.setTextColor(Color.argb(64, 0, 0, 0))
         binding?.searchPeople?.setTextColor(Color.argb(255, 0, 0, 0))
 
-//        setUsers()
+        viewModel.searchUser()
 
         binding?.searchRecyclerView?.adapter = userRecyclerAdapter
     }

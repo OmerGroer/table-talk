@@ -4,11 +4,10 @@ import android.accounts.AuthenticatorException
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.net.toUri
+import androidx.lifecycle.LiveData
 import com.example.tabletalk.MyApplication
 import com.example.tabletalk.data.local.AppLocalDb
-import com.example.tabletalk.data.model.Post
 import com.example.tabletalk.data.model.User
-import com.example.tabletalk.data.repositories.PostRepository.Companion
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
@@ -109,6 +108,10 @@ class UserRepository {
         }
 
         return user.apply { avatarUrl = imageRepository.getImagePathById(userId) }
+    }
+
+    fun getByIncluding(searchString: String): LiveData<List<User>> {
+        return AppLocalDb.getInstance().userDao().getByIncluding(searchString)
     }
 
     private suspend fun createAuthUser(email: String, password: String) {
