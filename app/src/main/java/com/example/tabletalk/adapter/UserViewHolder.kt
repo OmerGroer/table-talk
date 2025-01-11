@@ -19,7 +19,8 @@ class UserViewHolder(
 
     init {
         itemView.setOnClickListener {
-            listener?.onUsernameClickListener(user as User)
+            val user = user
+            if (user != null) listener?.onUsernameClickListener(user)
         }
     }
 

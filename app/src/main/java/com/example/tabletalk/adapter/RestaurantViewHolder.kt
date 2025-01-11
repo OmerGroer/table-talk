@@ -20,7 +20,8 @@ class RestaurantViewHolder(
 
     init {
         itemView.setOnClickListener {
-            listener?.onRestaurantClickListener(restaurant as Restaurant)
+            val restaurant = restaurant
+            if (restaurant != null) listener?.onRestaurantClickListener(restaurant)
         }
     }
 

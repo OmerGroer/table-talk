@@ -7,9 +7,13 @@ import com.example.tabletalk.data.model.InflatedPost
 
 @Dao
 interface InflatedPostDao {
-    @Query("SELECT * FROM inflatedPosts")
-    fun getAll(): LiveData<List<InflatedPost>>
+    @Query("SELECT * FROM inflatedPosts WHERE userId != :loggedUserId ")
+    fun getAll(loggedUserId: String): LiveData<List<InflatedPost>>
 
     @Query("SELECT * FROM inflatedPosts WHERE userId = :id")
     fun getByUserId(id: String): LiveData<List<InflatedPost>>
+
+    @Query("SELECT * FROM inflatedPosts WHERE restaurantId = :id AND userId = :loggedUserId " +
+            "UNION SELECT * FROM inflatedPosts WHERE restaurantId = :id AND userId != :loggedUserId")
+    fun getByRestaurantId(id: String, loggedUserId: String): LiveData<List<InflatedPost>>
 }

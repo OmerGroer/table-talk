@@ -41,10 +41,7 @@ class ProfileFragment : Fragment() {
         })
         fragment.setOnEditPostListener(object : OnPostItemClickListener {
             override fun onClickListener(post: InflatedPost) {
-                val action =
-                    ProfileFragmentDirections.actionProfileFragmentToEditPostFragment(
-                        post.id
-                    )
+                val action = ProfileFragmentDirections.actionProfileFragmentToPostFormFragment(post.id)
                 findNavController().navigate(action)
             }
         })

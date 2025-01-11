@@ -74,7 +74,7 @@ class RestaurantPickerFragment : Fragment() {
 
         adapter.listener = object : OnRestaurantItemClickListener {
             override fun onRestaurantClickListener(restaurant: Restaurant) {
-                val action = RestaurantPickerFragmentDirections.actionRestaurantPickerFragmentToAddPostFragment(restaurant)
+                val action = RestaurantPickerFragmentDirections.actionRestaurantPickerFragmentToPostFormFragment(restaurant)
                 findNavController().navigate(action)
             }
         }
