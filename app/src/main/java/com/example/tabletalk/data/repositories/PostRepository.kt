@@ -34,8 +34,8 @@ class PostRepository {
 
         db.runBatch { batch ->
             batch.set(documentRef, post)
-            batch.update(documentRef, "restaurantUrl", null)
-            batch.update(documentRef, "lastUpdated", FieldValue.serverTimestamp())
+            batch.update(documentRef, Post.IMAGE_URI_KEY, null)
+            batch.update(documentRef, Post.TIMESTAMP_KEY, FieldValue.serverTimestamp())
         }.await()
         uploadImage(post.restaurantUrl, post.id)
     }
@@ -44,19 +44,18 @@ class PostRepository {
         imageRepository.upload(imageUri.toUri(), reviewId)
     }
 
-    suspend fun getById(id: String): Post? {
-        var post = AppLocalDb.getInstance().postDao().getById(id)
+    suspend fun getById(postId: String): Post? {
+        var post = AppLocalDb.getInstance().postDao().getById(postId)
 
         if (post == null) {
             post = db.collection(COLLECTION)
-                .document(id)
+                .document(postId)
                 .get()
-                .await()
-                .toObject(Post::class.java)
+                .await().let { document -> document.data?.let { Post.fromJSON(it).apply { id = document.id } } }
 
             post?.restaurantUrl = imageRepository.downloadAndCacheImage(
-                imageRepository.getImageRemoteUri(id),
-                id
+                imageRepository.getImageRemoteUri(postId),
+                postId
             )
 
             if (post == null) return null
@@ -64,7 +63,7 @@ class PostRepository {
             AppLocalDb.getInstance().postDao().insertAll(post)
         }
 
-        return post.apply { restaurantUrl = imageRepository.getImagePathById(id) }
+        return post.apply { restaurantUrl = imageRepository.getImagePathById(postId) }
     }
 
     suspend fun refresh() {

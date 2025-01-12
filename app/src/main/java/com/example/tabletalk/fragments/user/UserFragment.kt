@@ -45,9 +45,8 @@ class UserFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_user, container, false
         )
-        bindViews()
-
         viewModel = userId?.let { UserViewModel(it) }
+        bindViews()
 
         setupList()
         setupUser()

@@ -12,7 +12,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.tabletalk.CommentsFragment
+import com.example.tabletalk.fragments.comments.CommentsFragment
 import com.example.tabletalk.R
 import com.example.tabletalk.data.model.InflatedPost
 import com.example.tabletalk.data.repositories.UserRepository
@@ -100,7 +100,7 @@ class PostViewHolder(
             stars.get(i).visibility = View.GONE
         }
 
-        val isMenuShown = post.userId == UserRepository.getInstance().getLoggedUserId()
+        val isMenuShown = post?.userId == UserRepository.getInstance().getLoggedUserId()
         if (isMenuShown) {
             menu.visibility = View.VISIBLE
         }

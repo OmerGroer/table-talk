@@ -1,7 +1,6 @@
 package com.example.tabletalk.data.model
 
 import androidx.room.DatabaseView
-import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @DatabaseView(viewName = "inflatedPosts",
