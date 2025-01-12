@@ -13,11 +13,14 @@ interface RestaurantDao {
     fun insertAll(vararg restaurant: Restaurant)
 
     @Query("SELECT * FROM restaurants WHERE id = :restaurantId")
-    fun getById(restaurantId: String): Restaurant?
+    fun getById(restaurantId: String): LiveData<Restaurant>
 
     @Query("SELECT * FROM restaurants " +
             "WHERE name LIKE '%' || :searchString || '%' " +
             "OR address LIKE '%' || :searchString || '%' " +
             "OR category LIKE '%' || :searchString || '%'")
     fun getByIncluding(searchString: String): LiveData<List<Restaurant>>
+
+    @Query("DELETE FROM restaurants WHERE id = :restaurantId")
+    fun delete(restaurantId: String)
 }

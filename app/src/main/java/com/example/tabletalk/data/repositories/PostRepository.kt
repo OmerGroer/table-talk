@@ -9,7 +9,9 @@ import com.example.tabletalk.data.model.Post
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
+import java.util.concurrent.Executors
 
 class PostRepository {
     companion object {
@@ -25,6 +27,7 @@ class PostRepository {
 
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val imageRepository = ImageRepository(COLLECTION)
+    private val executor = Executors.newSingleThreadExecutor()
 
     suspend fun save(post: Post) {
         val documentRef = if (post.id.isNotEmpty())
@@ -64,6 +67,22 @@ class PostRepository {
         }
 
         return post.apply { restaurantUrl = imageRepository.getImagePathById(postId) }
+    }
+
+    fun delete(postId: String, onError: () -> Unit) {
+        executor.submit {
+            runBlocking {
+                try {
+                    val post = getById(postId) ?: return@runBlocking
+                    db.collection(COLLECTION).document(postId).delete().await()
+                    RestaurantRepository.getInstance().delete(post.restaurantId, post.rating)
+                    AppLocalDb.getInstance().postDao().delete(postId)
+                    imageRepository.delete(postId)
+                } catch (e: Exception) {
+                    onError()
+                }
+            }
+        }
     }
 
     suspend fun refresh() {
