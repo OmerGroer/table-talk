@@ -36,10 +36,6 @@ class ImageRepository(private val folder: String) {
         return file.absolutePath
     }
 
-    fun getImageLocalUri(imageId: String): String {
-        return AppLocalDb.getInstance().imageDao().getById(imageId).value?.uri ?: ""
-    }
-
     suspend fun getImagePathById(imageId: String): String {
         val image = AppLocalDb.getInstance().imageDao().getById(imageId).value
 
@@ -53,14 +49,10 @@ class ImageRepository(private val folder: String) {
         return localPath
     }
 
-    suspend fun deleteImage(imageId: String) {
+    suspend fun delete(imageId: String) {
         val imageRef = storage.reference.child("$folder/$imageId")
         imageRef.delete().await()
 
-        deleteLocalImage(imageId)
-    }
-
-    private fun deleteLocalImage(imageId: String) {
         val image = AppLocalDb.getInstance().imageDao().getById(imageId).value
         image?.let {
             val file = Glide.with(MyApplication.context)

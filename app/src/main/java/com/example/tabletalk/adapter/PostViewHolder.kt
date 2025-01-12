@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.example.tabletalk.fragments.comments.CommentsFragment
 import com.example.tabletalk.R
 import com.example.tabletalk.data.model.InflatedPost
+import com.example.tabletalk.data.repositories.PostRepository
 import com.example.tabletalk.data.repositories.UserRepository
 
 class PostViewHolder(
@@ -61,12 +62,16 @@ class PostViewHolder(
             PopupMenu(menu.context, menu).apply {
                 setOnMenuItemClickListener(object : OnMenuItemClickListener {
                     override fun onMenuItemClick(item: MenuItem?): Boolean {
+                        val post = post ?: return false
                         when (item?.itemId) {
                             R.id.edit_post -> {
-                                editPostListener?.onClickListener(post!!)
+                                editPostListener?.onClickListener(post)
                             }
                             R.id.delete_post -> {
-                                TODO("implement")
+                                layout.alpha = 0.4f
+                                PostRepository.getInstance().delete(post.id) {
+                                    layout.alpha = 1F
+                                }
                             }
                             else -> return false
                             }
@@ -80,6 +85,7 @@ class PostViewHolder(
     }
 
     fun bind(post: InflatedPost?, position: Int, postType: PostType) {
+        layout.alpha = 1F
         this.post = post
 
         username.text = post?.userName
@@ -117,7 +123,7 @@ class PostViewHolder(
                 constraintSet.applyTo(layout)
             }
             PostType.RESTAURANT -> {
-                restaurant?.visibility = View.INVISIBLE
+                restaurant.visibility = View.INVISIBLE
 
                 val constraintSet = ConstraintSet()
                 constraintSet.clone(layout)

@@ -36,7 +36,7 @@ class RestaurantViewHolder(
             rate.visibility = View.GONE
             rateStar.visibility = View.GONE
         } else {
-            rate.text = rating.toString()
+            rate.text = "%.1f".format(rating)
         }
     }
 }

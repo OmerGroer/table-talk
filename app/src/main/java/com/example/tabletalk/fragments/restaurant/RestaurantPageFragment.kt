@@ -58,8 +58,7 @@ class RestaurantPageFragment : Fragment() {
         adapter.fragmentManager = getChildFragmentManager()
         adapter.userListener = object : OnPostItemClickListener {
             override fun onClickListener(post: InflatedPost) {
-                val action =
-                    RestaurantPageFragmentDirections.actionGlobalUserPageFragment(post.userId)
+                val action = RestaurantPageFragmentDirections.actionGlobalUserPageFragment(post.userId)
                 findNavController().navigate(action)
             }
         }
@@ -79,12 +78,16 @@ class RestaurantPageFragment : Fragment() {
 
     private fun setupRestaurant() {
         viewModel?.restaurantData?.observe(viewLifecycleOwner) {
-            if (it != null) {
-                binding?.restaurantName?.text = it.name
-                binding?.restaurantRate?.text = it.rating.toString()
-                binding?.restaurantPrice?.text = it.priceTypes
-                binding?.restaurantCategory?.text = it.category
-                binding?.restaurantAddress?.text = it.address
+            it?.observe(viewLifecycleOwner) { restaurant ->
+                if (restaurant != null) {
+                    binding?.restaurantName?.text = restaurant.name
+                    binding?.restaurantRate?.text = "%.1f".format(restaurant.rating)
+                    binding?.restaurantPrice?.text = restaurant.priceTypes
+                    binding?.restaurantCategory?.text = restaurant.category
+                    binding?.restaurantAddress?.text = restaurant.address
+                } else if (viewModel?.wasLoaded == true) {
+                    findNavController().popBackStack()
+                }
             }
         }
     }
@@ -96,7 +99,7 @@ class RestaurantPageFragment : Fragment() {
         }
         binding?.restaurantToolbar?.inflateMenu(R.menu.restaurant_menu)
         binding?.restaurantToolbar?.setOnMenuItemClickListener {
-            val restaurant = viewModel?.restaurantData?.value
+            val restaurant = viewModel?.restaurantData?.value?.value
             if (restaurant != null) {
                 val action = RestaurantPageFragmentDirections.actionRestaurantPageFragmentToAddPostFormFragment(restaurant)
                 findNavController().navigate(action)

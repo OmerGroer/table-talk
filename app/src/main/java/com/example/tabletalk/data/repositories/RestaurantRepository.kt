@@ -9,6 +9,7 @@ import com.example.tabletalk.data.model.Restaurant
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 
 class RestaurantRepository {
@@ -55,8 +56,8 @@ class RestaurantRepository {
         }.await()
     }
 
-    suspend fun getById(restaurantId: String): Restaurant? {
-        var restaurant = AppLocalDb.getInstance().restaurantDao().getById(restaurantId)
+    suspend fun getById(restaurantId: String): LiveData<Restaurant>? {
+        var restaurant = AppLocalDb.getInstance().restaurantDao().getById(restaurantId).value
 
         if (restaurant == null) {
             restaurant = db.collection(COLLECTION)
@@ -69,19 +70,49 @@ class RestaurantRepository {
             AppLocalDb.getInstance().restaurantDao().insertAll(restaurant)
         }
 
-        return restaurant
+        return AppLocalDb.getInstance().restaurantDao().getById(restaurantId)
     }
 
     fun getByIncluding(searchString: String): LiveData<List<Restaurant>> {
         return AppLocalDb.getInstance().restaurantDao().getByIncluding(searchString)
     }
 
-    suspend fun refresh() {
+    suspend fun delete(restaurantId: String, rating: Int) {
+        val documentRef = db.collection(COLLECTION).document(restaurantId)
+
+        val wasDeleted = db.runTransaction { transaction ->
+            val restaurantDB = transaction.get(documentRef)
+            var ratingCount = (restaurantDB.getDouble(Restaurant.RATING_COUNT_KEY) ?: 0.0).toInt()
+            val newRating = (restaurantDB.getDouble(Restaurant.RATING_KEY) ?: 0.0) * ratingCount - rating
+            ratingCount = ratingCount.dec()
+
+            if (ratingCount == 0) {
+                transaction.delete(documentRef)
+                true
+            } else {
+                transaction.update(documentRef, Restaurant.TIMESTAMP_KEY, FieldValue.serverTimestamp())
+                transaction.update(documentRef, Restaurant.RATING_KEY, newRating / ratingCount)
+                transaction.update(documentRef, Restaurant.RATING_COUNT_KEY, ratingCount)
+                false
+            }
+        }.await()
+
+        if (wasDeleted) {
+            AppLocalDb.getInstance().restaurantDao().delete(restaurantId)
+        } else {
+            refresh()
+        }
+    }
+
+    @Synchronized
+    fun refresh() {
         var time: Long = getLastUpdate()
 
-        val restaurants = db.collection(COLLECTION)
-            .whereGreaterThanOrEqualTo(Restaurant.TIMESTAMP_KEY, Timestamp(time, 0))
-            .get().await().documents.map { document -> document.data?.let { Restaurant.fromJSON(it).apply { id = document.id } }}
+        val restaurants = runBlocking {
+            db.collection(COLLECTION)
+                .whereGreaterThanOrEqualTo(Restaurant.TIMESTAMP_KEY, Timestamp(time, 0))
+                .get().await().documents.map { document -> document.data?.let { Restaurant.fromJSON(it).apply { id = document.id } }}
+        }
 
         for (restaurant in restaurants) {
             if (restaurant == null) continue

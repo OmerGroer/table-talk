@@ -1,6 +1,7 @@
 package com.example.tabletalk.fragments.restaurant
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,9 +14,10 @@ import kotlinx.coroutines.withContext
 
 class RestaurantPageViewModel(private val restaurantId: String) : ViewModel() {
     val posts = InflatedPostRepository.getInstance().getByRestaurantId(restaurantId)
-    val restaurantData: MutableLiveData<Restaurant> = MutableLiveData(null)
+    val restaurantData: MutableLiveData<LiveData<Restaurant>> = MutableLiveData(null)
 
     val isLoading = MutableLiveData(false)
+    var wasLoaded = false
 
     init {
         fetchRestaurant()
@@ -26,10 +28,10 @@ class RestaurantPageViewModel(private val restaurantId: String) : ViewModel() {
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val restaurant = RestaurantRepository.getInstance().getById(restaurantId)
-                    ?: throw Exception("Restaurant not found")
+                val restaurant = RestaurantRepository.getInstance().getById(restaurantId) ?: throw Exception("Restaurant not found")
                 withContext(Dispatchers.Main) {
                     restaurantData.value = restaurant
+                    wasLoaded = true
                 }
             } catch (e: Exception) {
                 Log.e("Restaurant Page", "Error fetching restaurant", e)
