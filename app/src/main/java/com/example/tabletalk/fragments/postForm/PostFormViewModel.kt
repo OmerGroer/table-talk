@@ -88,14 +88,14 @@ class PostFormViewModel : ViewModel() {
 
                     withContext(Dispatchers.Main) { onSuccess() }
                 } catch (e: Exception) {
-                    Log.e("Add Post", "Error registering user", e)
+                    Log.e("Add Post", "Error adding post", e)
                     withContext(Dispatchers.Main) { onFailure(e) }
                 } finally {
                     withContext(Dispatchers.Main) { isLoading.value = false }
                 }
             }
         } catch (e: Exception) {
-            Log.e("Add Post", "Error registering user", e)
+            Log.e("Add Post", "Error adding post", e)
             onFailure(e)
         }
     }

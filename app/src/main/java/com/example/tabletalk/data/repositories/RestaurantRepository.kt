@@ -30,15 +30,15 @@ class RestaurantRepository {
 
         db.runTransaction { transaction ->
             val restaurantDB = transaction.get(documentRef)
-            var ratingCount = (restaurantDB.getDouble("ratingCount") ?: 0.0).toInt()
-            val newRating = (restaurantDB.getDouble("rating") ?: 0.0) * ratingCount + rating
+            var ratingCount = (restaurantDB.getDouble(Restaurant.RATING_COUNT_KEY) ?: 0.0).toInt()
+            val newRating = (restaurantDB.getDouble(Restaurant.RATING_KEY) ?: 0.0) * ratingCount + rating
             ratingCount = ratingCount.inc()
 
             transaction.set(documentRef, restaurant)
 
-            transaction.update(documentRef, "lastUpdated", FieldValue.serverTimestamp())
-            transaction.update(documentRef, "rating", newRating / ratingCount)
-            transaction.update(documentRef, "ratingCount", ratingCount)
+            transaction.update(documentRef, Restaurant.TIMESTAMP_KEY, FieldValue.serverTimestamp())
+            transaction.update(documentRef, Restaurant.RATING_KEY, newRating / ratingCount)
+            transaction.update(documentRef, Restaurant.RATING_COUNT_KEY, ratingCount)
         }.await()
     }
 
@@ -47,23 +47,22 @@ class RestaurantRepository {
 
         db.runTransaction { transaction ->
             val restaurantDB = transaction.get(documentRef)
-            val ratingCount = (restaurantDB.getDouble("ratingCount") ?: 0.0).toInt()
-            val newRating = (restaurantDB.getDouble("rating") ?: 0.0) * ratingCount - oldRating + rating
+            val ratingCount = (restaurantDB.getDouble(Restaurant.RATING_COUNT_KEY) ?: 0.0).toInt()
+            val newRating = (restaurantDB.getDouble(Restaurant.RATING_KEY) ?: 0.0) * ratingCount - oldRating + rating
 
-            transaction.update(documentRef, "lastUpdated", FieldValue.serverTimestamp())
-            transaction.update(documentRef, "rating", newRating / ratingCount)
+            transaction.update(documentRef, Restaurant.TIMESTAMP_KEY, FieldValue.serverTimestamp())
+            transaction.update(documentRef, Restaurant.RATING_KEY, newRating / ratingCount)
         }.await()
     }
 
-    suspend fun getById(id: String): Restaurant? {
-        var restaurant = AppLocalDb.getInstance().restaurantDao().getById(id)
+    suspend fun getById(restaurantId: String): Restaurant? {
+        var restaurant = AppLocalDb.getInstance().restaurantDao().getById(restaurantId)
 
         if (restaurant == null) {
             restaurant = db.collection(COLLECTION)
-                .document(id)
+                .document(restaurantId)
                 .get()
-                .await()
-                .toObject(Restaurant::class.java)
+                .await().let { document -> document.data?.let { Restaurant.fromJSON(it).apply { id = document.id } } }
 
             if (restaurant == null) return null
 

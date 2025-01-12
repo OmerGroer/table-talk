@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tabletalk.R
-import com.example.tabletalk.data.model.Comment
+import com.example.tabletalk.data.model.InflatedComment
 
-class CommentsRecyclerAdapter(private val comments: List<Comment>?) :
+class CommentsRecyclerAdapter(private var comments: List<InflatedComment>?) :
     RecyclerView.Adapter<CommentViewHolder>() {
 
     override fun getItemCount(): Int = comments?.size ?: 0
@@ -26,4 +26,10 @@ class CommentsRecyclerAdapter(private val comments: List<Comment>?) :
             position = position
         )
     }
+
+    fun updateComments(newComments: List<InflatedComment>) {
+        comments = newComments
+        notifyDataSetChanged()
+    }
+
 }

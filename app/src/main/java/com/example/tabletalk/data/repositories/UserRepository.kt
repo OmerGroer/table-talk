@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
@@ -84,8 +85,8 @@ class UserRepository {
 
         db.runBatch { batch ->
             batch.set(documentRef, user)
-            batch.update(documentRef, "avatarUrl", null)
-            batch.update(documentRef, "lastUpdated", FieldValue.serverTimestamp())
+            batch.update(documentRef, User.IMAGE_URI_KEY, null)
+            batch.update(documentRef, User.TIMESTAMP_KEY, FieldValue.serverTimestamp())
         }.await()
 
         AppLocalDb.getInstance().userDao().insertAll(user)
@@ -98,8 +99,7 @@ class UserRepository {
             user = db.collection(COLLECTION)
                 .document(userId)
                 .get()
-                .await()
-                .toObject(User::class.java)
+                .await().let { document -> document.data?.let { User.fromJSON(it).apply { id = document.id } } }
             user?.avatarUrl = imageRepository.downloadAndCacheImage(imageRepository.getImageRemoteUri(userId), userId)
 
             if (user == null) return null
@@ -149,17 +149,22 @@ class UserRepository {
     private suspend fun saveImage(imageUri: String, userId: String) =
         imageRepository.upload(imageUri.toUri(), userId)
 
-    suspend fun refresh() {
+    @Synchronized
+    fun refresh() {
         var time: Long = getLastUpdate()
 
-        val users = db.collection(COLLECTION)
-            .whereGreaterThanOrEqualTo(User.TIMESTAMP_KEY, Timestamp(time, 0))
-            .get().await().documents.map { document -> document.data?.let { User.fromJSON(it).apply { id = document.id } }}
+        val users = runBlocking {
+            db.collection(COLLECTION)
+                .whereGreaterThanOrEqualTo(User.TIMESTAMP_KEY, Timestamp(time, 0))
+                .get().await().documents.map { document -> document.data?.let { User.fromJSON(it).apply { id = document.id } }}
+        }
 
         for (user in users) {
             if (user == null) continue
 
-            user.avatarUrl = imageRepository.downloadAndCacheImage(imageRepository.getImageRemoteUri(user.id), user.id)
+            user.avatarUrl = runBlocking {
+                imageRepository.downloadAndCacheImage(imageRepository.getImageRemoteUri(user.id), user.id)
+            }
 
             AppLocalDb.getInstance().userDao().insertAll(user)
             val lastUpdated = user.lastUpdated

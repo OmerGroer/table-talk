@@ -28,9 +28,8 @@ class RestaurantPageFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_restaurant_page, container, false
         )
-        bindViews()
-
         viewModel = RestaurantPageViewModel(args.restaurantId)
+        bindViews()
 
         setupList()
         setupRestaurant()
