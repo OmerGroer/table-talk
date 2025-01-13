@@ -45,7 +45,7 @@ class EditUserViewModel : ViewModel() {
 
                     withContext(Dispatchers.Main) {
                         name.value = user.username
-                        avatarUri.value = user.avatarUrl!!
+                        avatarUri.value = user.avatarUrl
                     }
                 } catch (e: Exception) {
                     Log.e("Edit", "Error fetching user details", e)
@@ -70,8 +70,12 @@ class EditUserViewModel : ViewModel() {
             isLoading.value = true
             viewModelScope.launch(Dispatchers.IO) {
                 try {
-                    UserRepository.getInstance()
-                        .update(oldPassword.value!!, password.value!!, name.value!!, avatarUri.value!!)
+                    val oldPassword = oldPassword.value ?: throw Exception("Old password is required")
+                    val password = password.value ?: throw Exception("Password is required")
+                    val name = name.value ?: throw Exception("Name is required")
+                    val avatarUri = avatarUri.value ?: throw Exception("Avatar is required")
+
+                    UserRepository.getInstance().update(oldPassword, password, name, avatarUri)
 
                     withContext(Dispatchers.Main) { onSuccess() }
                 } catch (e: Exception) {

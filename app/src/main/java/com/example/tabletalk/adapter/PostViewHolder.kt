@@ -49,13 +49,16 @@ class PostViewHolder(
 
     init {
         username.setOnClickListener {
-            userListener?.onClickListener(post!!)
+            val post = post
+            if (post != null) userListener?.onClickListener(post)
         }
         avatar.setOnClickListener {
-            userListener?.onClickListener(post!! )
+            val post = post
+            if (post != null) userListener?.onClickListener(post)
         }
         restaurant.setOnClickListener {
-            restaurantListener?.onClickListener(post!!)
+            val post = post
+            if (post != null) restaurantListener?.onClickListener(post)
         }
         comment.setOnClickListener {
             val postId = post?.id
@@ -112,16 +115,18 @@ class PostViewHolder(
             .load(post.avatarUrl)
             .into(avatar)
 
-        val rate = post.rating ?: 5
+        val rate = post.rating
         val startsSize = stars.size - 1
 
-        for (i in rate..startsSize) {
-            stars.get(i).visibility = View.GONE
+        for (i in 0..startsSize) {
+            stars.get(i).visibility = if (i < rate) View.VISIBLE else View.GONE
         }
 
         val isMenuShown = post.userId == UserRepository.getInstance().getLoggedUserId()
         if (isMenuShown) {
             menu.visibility = View.VISIBLE
+        } else {
+            menu.visibility = View.GONE
         }
 
         when (postType) {

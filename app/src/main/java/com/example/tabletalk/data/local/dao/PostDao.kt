@@ -14,6 +14,9 @@ interface PostDao {
     @Query("SELECT * FROM posts WHERE id = :postId")
     fun getById(postId: String): Post?
 
+    @Query("SELECT * FROM posts WHERE restaurantId = :restaurantId AND userId = :userId")
+    fun getByRestaurantIdAndUserId(restaurantId: String, userId: String): Post?
+
     @Query("DELETE FROM posts WHERE id = :postId")
     fun delete(postId: String)
 }

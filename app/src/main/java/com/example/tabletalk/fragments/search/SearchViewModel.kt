@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class SearchViewModel : ViewModel() {
+    var searchType: SearchType = SearchType.RESTAURANTS
     var search = ""
     private var previousRestaurantSearch = ""
     private var previousUserSearch = ""
