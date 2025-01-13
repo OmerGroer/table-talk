@@ -38,6 +38,15 @@ class CommentRepository {
         refresh()
     }
 
+    suspend fun delete(commentId: String, onError: () -> Unit) {
+        try {
+            db.collection(COLLECTION).document(commentId).delete().await()
+            AppLocalDb.getInstance().commentDao().delete(commentId)
+        } catch (e: Exception) {
+            onError()
+        }
+    }
+
     suspend fun refresh() {
         var time: Long = getLastUpdate()
 
