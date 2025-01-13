@@ -63,6 +63,18 @@ class SearchFragment : Fragment() {
             }
         })
 
+        binding?.swipeRefreshLayout?.setOnRefreshListener {
+            viewModel.refresh()
+        }
+
+        viewModel.isRefreshing.observe(viewLifecycleOwner) {
+            binding?.swipeRefreshLayout?.isRefreshing = it || viewModel.isLoading.value == true
+        }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) {
+            binding?.swipeRefreshLayout?.isRefreshing = it || viewModel.isRefreshing.value == true
+        }
+
         return binding?.root
     }
 

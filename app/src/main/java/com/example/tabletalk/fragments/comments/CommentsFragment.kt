@@ -63,6 +63,18 @@ class CommentsFragment : DialogFragment() {
             dismiss()
         }
 
+        binding?.swipeRefreshLayout?.setOnRefreshListener {
+            viewModel?.fetchComments()
+        }
+
+        viewModel?.isLoading?.observe(viewLifecycleOwner) {
+            binding?.swipeRefreshLayout?.isRefreshing = it || viewModel?.isRefreshing?.value == true
+        }
+
+        viewModel?.isRefreshing?.observe(viewLifecycleOwner) {
+            binding?.swipeRefreshLayout?.isRefreshing = it || viewModel?.isLoading?.value == true
+        }
+
         return binding?.root
     }
 

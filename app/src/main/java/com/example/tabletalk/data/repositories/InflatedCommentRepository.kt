@@ -1,6 +1,7 @@
 package com.example.tabletalk.data.repositories
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.tabletalk.data.local.AppLocalDb
 import com.example.tabletalk.data.model.InflatedComment
 import kotlinx.coroutines.runBlocking
@@ -24,10 +25,15 @@ class InflatedCommentRepository {
         1, 1, 0,
         TimeUnit.SECONDS, LinkedBlockingQueue(1), ThreadPoolExecutor.DiscardPolicy()
     )
+    val isLoading = MutableLiveData(false)
 
     fun getByPostId(id: String): LiveData<List<InflatedComment>> {
         refresh()
         return AppLocalDb.getInstance().inflatedCommentDao().getByPostId(id)
+    }
+
+    fun getIsLoading(): LiveData<Boolean> {
+        return isLoading
     }
 
     fun refresh() {
@@ -38,6 +44,8 @@ class InflatedCommentRepository {
 
     @Synchronized
     private fun refreshHandler() {
+        isLoading.postValue(true)
+
         val futures = listOf(Callable {
             runBlocking {
                 CommentRepository.getInstance().refresh()
@@ -49,5 +57,7 @@ class InflatedCommentRepository {
         })
 
         executor.invokeAll(futures)
+
+        isLoading.postValue(false)
     }
 }

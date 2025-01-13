@@ -1,6 +1,7 @@
 package com.example.tabletalk.data.repositories
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.tabletalk.data.local.AppLocalDb
 import com.example.tabletalk.data.model.InflatedPost
 import kotlinx.coroutines.runBlocking
@@ -20,10 +21,11 @@ class InflatedPostRepository {
     }
 
     private val executor = Executors.newSingleThreadExecutor()
-    var pool = ThreadPoolExecutor(
+    private var pool = ThreadPoolExecutor(
         1, 1, 0,
         TimeUnit.SECONDS, LinkedBlockingQueue(1), ThreadPoolExecutor.DiscardPolicy()
     )
+    private val isLoading = MutableLiveData(false)
 
     fun getAll(): LiveData<List<InflatedPost>> {
         refresh()
@@ -42,6 +44,10 @@ class InflatedPostRepository {
         return AppLocalDb.getInstance().inflatedPostDao().getByRestaurantId(restaurantId, loggedUserId)
     }
 
+    fun getIsLoading(): LiveData<Boolean> {
+        return isLoading
+    }
+
     fun refresh() {
         pool.execute {
             refreshHandler()
@@ -50,6 +56,7 @@ class InflatedPostRepository {
 
     @Synchronized
     private fun refreshHandler() {
+        isLoading.postValue(true)
         val futures = listOf(Callable {
             runBlocking {
                 PostRepository.getInstance().refresh()
@@ -65,5 +72,6 @@ class InflatedPostRepository {
         })
 
         executor.invokeAll(futures)
+        isLoading.postValue(false)
     }
 }

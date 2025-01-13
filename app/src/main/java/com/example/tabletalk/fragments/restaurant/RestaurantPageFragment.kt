@@ -35,6 +35,14 @@ class RestaurantPageFragment : Fragment() {
         setupRestaurant()
         setupToolbar()
 
+        binding?.swipeRefreshLayout?.setOnRefreshListener {
+            viewModel?.fetchPosts()
+        }
+
+        viewModel?.isLoadingPosts?.observe(viewLifecycleOwner) {
+            binding?.swipeRefreshLayout?.isRefreshing = it || viewModel?.isLoadingRestaurant?.value == true
+        }
+
         return binding?.root
     }
 
@@ -89,6 +97,10 @@ class RestaurantPageFragment : Fragment() {
                     findNavController().popBackStack()
                 }
             }
+        }
+
+        viewModel?.isLoadingRestaurant?.observe(viewLifecycleOwner) {
+            binding?.swipeRefreshLayout?.isRefreshing = it || viewModel?.isLoadingPosts?.value == true
         }
     }
 
