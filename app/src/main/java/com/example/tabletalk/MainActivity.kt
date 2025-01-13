@@ -1,13 +1,14 @@
 package com.example.tabletalk
 
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.example.tabletalk.data.repositories.AuthListener
@@ -44,24 +45,23 @@ class MainActivity : AppCompatActivity() {
                 if (previousIsLogged == UserRepository.getInstance().isLogged()) return
 
                 previousIsLogged = UserRepository.getInstance().isLogged()
-                if (previousIsLogged == true) {
-                    bottomNavigationView.visibility = View.VISIBLE
-                    navController?.navigate(R.id.postsListFragment)
-                } else {
-                    bottomNavigationView.visibility = View.GONE
-                    navController?.navigate(R.id.loginFragment)
+                navController?.let {
+                    val options = NavOptions.Builder().setLaunchSingleTop(true).setRestoreState(true).setPopUpTo(
+                        it.graph.findStartDestination().id,
+                        inclusive = false,
+                        saveState = true
+                    ).build()
+                    if (previousIsLogged == true) {
+                        bottomNavigationView.visibility = View.VISIBLE
+                        it.navigate(R.id.postsListFragment, null, options)
+                        it.graph.setStartDestination(R.id.postsListFragment)
+                    } else {
+                        bottomNavigationView.visibility = View.GONE
+                        it.navigate(R.id.loginFragment, null, options)
+                        it.graph.setStartDestination(R.id.loginFragment)
+                    }
                 }
             }
         })
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            navController?.popBackStack()
-            return true
-        }
-
-        val navController = navController ?: return false
-        return NavigationUI.onNavDestinationSelected(item, navController)
     }
 }
