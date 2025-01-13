@@ -17,6 +17,7 @@ import com.example.tabletalk.R
 import com.example.tabletalk.data.model.InflatedPost
 import com.example.tabletalk.data.repositories.PostRepository
 import com.example.tabletalk.data.repositories.UserRepository
+import com.example.tabletalk.utils.BasicAlert
 
 class PostViewHolder(
     itemView: View,
@@ -71,6 +72,7 @@ class PostViewHolder(
                                 layout.alpha = 0.4f
                                 PostRepository.getInstance().delete(post.id) {
                                     layout.alpha = 1F
+                                    BasicAlert("Fail", "Failed to delete post", itemView.context).show()
                                 }
                             }
                             else -> return false

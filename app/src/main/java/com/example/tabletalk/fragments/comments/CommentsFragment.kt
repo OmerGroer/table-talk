@@ -45,7 +45,7 @@ class CommentsFragment : DialogFragment() {
             binding?.commentsRecyclerView?.setHasFixedSize(true)
             val layoutManager = LinearLayoutManager(context)
             binding?.commentsRecyclerView?.layoutManager = layoutManager
-            val adapter = CommentsRecyclerAdapter(emptyList())
+            val adapter = CommentsRecyclerAdapter(emptyList(), viewModel)
             binding?.commentsRecyclerView?.adapter = adapter
 
             viewModel?.comments?.observe(viewLifecycleOwner) { comments ->

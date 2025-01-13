@@ -15,6 +15,7 @@ import kotlinx.coroutines.withContext
 class CommentsViewModel(private val postId: String) : ViewModel() {
     val comments = InflatedCommentRepository.getInstance().getByPostId(postId)
     val commentInput = MutableLiveData("")
+    val commentId = MutableLiveData("")
 
     val isLoading = MutableLiveData(false)
     val isRefreshing = InflatedCommentRepository.getInstance().getIsLoading()
@@ -37,7 +38,8 @@ class CommentsViewModel(private val postId: String) : ViewModel() {
                         val comment = Comment(
                             postId = postId,
                             content = text,
-                            userId = userId
+                            userId = userId,
+                            id = commentId.value ?: ""
                         )
 
                         CommentRepository.getInstance().save(comment)
@@ -57,5 +59,16 @@ class CommentsViewModel(private val postId: String) : ViewModel() {
                 onFailure(e)
             }
         }
+    }
+
+    fun delete(commentId: String, onError: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            CommentRepository.getInstance().delete(commentId, onError)
+        }
+    }
+
+    fun edit(commentText: String, commentId: String) {
+        this.commentId.value = commentId
+        this.commentInput.value = commentText
     }
 }
