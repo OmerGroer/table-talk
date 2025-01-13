@@ -15,14 +15,15 @@ class UserViewModel(private val userId: String) : ViewModel() {
     val username = MutableLiveData("")
     val avatarUrl = MutableLiveData("")
 
-    val isLoading = MutableLiveData(false)
+    val isLoadingPosts = InflatedPostRepository.getInstance().getIsLoading()
+    val isLoadingUser = MutableLiveData(false)
 
     init {
         fetchUser()
     }
 
     fun fetchUser() {
-        isLoading.value = true
+        isLoadingUser.value = true
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -35,8 +36,14 @@ class UserViewModel(private val userId: String) : ViewModel() {
             } catch (e: Exception) {
                 Log.e("User Page", "Error fetching user", e)
             } finally {
-                withContext(Dispatchers.Main) { isLoading.value = false }
+                withContext(Dispatchers.Main) { isLoadingUser.value = false }
             }
+        }
+    }
+
+    fun fetchPosts() {
+        viewModelScope.launch(Dispatchers.IO) {
+            InflatedPostRepository.getInstance().refresh()
         }
     }
 }

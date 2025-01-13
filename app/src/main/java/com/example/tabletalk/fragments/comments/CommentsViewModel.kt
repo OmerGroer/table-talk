@@ -17,6 +17,13 @@ class CommentsViewModel(private val postId: String) : ViewModel() {
     val commentInput = MutableLiveData("")
 
     val isLoading = MutableLiveData(false)
+    val isRefreshing = InflatedCommentRepository.getInstance().getIsLoading()
+
+    fun fetchComments() {
+        viewModelScope.launch(Dispatchers.IO) {
+            InflatedCommentRepository.getInstance().refresh()
+        }
+    }
 
     fun submit(onFailure: (error: Exception?) -> Unit) {
         val text = commentInput.value

@@ -16,7 +16,8 @@ class RestaurantPageViewModel(private val restaurantId: String) : ViewModel() {
     val posts = InflatedPostRepository.getInstance().getByRestaurantId(restaurantId)
     val restaurantData: MutableLiveData<LiveData<Restaurant>> = MutableLiveData(null)
 
-    val isLoading = MutableLiveData(false)
+    val isLoadingPosts = InflatedPostRepository.getInstance().getIsLoading()
+    val isLoadingRestaurant = MutableLiveData(false)
     var wasLoaded = false
 
     init {
@@ -24,7 +25,7 @@ class RestaurantPageViewModel(private val restaurantId: String) : ViewModel() {
     }
 
     fun fetchRestaurant() {
-        isLoading.value = true
+        isLoadingRestaurant.value = true
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -36,8 +37,14 @@ class RestaurantPageViewModel(private val restaurantId: String) : ViewModel() {
             } catch (e: Exception) {
                 Log.e("Restaurant Page", "Error fetching restaurant", e)
             } finally {
-                withContext(Dispatchers.Main) { isLoading.value = false }
+                withContext(Dispatchers.Main) { isLoadingRestaurant.value = false }
             }
+        }
+    }
+
+    fun fetchPosts() {
+        viewModelScope.launch(Dispatchers.IO) {
+            InflatedPostRepository.getInstance().refresh()
         }
     }
 }

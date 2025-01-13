@@ -16,15 +16,18 @@ class SearchViewModel : ViewModel() {
     val restaurants = MutableLiveData(RestaurantRepository.getInstance().getByIncluding(search))
     val users = MutableLiveData(UserRepository.getInstance().getByIncluding(search))
     val isLoading = MutableLiveData(false)
+    val isRefreshing = MutableLiveData(false)
 
     init {
         refresh()
     }
 
     fun refresh() {
+        isRefreshing.postValue(true)
         viewModelScope.launch(Dispatchers.IO) {
             RestaurantRepository.getInstance().refresh()
             UserRepository.getInstance().refresh()
+            withContext(Dispatchers.Main) { isRefreshing.postValue(false) }
         }
     }
 

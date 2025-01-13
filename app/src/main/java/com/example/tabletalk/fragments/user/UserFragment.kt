@@ -51,6 +51,14 @@ class UserFragment : Fragment() {
         setupList()
         setupUser()
 
+        binding?.swipeRefreshLayout?.setOnRefreshListener {
+            viewModel?.fetchPosts()
+        }
+
+        viewModel?.isLoadingPosts?.observe(viewLifecycleOwner) {
+            binding?.swipeRefreshLayout?.isRefreshing = it || viewModel?.isLoadingUser?.value == true
+        }
+
         this.onCreateListener?.onCreate(binding)
 
         return binding?.root
@@ -96,6 +104,10 @@ class UserFragment : Fragment() {
                     .load(avatarUrl)
                     .into(avatar)
             }
+        }
+
+        viewModel?.isLoadingUser?.observe(viewLifecycleOwner) {
+            binding?.swipeRefreshLayout?.isRefreshing = it || viewModel?.isLoadingPosts?.value == true
         }
     }
 

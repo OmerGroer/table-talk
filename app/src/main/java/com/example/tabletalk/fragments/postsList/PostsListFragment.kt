@@ -30,6 +30,14 @@ class PostsListFragment : Fragment() {
 
         setupList()
 
+        binding?.swipeRefreshLayout?.setOnRefreshListener {
+            viewModel.fetchPosts()
+        }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) {
+            binding?.swipeRefreshLayout?.isRefreshing = it
+        }
+
         return binding?.root
     }
 
