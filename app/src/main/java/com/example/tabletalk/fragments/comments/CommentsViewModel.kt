@@ -45,6 +45,7 @@ class CommentsViewModel(private val postId: String) : ViewModel() {
                         CommentRepository.getInstance().save(comment)
 
                         withContext(Dispatchers.Main) {
+                            commentId.value = ""
                             commentInput.value = ""
                         }
                     } catch (e: Exception) {
