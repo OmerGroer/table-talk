@@ -59,7 +59,30 @@ class PostFormViewModel : ViewModel() {
     fun initForm(restaurant: Restaurant) {
         this.restaurant = restaurant
         restaurantId = restaurant.id
-        restaurantName.value = restaurant.name
+
+        isLoading.value = true
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val userId = UserRepository.getInstance().getLoggedUserId() ?: throw Exception("User not logged in")
+                val post = PostRepository.getInstance().getByRestaurantIdAndUserId(restaurantId, userId)
+
+                if (post != null) {
+                    postId = post.id
+                    withContext(Dispatchers.Main) {
+                        restaurantName.value = restaurant.name
+                        review.value = post.review
+                        rating.value = post.rating.toFloat()
+                        oldRating = post.rating
+                        imageUri.value = post.restaurantUrl
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("AddNewReview", "Error fetching post", e)
+            } finally {
+                withContext(Dispatchers.Main) { isLoading.value = false }
+            }
+        }
     }
 
     fun submit(onSuccess: () -> Unit, onFailure: (error: Exception?) -> Unit) {
@@ -108,13 +131,17 @@ class PostFormViewModel : ViewModel() {
 
     private fun getPost(): Post {
         val userId = UserRepository.getInstance().getLoggedUserId() ?: throw Exception("User not logged in")
+        val review = review.value ?: throw Exception("Review is required")
+        val rating = rating.value ?: throw Exception("Rating is required")
+        val imageUri = imageUri.value ?: throw Exception("Image is required")
+
         return Post(
             id = postId ?: "",
             userId = userId,
             restaurantId = restaurantId,
-            review = review.value!!,
-            rating = rating.value!!.toInt(),
-            restaurantUrl = imageUri.value!!.let {
+            review = review,
+            rating = rating.toInt(),
+            restaurantUrl = imageUri.let {
                 if (!it.startsWith("file:///")) "file://$it" else it
             }
         )

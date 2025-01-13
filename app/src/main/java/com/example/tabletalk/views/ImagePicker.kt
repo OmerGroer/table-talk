@@ -40,7 +40,8 @@ class ImagePicker @JvmOverloads constructor(
 
     fun handleUCropResult(result: ActivityResult) {
         if (result.resultCode == Activity.RESULT_OK) {
-            val uri = UCrop.getOutput(result.data!!)
+            val data = result.data ?: return
+            val uri = UCrop.getOutput(data)
             setImageURI(uri)
         }
     }

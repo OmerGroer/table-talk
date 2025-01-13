@@ -69,6 +69,33 @@ class PostRepository {
         return post.apply { restaurantUrl = imageRepository.getImagePathById(postId) }
     }
 
+    suspend fun getByRestaurantIdAndUserId(restaurantId: String, userId: String): Post? {
+        var post = AppLocalDb.getInstance().postDao().getByRestaurantIdAndUserId(restaurantId, userId)
+
+        if (post == null) {
+            val posts = db.collection(COLLECTION)
+                .whereEqualTo(Post.RESTAURANT_ID_KEY, restaurantId)
+                .whereEqualTo(Post.USER_ID_KEY, userId)
+                .get()
+                .await().documents.map { document -> document.data?.let { Post.fromJSON(it).apply { id = document.id } }}
+            if (posts.size != 1) return null
+            post = posts[0]
+            if (post == null) return null
+            val postId = post.id
+
+            post.restaurantUrl = imageRepository.downloadAndCacheImage(
+                imageRepository.getImageRemoteUri(postId),
+                postId
+            )
+
+            AppLocalDb.getInstance().postDao().insertAll(post)
+        }
+
+        val postId = post.id
+
+        return post.apply { restaurantUrl = imageRepository.getImagePathById(postId) }
+    }
+
     fun delete(postId: String, onError: () -> Unit) {
         executor.submit {
             runBlocking {

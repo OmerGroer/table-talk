@@ -18,6 +18,8 @@ import com.example.tabletalk.data.model.InflatedPost
 import com.example.tabletalk.data.repositories.PostRepository
 import com.example.tabletalk.data.repositories.UserRepository
 import com.example.tabletalk.utils.BasicAlert
+import com.google.firebase.Timestamp
+import java.text.SimpleDateFormat
 
 class PostViewHolder(
     itemView: View,
@@ -41,18 +43,22 @@ class PostViewHolder(
     private var restaurantImage: ImageView = itemView.findViewById(R.id.post_row_restaurant_image)
     private var avatar: ImageView = itemView.findViewById(R.id.post_row_avatar)
     private var comment: Button = itemView.findViewById(R.id.post_row_comment_button)
+    private var date: TextView = itemView.findViewById(R.id.date)
 
     private var post: InflatedPost? = null
 
     init {
         username.setOnClickListener {
-            userListener?.onClickListener(post!!)
+            val post = post
+            if (post != null) userListener?.onClickListener(post)
         }
         avatar.setOnClickListener {
-            userListener?.onClickListener(post!! )
+            val post = post
+            if (post != null) userListener?.onClickListener(post)
         }
         restaurant.setOnClickListener {
-            restaurantListener?.onClickListener(post!!)
+            val post = post
+            if (post != null) restaurantListener?.onClickListener(post)
         }
         comment.setOnClickListener {
             val postId = post?.id
@@ -90,27 +96,37 @@ class PostViewHolder(
         layout.alpha = 1F
         this.post = post
 
-        username.text = post?.userName
-        restaurant.text = post?.restaurantName
-        review.text = post?.review
+        if (post == null) return
 
-        Glide.with(itemView.context)
-            .load(post?.restaurantUrl)
-            .into(restaurantImage)
-        Glide.with(itemView.context)
-            .load(post?.avatarUrl)
-            .into(avatar)
+        username.text = post.userName
+        restaurant.text = post.restaurantName
+        review.text = post.review
 
-        val rate = post?.rating ?: 5
-        val startsSize = stars.size - 1
-
-        for (i in rate..startsSize) {
-            stars.get(i).visibility = View.GONE
+        val lastUpdated = post.lastUpdated
+        if (lastUpdated != null) {
+            val dateFormat = SimpleDateFormat("dd/MM/yyyy")
+            date.text = dateFormat.format(Timestamp(lastUpdated, 0).toDate())
         }
 
-        val isMenuShown = post?.userId == UserRepository.getInstance().getLoggedUserId()
+        Glide.with(itemView.context)
+            .load(post.restaurantUrl)
+            .into(restaurantImage)
+        Glide.with(itemView.context)
+            .load(post.avatarUrl)
+            .into(avatar)
+
+        val rate = post.rating
+        val startsSize = stars.size - 1
+
+        for (i in 0..startsSize) {
+            stars.get(i).visibility = if (i < rate) View.VISIBLE else View.GONE
+        }
+
+        val isMenuShown = post.userId == UserRepository.getInstance().getLoggedUserId()
         if (isMenuShown) {
             menu.visibility = View.VISIBLE
+        } else {
+            menu.visibility = View.GONE
         }
 
         when (postType) {

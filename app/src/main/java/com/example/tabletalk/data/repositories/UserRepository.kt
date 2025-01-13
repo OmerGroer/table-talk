@@ -44,13 +44,14 @@ class UserRepository {
 
         createAuthUser(email, password)
         val user = User(
-            id = getLoggedUserId()!!,
+            id = getLoggedUserId() ?: throw Exception("User not logged in"),
             username = username,
             email = email,
             avatarUrl = avatarUri
         )
         save(user)
-        saveImage(user.avatarUrl!!, user.id)
+        val avatarUrl = user.avatarUrl
+        if (avatarUrl != null) saveImage(avatarUrl, user.id)
 
         isInUserCreation = false
 
@@ -65,19 +66,21 @@ class UserRepository {
                 throw AuthenticatorException("Old password is required")
             }
 
-            auth.signInWithEmailAndPassword(getLoggedUserEmail()!!, oldPassword).await()
+            val loggedUserId = getLoggedUserId() ?: throw Exception("User not logged in")
+            auth.signInWithEmailAndPassword(loggedUserId, oldPassword).await()
             auth.currentUser?.updatePassword(password)?.await()
         }
 
         val user = User(
-            id = getLoggedUserId()!!,
+            id = getLoggedUserId() ?: throw Exception("User not logged in"),
             username = username,
-            email = getLoggedUserEmail()!!,
+            email = getLoggedUserEmail() ?: throw Exception("User not logged in"),
             avatarUrl = if (!avatarUri.startsWith("file:///")) "file://${avatarUri}" else avatarUri
         )
 
         save(user)
-        saveImage(user.avatarUrl!!, user.id)
+        val userAvatarUrl = user.avatarUrl
+        if (userAvatarUrl != null) saveImage(userAvatarUrl, user.id)
     }
 
     private suspend fun save(user: User) {

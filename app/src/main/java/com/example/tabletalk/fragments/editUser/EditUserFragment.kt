@@ -131,7 +131,8 @@ class EditUserFragment : Fragment() {
     private fun getUCropLauncher() =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val uri = UCrop.getOutput(result.data!!)
+                val data = result.data ?: return@registerForActivityResult
+                val uri = UCrop.getOutput(data)
                 binding?.imageView?.setImageURI(uri)
                 viewModel.avatarUri.value = uri.toString()
             }

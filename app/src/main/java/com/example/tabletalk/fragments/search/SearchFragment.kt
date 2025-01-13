@@ -31,8 +31,6 @@ class SearchFragment : Fragment() {
     private var userRecyclerAdapter: UsersRecyclerAdapter = UsersRecyclerAdapter(emptyList())
     private var restaurantRecyclerAdapter: RestaurantsRecyclerAdapter = RestaurantsRecyclerAdapter(emptyList())
 
-    private var searchType: SearchType = SearchType.RESTAURANTS
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,7 +41,11 @@ class SearchFragment : Fragment() {
         bindViews()
 
         setUpList()
-        switchToRestaurants(binding?.root)
+        if (viewModel.searchType == SearchType.PEOPLE) {
+            switchToPeople(binding?.root)
+        } else {
+            switchToRestaurants(binding?.root)
+        }
 
         binding?.searchPeople?.setOnClickListener(::switchToPeople)
         binding?.searchRestaurant?.setOnClickListener(::switchToRestaurants)
@@ -51,7 +53,7 @@ class SearchFragment : Fragment() {
         binding?.searchInput?.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
             override fun onQueryTextChange(p0: String?): Boolean {
                 viewModel.search = p0 ?: ""
-                when (searchType) {
+                when (viewModel.searchType) {
                     SearchType.RESTAURANTS -> viewModel.searchRestaurants()
                     SearchType.PEOPLE -> viewModel.searchUser()
                 }
@@ -121,7 +123,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun switchToRestaurants(view: View?) {
-        searchType = SearchType.RESTAURANTS
+        viewModel.searchType = SearchType.RESTAURANTS
         binding?.searchInput?.setQuery("", false)
 
         binding?.searchRestaurant?.setTextColor(Color.argb(255, 0, 0, 0))
@@ -132,8 +134,8 @@ class SearchFragment : Fragment() {
         binding?.searchRecyclerView?.adapter = restaurantRecyclerAdapter
     }
 
-    private fun switchToPeople(view: View) {
-        searchType = SearchType.PEOPLE
+    private fun switchToPeople(view: View?) {
+        viewModel.searchType = SearchType.PEOPLE
         binding?.searchInput?.setQuery("", false)
 
         binding?.searchRestaurant?.setTextColor(Color.argb(64, 0, 0, 0))

@@ -32,7 +32,9 @@ class LoginViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 withContext(Dispatchers.IO) {
-                    UserRepository.getInstance().signIn(email.value!!, password.value!!)
+                    val email = email.value ?: throw Exception("Email is required")
+                    val password = password.value ?: throw Exception("Password is required")
+                    UserRepository.getInstance().signIn(email, password)
                 }
             } catch (e: Exception) {
                 Log.e("Login", "Error signing in user", e)
