@@ -13,6 +13,8 @@ import com.example.tabletalk.R
 import com.example.tabletalk.data.model.InflatedComment
 import com.example.tabletalk.fragments.comments.CommentsViewModel
 import com.example.tabletalk.utils.BasicAlert
+import com.google.firebase.Timestamp
+import java.text.SimpleDateFormat
 
 class CommentViewHolder(
     itemView: View
@@ -22,6 +24,7 @@ class CommentViewHolder(
     private var avatar: ImageView = itemView.findViewById(R.id.comment_row_avatar)
     private var content: TextView = itemView.findViewById(R.id.comment_row_content)
     private var menu: ImageView = itemView.findViewById(R.id.comment_menu)
+    private var date: TextView = itemView.findViewById(R.id.date)
 
     private var comment: InflatedComment? = null
     private var viewModel: CommentsViewModel? = null
@@ -62,6 +65,12 @@ class CommentViewHolder(
         layout.alpha = 1F
         name.text = comment?.userName
         content.text = comment?.content
+
+        val lastUpdated = comment?.lastUpdated
+        if (lastUpdated != null) {
+            val dateFormat = SimpleDateFormat("dd/MM/yyyy")
+            date.text = dateFormat.format(Timestamp(lastUpdated, 0).toDate())
+        }
 
         Glide.with(itemView).load(comment?.avatarUrl).into(avatar)
     }
