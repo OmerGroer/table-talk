@@ -1,15 +1,15 @@
 package com.example.tabletalk.fragments.search
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tabletalk.data.repositories.RestaurantRepository
 import com.example.tabletalk.data.repositories.UserRepository
+import com.example.tabletalk.utils.ImageLoaderViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class SearchViewModel : ViewModel() {
+class SearchViewModel : ImageLoaderViewModel() {
     var searchType: SearchType = SearchType.RESTAURANTS
     var search = ""
     private var previousRestaurantSearch = ""

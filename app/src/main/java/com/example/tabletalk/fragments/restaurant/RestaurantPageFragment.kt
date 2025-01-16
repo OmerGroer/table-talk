@@ -60,7 +60,8 @@ class RestaurantPageFragment : Fragment() {
         binding?.postsRecyclerView?.setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(context)
         binding?.postsRecyclerView?.layoutManager = layoutManager
-        val adapter = PostsRecyclerAdapter(emptyList())
+        val viewModel = viewModel ?: throw Exception("ViewModel is null")
+        val adapter = PostsRecyclerAdapter(emptyList(), viewModel)
         binding?.postsRecyclerView?.adapter = adapter
 
         adapter.fragmentManager = getChildFragmentManager()
@@ -85,17 +86,15 @@ class RestaurantPageFragment : Fragment() {
     }
 
     private fun setupRestaurant() {
-        viewModel?.restaurantData?.observe(viewLifecycleOwner) {
-            it?.observe(viewLifecycleOwner) { restaurant ->
-                if (restaurant != null) {
-                    binding?.restaurantName?.text = restaurant.name
-                    binding?.restaurantRate?.text = "%.1f".format(restaurant.rating)
-                    binding?.restaurantPrice?.text = restaurant.priceTypes
-                    binding?.restaurantCategory?.text = restaurant.category
-                    binding?.restaurantAddress?.text = restaurant.address
-                } else if (viewModel?.wasLoaded == true) {
-                    findNavController().popBackStack()
-                }
+        viewModel?.restaurantData?.observe(viewLifecycleOwner) { restaurant ->
+            if (restaurant != null) {
+                binding?.restaurantName?.text = restaurant.name
+                binding?.restaurantRate?.text = "%.1f".format(restaurant.rating)
+                binding?.restaurantPrice?.text = restaurant.priceTypes
+                binding?.restaurantCategory?.text = restaurant.category
+                binding?.restaurantAddress?.text = restaurant.address
+            } else {
+                findNavController().popBackStack()
             }
         }
 
@@ -111,7 +110,7 @@ class RestaurantPageFragment : Fragment() {
         }
         binding?.restaurantToolbar?.inflateMenu(R.menu.restaurant_menu)
         binding?.restaurantToolbar?.setOnMenuItemClickListener {
-            val restaurant = viewModel?.restaurantData?.value?.value
+            val restaurant = viewModel?.restaurantData?.value
             if (restaurant != null) {
                 val action = RestaurantPageFragmentDirections.actionRestaurantPageFragmentToAddPostFormFragment(restaurant)
                 findNavController().navigate(action)

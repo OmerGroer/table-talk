@@ -39,7 +39,8 @@ class CommentsFragment : DialogFragment() {
 
         val postId = postId
         if (postId != null ) {
-            viewModel = CommentsViewModel(postId)
+            val viewModel = CommentsViewModel(postId)
+            this.viewModel = viewModel
             bindViews()
 
             binding?.commentsRecyclerView?.setHasFixedSize(true)

@@ -2,15 +2,15 @@ package com.example.tabletalk.fragments.user
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tabletalk.data.repositories.InflatedPostRepository
 import com.example.tabletalk.data.repositories.UserRepository
+import com.example.tabletalk.utils.ImageLoaderViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class UserViewModel(private val userId: String) : ViewModel() {
+class UserViewModel(private val userId: String) : ImageLoaderViewModel() {
     val posts = InflatedPostRepository.getInstance().getByUserId(userId)
     val username = MutableLiveData("")
     val avatarUrl = MutableLiveData("")

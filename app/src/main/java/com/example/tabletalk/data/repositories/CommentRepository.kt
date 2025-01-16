@@ -9,6 +9,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import java.util.Date
 
 class CommentRepository {
     companion object {
@@ -51,7 +52,7 @@ class CommentRepository {
         var time: Long = getLastUpdate()
 
         val comments = db.collection(COLLECTION)
-            .whereGreaterThanOrEqualTo(Comment.TIMESTAMP_KEY, Timestamp(time, 0))
+            .whereGreaterThanOrEqualTo(Comment.TIMESTAMP_KEY, Timestamp(Date(time)))
             .get().await().documents.map { document -> document.data?.let { Comment.fromJSON(it).apply { id = document.id } }}
 
         for (comment in comments) {
@@ -64,7 +65,7 @@ class CommentRepository {
             }
         }
 
-        setLastUpdate(time)
+        setLastUpdate(time + 1)
     }
 
     private fun getLastUpdate(): Long {

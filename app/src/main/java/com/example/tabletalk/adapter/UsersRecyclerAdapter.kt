@@ -5,12 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tabletalk.R
 import com.example.tabletalk.data.model.User
+import com.example.tabletalk.utils.ImageLoaderViewModel
 
 interface OnUserItemClickListener {
     fun onUsernameClickListener(user: User)
 }
 
-class UsersRecyclerAdapter(private var users: List<User>?) :
+class UsersRecyclerAdapter(private var users: List<User>?, private val imageLoaderViewModel: ImageLoaderViewModel) :
     RecyclerView.Adapter<UserViewHolder>() {
 
     var listener: OnUserItemClickListener? = null
@@ -23,7 +24,7 @@ class UsersRecyclerAdapter(private var users: List<User>?) :
             parent,
             false
         )
-        return UserViewHolder(itemView, listener)
+        return UserViewHolder(itemView, listener, imageLoaderViewModel)
     }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {

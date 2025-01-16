@@ -28,7 +28,7 @@ class SearchFragment : Fragment() {
     private val viewModel: SearchViewModel by viewModels()
     private var binding: FragmentSearchBinding? = null
 
-    private var userRecyclerAdapter: UsersRecyclerAdapter = UsersRecyclerAdapter(emptyList())
+    private var userRecyclerAdapter: UsersRecyclerAdapter? = null
     private var restaurantRecyclerAdapter: RestaurantsRecyclerAdapter = RestaurantsRecyclerAdapter(emptyList())
 
     override fun onCreateView(
@@ -40,6 +40,7 @@ class SearchFragment : Fragment() {
         )
         bindViews()
 
+        userRecyclerAdapter = UsersRecyclerAdapter(emptyList(), viewModel)
         setUpList()
         if (viewModel.searchType == SearchType.PEOPLE) {
             switchToPeople(binding?.root)
@@ -108,7 +109,7 @@ class SearchFragment : Fragment() {
             }
         }
 
-        userRecyclerAdapter.listener = object : OnUserItemClickListener {
+        userRecyclerAdapter?.listener = object : OnUserItemClickListener {
             override fun onUsernameClickListener(user: User) {
                 val action = SearchFragmentDirections.actionGlobalUserPageFragment(user.id)
                 findNavController().navigate(action)
@@ -117,7 +118,7 @@ class SearchFragment : Fragment() {
 
         viewModel.users.observe(viewLifecycleOwner) { users ->
             users.observe(viewLifecycleOwner) {
-                userRecyclerAdapter.updateUsers(it)
+                userRecyclerAdapter?.updateUsers(it)
             }
         }
     }

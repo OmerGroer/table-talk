@@ -1,5 +1,6 @@
 package com.example.tabletalk.adapter
 
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
@@ -18,8 +19,10 @@ import com.example.tabletalk.data.model.InflatedPost
 import com.example.tabletalk.data.repositories.PostRepository
 import com.example.tabletalk.data.repositories.UserRepository
 import com.example.tabletalk.utils.BasicAlert
+import com.example.tabletalk.utils.ImageLoaderViewModel
 import com.google.firebase.Timestamp
 import java.text.SimpleDateFormat
+import java.util.Date
 
 class PostViewHolder(
     itemView: View,
@@ -27,6 +30,8 @@ class PostViewHolder(
     userListener: OnPostItemClickListener?,
     editPostListener: OnPostItemClickListener?,
     fragmentManager: FragmentManager?,
+    private val imageLoaderViewModel: ImageLoaderViewModel,
+    private val postType: PostType
 ): RecyclerView.ViewHolder(itemView) {
     private var layout: ConstraintLayout = itemView.findViewById(R.id.post_row_main)
     private var menu: ImageView = itemView.findViewById(R.id.post_row_menu)
@@ -44,6 +49,8 @@ class PostViewHolder(
     private var avatar: ImageView = itemView.findViewById(R.id.post_row_avatar)
     private var comment: Button = itemView.findViewById(R.id.post_row_comment_button)
     private var date: TextView = itemView.findViewById(R.id.date)
+    private var progressBarAvatar: View = itemView.findViewById(R.id.progress_bar_avatar)
+    private var progressBarRestaurant: View = itemView.findViewById(R.id.progress_bar_restaurant)
 
     private var post: InflatedPost? = null
 
@@ -92,7 +99,7 @@ class PostViewHolder(
         }
     }
 
-    fun bind(post: InflatedPost?, position: Int, postType: PostType) {
+    fun bind(post: InflatedPost?, position: Int) {
         layout.alpha = 1F
         this.post = post
 
@@ -105,15 +112,31 @@ class PostViewHolder(
         val lastUpdated = post.lastUpdated
         if (lastUpdated != null) {
             val dateFormat = SimpleDateFormat("dd/MM/yyyy")
-            date.text = dateFormat.format(Timestamp(lastUpdated, 0).toDate())
+            date.text = dateFormat.format(Timestamp(Date(lastUpdated)).toDate())
         }
 
-        Glide.with(itemView.context)
-            .load(post.restaurantUrl)
-            .into(restaurantImage)
-        Glide.with(itemView.context)
-            .load(post.avatarUrl)
-            .into(avatar)
+        Glide.with(itemView.context).clear(restaurantImage)
+        progressBarRestaurant.visibility = View.VISIBLE
+        imageLoaderViewModel.getImageUrl(post.id, PostRepository.getInstance()) {
+            if (post.id == this.post?.id) {
+                Glide.with(itemView.context)
+                    .load(it)
+                    .into(restaurantImage)
+                progressBarRestaurant.visibility = View.GONE
+            }
+        }
+        if (postType != PostType.PROFILE) {
+            Glide.with(itemView.context).clear(avatar)
+            progressBarAvatar.visibility = View.VISIBLE
+            imageLoaderViewModel.getImageUrl(post.userId, UserRepository.getInstance()) {
+                if (post.id == this.post?.id) {
+                    Glide.with(itemView.context)
+                        .load(it)
+                        .into(avatar)
+                    progressBarAvatar.visibility = View.GONE
+                }
+            }
+        }
 
         val rate = post.rating
         val startsSize = stars.size - 1
@@ -133,6 +156,7 @@ class PostViewHolder(
             PostType.PROFILE -> {
                 username.visibility = View.GONE
                 avatar.visibility = View.GONE
+                progressBarAvatar.visibility = View.GONE
 
                 val constraintSet = ConstraintSet()
                 constraintSet.clone(layout)

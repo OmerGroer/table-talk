@@ -24,7 +24,8 @@ data class User (
             val email = json[EMAIL_KEY] as? String ?: ""
             val username = json[USERNAME_KEY] as? String ?: ""
             val avatarUrl = json[IMAGE_URI_KEY] as? String ?: ""
-            val lastUpdated = (json[TIMESTAMP_KEY] as? Timestamp ?: Timestamp(0,0)).seconds
+            val timestamp = (json[Post.TIMESTAMP_KEY] as? Timestamp ?: Timestamp(0,0))
+            val lastUpdated = timestamp.toDate().time
             return User(id, email, username, avatarUrl, lastUpdated)
         }
     }

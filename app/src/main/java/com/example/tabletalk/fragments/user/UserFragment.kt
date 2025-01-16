@@ -78,7 +78,8 @@ class UserFragment : Fragment() {
         binding?.postsRecyclerView?.setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(context)
         binding?.postsRecyclerView?.layoutManager = layoutManager
-        val adapter = PostsRecyclerAdapter(emptyList())
+        val viewModel = viewModel ?: throw Exception("ViewModel is null")
+        val adapter = PostsRecyclerAdapter(emptyList(), viewModel)
         binding?.postsRecyclerView?.adapter = adapter
 
         adapter.restaurantListener = onRestaurantClickListener

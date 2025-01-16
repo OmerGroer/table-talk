@@ -19,6 +19,7 @@ interface UserDao {
     fun getById(userId: String): User?
 
     @Query("SELECT * FROM users " +
-            "WHERE username LIKE '%' || :searchString || '%'")
+            "WHERE username LIKE '%' || :searchString || '%' " +
+            "ORDER BY lastUpdated DESC")
     fun getByIncluding(searchString: String): LiveData<List<User>>
 }
