@@ -31,7 +31,9 @@ data class Post (
             val review = json[REVIEW_KEY] as? String ?: ""
             val restaurantUrl = json[IMAGE_URI_KEY] as? String ?: ""
             val rating = json[RATING_KEY] as? Long ?: 0
-            val lastUpdated = (json[TIMESTAMP_KEY] as? Timestamp ?: Timestamp(0,0)).seconds
+            val timestamp = (json[TIMESTAMP_KEY] as? Timestamp ?: Timestamp(0,0))
+            val lastUpdated = timestamp.toDate().time
+
             return Post(id, userId, restaurantId, review, restaurantUrl, rating.toInt(), lastUpdated)
         }
     }

@@ -6,14 +6,16 @@ import androidx.core.net.toUri
 import com.example.tabletalk.MyApplication
 import com.example.tabletalk.data.local.AppLocalDb
 import com.example.tabletalk.data.model.Post
+import com.example.tabletalk.utils.ImageLoader
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
+import java.util.Date
 import java.util.concurrent.Executors
 
-class PostRepository {
+class PostRepository : ImageLoader {
     companion object {
         private const val COLLECTION = "posts"
         private const val LAST_UPDATED = "postsLastUpdated"
@@ -69,6 +71,10 @@ class PostRepository {
         return post.apply { restaurantUrl = imageRepository.getImagePathById(postId) }
     }
 
+    override suspend fun getImagePath(imageId: String): String {
+        return imageRepository.getImagePathById(imageId)
+    }
+
     suspend fun getByRestaurantIdAndUserId(restaurantId: String, userId: String): Post? {
         var post = AppLocalDb.getInstance().postDao().getByRestaurantIdAndUserId(restaurantId, userId)
 
@@ -116,17 +122,13 @@ class PostRepository {
         var time: Long = getLastUpdate()
 
         val posts = db.collection(COLLECTION)
-            .whereGreaterThanOrEqualTo(Post.TIMESTAMP_KEY, Timestamp(time, 0))
+            .whereGreaterThanOrEqualTo(Post.TIMESTAMP_KEY, Timestamp(Date(time)))
             .get().await().documents.map { document -> document.data?.let { Post.fromJSON(it).apply { id = document.id } }}
 
         for (post in posts) {
             if (post == null) continue
 
-            post.restaurantUrl = imageRepository.downloadAndCacheImage(
-                imageRepository.getImageRemoteUri(post.id),
-                post.id
-            )
-
+            imageRepository.deleteLocal(post.id)
             AppLocalDb.getInstance().postDao().insertAll(post)
             val lastUpdated = post.lastUpdated
             if (lastUpdated != null && lastUpdated > time) {
@@ -134,7 +136,7 @@ class PostRepository {
             }
         }
 
-        setLastUpdate(time)
+        setLastUpdate(time + 1)
     }
 
     private fun getLastUpdate(): Long {

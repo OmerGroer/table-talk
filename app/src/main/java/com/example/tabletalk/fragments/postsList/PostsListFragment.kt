@@ -55,7 +55,7 @@ class PostsListFragment : Fragment() {
         binding?.postsRecyclerView?.setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(context)
         binding?.postsRecyclerView?.layoutManager = layoutManager
-        val adapter = PostsRecyclerAdapter(emptyList())
+        val adapter = PostsRecyclerAdapter(emptyList(), viewModel)
         binding?.postsRecyclerView?.adapter = adapter
 
         adapter.fragmentManager = getChildFragmentManager()

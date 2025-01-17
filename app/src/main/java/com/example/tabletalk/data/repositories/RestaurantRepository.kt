@@ -11,6 +11,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
+import java.util.Date
 
 class RestaurantRepository {
     companion object {
@@ -56,8 +57,12 @@ class RestaurantRepository {
         }.await()
     }
 
-    suspend fun getById(restaurantId: String): LiveData<Restaurant>? {
-        var restaurant = AppLocalDb.getInstance().restaurantDao().getById(restaurantId).value
+    fun getByIdLiveData(restaurantId: String): LiveData<Restaurant> {
+        return AppLocalDb.getInstance().restaurantDao().getByIdLiveData(restaurantId)
+    }
+
+    suspend fun getById(restaurantId: String): Restaurant? {
+        var restaurant = AppLocalDb.getInstance().restaurantDao().getById(restaurantId)
 
         if (restaurant == null) {
             restaurant = db.collection(COLLECTION)
@@ -70,7 +75,7 @@ class RestaurantRepository {
             AppLocalDb.getInstance().restaurantDao().insertAll(restaurant)
         }
 
-        return AppLocalDb.getInstance().restaurantDao().getById(restaurantId)
+        return restaurant
     }
 
     fun getByIncluding(searchString: String): LiveData<List<Restaurant>> {
@@ -110,7 +115,7 @@ class RestaurantRepository {
 
         val restaurants = runBlocking {
             db.collection(COLLECTION)
-                .whereGreaterThanOrEqualTo(Restaurant.TIMESTAMP_KEY, Timestamp(time, 0))
+                .whereGreaterThanOrEqualTo(Restaurant.TIMESTAMP_KEY, Timestamp(Date(time)))
                 .get().await().documents.map { document -> document.data?.let { Restaurant.fromJSON(it).apply { id = document.id } }}
         }
 
@@ -123,7 +128,7 @@ class RestaurantRepository {
             }
         }
 
-        setLastUpdate(time)
+        setLastUpdate(time + 1)
     }
 
     private fun getLastUpdate(): Long {

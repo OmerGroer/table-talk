@@ -39,7 +39,7 @@ class PostFormViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val post = PostRepository.getInstance().getById(postId) ?: throw Exception("Post not found")
-                val restaurant = RestaurantRepository.getInstance().getById(post.restaurantId)?.value ?: throw Exception("Restaurant not found")
+                val restaurant = RestaurantRepository.getInstance().getById(post.restaurantId) ?: throw Exception("Restaurant not found")
                 restaurantId = post.restaurantId
                 withContext(Dispatchers.Main) {
                     restaurantName.value = restaurant.name

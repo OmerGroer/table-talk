@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData
 import com.example.tabletalk.MyApplication
 import com.example.tabletalk.data.local.AppLocalDb
 import com.example.tabletalk.data.model.User
+import com.example.tabletalk.utils.ImageLoader
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
@@ -16,12 +17,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.util.Date
 
 interface AuthListener {
     fun onAuthStateChanged()
 }
 
-class UserRepository {
+class UserRepository : ImageLoader {
     companion object {
         private const val COLLECTION = "users"
         private const val LAST_UPDATED = "usersLastUpdated"
@@ -113,6 +115,10 @@ class UserRepository {
         return user.apply { avatarUrl = imageRepository.getImagePathById(userId) }
     }
 
+    override suspend fun getImagePath(imageId: String): String {
+        return imageRepository.getImagePathById(imageId)
+    }
+
     fun getByIncluding(searchString: String): LiveData<List<User>> {
         return AppLocalDb.getInstance().userDao().getByIncluding(searchString)
     }
@@ -158,17 +164,14 @@ class UserRepository {
 
         val users = runBlocking {
             db.collection(COLLECTION)
-                .whereGreaterThanOrEqualTo(User.TIMESTAMP_KEY, Timestamp(time, 0))
+                .whereGreaterThanOrEqualTo(User.TIMESTAMP_KEY, Timestamp(Date(time)))
                 .get().await().documents.map { document -> document.data?.let { User.fromJSON(it).apply { id = document.id } }}
         }
 
         for (user in users) {
             if (user == null) continue
 
-            user.avatarUrl = runBlocking {
-                imageRepository.downloadAndCacheImage(imageRepository.getImageRemoteUri(user.id), user.id)
-            }
-
+            imageRepository.deleteLocal(user.id)
             AppLocalDb.getInstance().userDao().insertAll(user)
             val lastUpdated = user.lastUpdated
             if (lastUpdated != null && lastUpdated > time) {
@@ -176,7 +179,7 @@ class UserRepository {
             }
         }
 
-        setLastUpdate(time)
+        setLastUpdate(time + 1)
     }
 
     private fun getLastUpdate(): Long {

@@ -78,7 +78,8 @@ data class Restaurant (
             val category = json[CATEGORY_KEY] as? String ?: ""
             val address = json[ADDRESS_KEY] as? String ?: ""
             val priceTypes = json[PRICE_TYPES_KEY] as? String ?: ""
-            val lastUpdated = (json[TIMESTAMP_KEY] as? Timestamp ?: Timestamp(0,0)).seconds
+            val timestamp = (json[Post.TIMESTAMP_KEY] as? Timestamp ?: Timestamp(0,0))
+            val lastUpdated = timestamp.toDate().time
             return Restaurant(id, name, rating, ratingCount.toInt(), category, address, priceTypes, lastUpdated)
         }
     }

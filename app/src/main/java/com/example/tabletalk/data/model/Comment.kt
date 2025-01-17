@@ -25,7 +25,8 @@ data class Comment(
             val userId = json[USER_ID_KEY] as? String ?: ""
             val postId = json[POST_ID_KEY] as? String ?: ""
             val content = json[CONTENT_KEY] as? String ?: ""
-            val lastUpdated = (json[TIMESTAMP_KEY] as? Timestamp ?: Timestamp(0, 0)).seconds
+            val timestamp = (json[Post.TIMESTAMP_KEY] as? Timestamp ?: Timestamp(0,0))
+            val lastUpdated = timestamp.toDate().time
             return Comment(id, userId, postId, content, lastUpdated)
         }
     }

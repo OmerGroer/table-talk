@@ -68,4 +68,8 @@ class ImageRepository(private val folder: String) {
             AppLocalDb.getInstance().imageDao().delete(imageId)
         }
     }
+
+    fun deleteLocal(imageId: String) {
+        AppLocalDb.getInstance().imageDao().delete(imageId)
+    }
 }

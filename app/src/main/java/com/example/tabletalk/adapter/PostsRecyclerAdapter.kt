@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tabletalk.R
 import com.example.tabletalk.data.model.InflatedPost
+import com.example.tabletalk.utils.ImageLoaderViewModel
 
 enum class PostType {
     REGULAR, PROFILE, RESTAURANT
@@ -15,7 +16,7 @@ interface OnPostItemClickListener {
     fun onClickListener(post: InflatedPost)
 }
 
-class PostsRecyclerAdapter(private var posts: List<InflatedPost>) :
+class PostsRecyclerAdapter(private var posts: List<InflatedPost>, private val imageLoaderViewModel: ImageLoaderViewModel) :
     RecyclerView.Adapter<PostViewHolder>() {
 
     var restaurantListener: OnPostItemClickListener? = null
@@ -37,15 +38,16 @@ class PostsRecyclerAdapter(private var posts: List<InflatedPost>) :
             restaurantListener,
             userListener,
             editPostListener,
-            fragmentManager
+            fragmentManager,
+            imageLoaderViewModel,
+            postType
         )
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         holder.bind(
             post = posts.get(position),
-            position = position,
-            postType = postType
+            position = position
         )
     }
 
