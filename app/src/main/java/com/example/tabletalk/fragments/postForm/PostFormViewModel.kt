@@ -22,7 +22,6 @@ class PostFormViewModel : ViewModel() {
     var postId: String? = null
     var restaurantId: String = ""
     var restaurant: Restaurant? = null
-    var oldRating: Int = 0
 
     val isReviewValid = MutableLiveData(true)
     val isRatingValid = MutableLiveData(true)
@@ -45,7 +44,6 @@ class PostFormViewModel : ViewModel() {
                     restaurantName.value = restaurant.name
                     review.value = post.review
                     rating.value = post.rating.toFloat()
-                    oldRating = post.rating
                     imageUri.value = post.restaurantUrl
                 }
             } catch (e: Exception) {
@@ -73,7 +71,6 @@ class PostFormViewModel : ViewModel() {
                         restaurantName.value = restaurant.name
                         review.value = post.review
                         rating.value = post.rating.toFloat()
-                        oldRating = post.rating
                         imageUri.value = post.restaurantUrl
                     }
                 }
@@ -98,16 +95,7 @@ class PostFormViewModel : ViewModel() {
             viewModelScope.launch(Dispatchers.IO) {
                 try {
                     val post = getPost()
-                    PostRepository.getInstance().save(post)
-
-                    if (postId != null) {
-                        RestaurantRepository.getInstance().save(restaurantId, post.rating, oldRating)
-                    } else {
-                        val restaurant = restaurant
-                        if (restaurant != null) {
-                            RestaurantRepository.getInstance().save(restaurant, post.rating)
-                        }
-                    }
+                    PostRepository.getInstance().save(post, restaurant)
 
                     withContext(Dispatchers.Main) { onSuccess() }
                 } catch (e: Exception) {
