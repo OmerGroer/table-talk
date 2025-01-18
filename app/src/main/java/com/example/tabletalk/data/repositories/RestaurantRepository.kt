@@ -9,6 +9,7 @@ import com.example.tabletalk.data.model.Restaurant
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Transaction
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import java.util.Date
@@ -27,34 +28,30 @@ class RestaurantRepository {
 
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
-    suspend fun save(restaurant: Restaurant, rating: Int) {
+    fun save(restaurant: Restaurant, rating: Int, transaction: Transaction) {
         val documentRef = db.collection(COLLECTION).document(restaurant.id)
 
-        db.runTransaction { transaction ->
-            val restaurantDB = transaction.get(documentRef)
-            var ratingCount = (restaurantDB.getDouble(Restaurant.RATING_COUNT_KEY) ?: 0.0).toInt()
-            val newRating = (restaurantDB.getDouble(Restaurant.RATING_KEY) ?: 0.0) * ratingCount + rating
-            ratingCount = ratingCount.inc()
+        val restaurantDB = transaction.get(documentRef)
+        var ratingCount = (restaurantDB.getDouble(Restaurant.RATING_COUNT_KEY) ?: 0.0).toInt()
+        val newRating = (restaurantDB.getDouble(Restaurant.RATING_KEY) ?: 0.0) * ratingCount + rating
+        ratingCount = ratingCount.inc()
 
-            transaction.set(documentRef, restaurant)
+        transaction.set(documentRef, restaurant)
 
-            transaction.update(documentRef, Restaurant.TIMESTAMP_KEY, FieldValue.serverTimestamp())
-            transaction.update(documentRef, Restaurant.RATING_KEY, newRating / ratingCount)
-            transaction.update(documentRef, Restaurant.RATING_COUNT_KEY, ratingCount)
-        }.await()
+        transaction.update(documentRef, Restaurant.TIMESTAMP_KEY, FieldValue.serverTimestamp())
+        transaction.update(documentRef, Restaurant.RATING_KEY, newRating / ratingCount)
+        transaction.update(documentRef, Restaurant.RATING_COUNT_KEY, ratingCount)
     }
 
-    suspend fun save(restaurantId: String, rating: Int, oldRating: Int) {
+    fun save(restaurantId: String, rating: Int, oldRating: Int, transaction: Transaction) {
         val documentRef = db.collection(COLLECTION).document(restaurantId)
 
-        db.runTransaction { transaction ->
-            val restaurantDB = transaction.get(documentRef)
-            val ratingCount = (restaurantDB.getDouble(Restaurant.RATING_COUNT_KEY) ?: 0.0).toInt()
-            val newRating = (restaurantDB.getDouble(Restaurant.RATING_KEY) ?: 0.0) * ratingCount - oldRating + rating
+        val restaurantDB = transaction.get(documentRef)
+        val ratingCount = (restaurantDB.getDouble(Restaurant.RATING_COUNT_KEY) ?: 0.0).toInt()
+        val newRating = (restaurantDB.getDouble(Restaurant.RATING_KEY) ?: 0.0) * ratingCount - oldRating + rating
 
-            transaction.update(documentRef, Restaurant.TIMESTAMP_KEY, FieldValue.serverTimestamp())
-            transaction.update(documentRef, Restaurant.RATING_KEY, newRating / ratingCount)
-        }.await()
+        transaction.update(documentRef, Restaurant.TIMESTAMP_KEY, FieldValue.serverTimestamp())
+        transaction.update(documentRef, Restaurant.RATING_KEY, newRating / ratingCount)
     }
 
     fun getByIdLiveData(restaurantId: String): LiveData<Restaurant> {

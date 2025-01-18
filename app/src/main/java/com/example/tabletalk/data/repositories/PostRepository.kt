@@ -6,6 +6,7 @@ import androidx.core.net.toUri
 import com.example.tabletalk.MyApplication
 import com.example.tabletalk.data.local.AppLocalDb
 import com.example.tabletalk.data.model.Post
+import com.example.tabletalk.data.model.Restaurant
 import com.example.tabletalk.utils.ImageLoader
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
@@ -31,16 +32,27 @@ class PostRepository : ImageLoader {
     private val imageRepository = ImageRepository(COLLECTION)
     private val executor = Executors.newSingleThreadExecutor()
 
-    suspend fun save(post: Post) {
-        val documentRef = if (post.id.isNotEmpty())
+    suspend fun save(post: Post, restaurant: Restaurant?) {
+        val isOldPost = post.id.isNotEmpty()
+        val documentRef = if (isOldPost)
             db.collection(COLLECTION).document(post.id)
         else
             db.collection(COLLECTION).document().also { post.id = it.id }
 
-        db.runBatch { batch ->
-            batch.set(documentRef, post)
-            batch.update(documentRef, Post.IMAGE_URI_KEY, null)
-            batch.update(documentRef, Post.TIMESTAMP_KEY, FieldValue.serverTimestamp())
+        db.runTransaction { transaction ->
+            if (isOldPost) {
+                val postDB = transaction.get(documentRef)
+                val oldRating = (postDB.getDouble(Post.RATING_KEY) ?: 0.0).toInt()
+                RestaurantRepository.getInstance().save(post.restaurantId, post.rating, oldRating, transaction)
+            } else {
+                if (restaurant != null) {
+                    RestaurantRepository.getInstance().save(restaurant, post.rating, transaction)
+                }
+            }
+
+            transaction.set(documentRef, post)
+            transaction.update(documentRef, Post.IMAGE_URI_KEY, null)
+            transaction.update(documentRef, Post.TIMESTAMP_KEY, FieldValue.serverTimestamp())
         }.await()
         uploadImage(post.restaurantUrl, post.id)
     }
