@@ -31,6 +31,7 @@ ucrop = "2.2.6"
 glide = "4.16.0"
 firebaseStorageKtx = "21.0.1"
 googleGmsGoogleServices = "4.4.2"
+gson = "2.11.0"
 
 [libraries]
 adapter-guava = { module = "com.squareup.retrofit2:adapter-guava", version.ref = "adapterGuava" }
@@ -66,6 +67,7 @@ room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRunti
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 ucrop = { module = "com.github.yalantis:ucrop", version.ref = "ucrop" }
 firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx", version.ref = "firebaseStorageKtx" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 
 
 [plugins]

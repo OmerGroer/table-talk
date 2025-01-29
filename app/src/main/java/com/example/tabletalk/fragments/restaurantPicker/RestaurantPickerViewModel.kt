@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tabletalk.data.model.Restaurant
-import com.example.tabletalk.data.services.RestaurantsApiService
+import com.example.tabletalk.data.services.restaurantsApi.RestaurantsApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

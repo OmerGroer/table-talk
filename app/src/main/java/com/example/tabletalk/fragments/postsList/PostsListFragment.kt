@@ -29,13 +29,17 @@ class PostsListFragment : Fragment() {
         bindViews()
 
         setupList()
+        setupRecommendation()
 
         binding?.swipeRefreshLayout?.setOnRefreshListener {
             viewModel.fetchPosts()
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner) {
-            binding?.swipeRefreshLayout?.isRefreshing = it
+            binding?.swipeRefreshLayout?.isRefreshing = it || viewModel.isRecommendationLoaded.value == false
+        }
+        viewModel.isRecommendationLoaded.observe(viewLifecycleOwner) {
+            binding?.swipeRefreshLayout?.isRefreshing = it == false || viewModel.isLoading.value == true
         }
 
         return binding?.root
@@ -78,6 +82,27 @@ class PostsListFragment : Fragment() {
 
         viewModel.posts.observe(viewLifecycleOwner) { posts ->
             adapter.updatePosts(posts)
+        }
+    }
+
+    private fun setupRecommendation() {
+        viewModel.recommendation.observe(viewLifecycleOwner) {
+            if (it != null) {
+                binding?.recommendation?.visibility = View.VISIBLE
+                binding?.recommendationRestaurant?.text = it.restaurant.name
+
+                val rate = it.rating
+                val stars = listOf(binding?.recommendationFirstStar, binding?.recommendationSecondStar, binding?.recommendationThirdStar, binding?.recommendationFourthStar, binding?.recommendationFifthStar)
+                val startsSize = stars.size - 1
+
+                for (i in 0..startsSize) {
+                    stars.get(i)?.visibility = if (i < rate) View.VISIBLE else View.GONE
+                }
+
+                binding?.recommendationReview?.text = it.review
+                binding?.recommendationCategory?.text = it.restaurant.cuisines?.joinToString("/")
+                binding?.recommendationAddress?.text = it.restaurant.address.fullAddress
+            }
         }
     }
 }

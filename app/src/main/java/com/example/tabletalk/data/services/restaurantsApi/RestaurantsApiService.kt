@@ -1,4 +1,4 @@
-package com.example.tabletalk.data.services
+package com.example.tabletalk.data.services.restaurantsApi
 
 import retrofit2.http.GET
 import retrofit2.http.Query

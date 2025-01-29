@@ -1,4 +1,4 @@
-package com.example.tabletalk.data.services
+package com.example.tabletalk.data.services.restaurantsApi
 
 class RestaurantsPage(
     val data: List<ApiRestaurant>,
