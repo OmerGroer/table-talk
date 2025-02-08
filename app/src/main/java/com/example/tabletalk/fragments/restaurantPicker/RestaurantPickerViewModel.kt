@@ -42,8 +42,8 @@ class RestaurantPickerViewModel : ViewModel() {
 
         isLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {
-            val currentMovies = restaurants.value ?: emptyList()
-            restaurants.postValue(currentMovies + fetchRestaurants())
+            val currentRestaurants = restaurants.value ?: emptyList()
+            restaurants.postValue(currentRestaurants + fetchRestaurants())
             withContext(Dispatchers.Main) { isLoading.value = false }
         }
     }

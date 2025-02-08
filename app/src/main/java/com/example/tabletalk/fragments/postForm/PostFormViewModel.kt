@@ -65,9 +65,11 @@ class PostFormViewModel : ViewModel() {
                 val userId = UserRepository.getInstance().getLoggedUserId() ?: throw Exception("User not logged in")
                 val post = PostRepository.getInstance().getByRestaurantIdAndUserId(restaurantId, userId)
 
-                if (post != null) {
-                    postId = post.id
-                    withContext(Dispatchers.Main) {
+                withContext(Dispatchers.Main) {
+                    restaurantName.value = restaurant.name
+
+                    if (post != null) {
+                        postId = post.id
                         restaurantName.value = restaurant.name
                         review.value = post.review
                         rating.value = post.rating.toFloat()
